@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 
+const BACKEND_URL = process.env.BACKEND_URL;
+
 const HomePage = () => {
-  const BACKEND_URL = process.env.BACKEND_URL;
   const [data, setData] = useState(null);
 
   useEffect(() => {
