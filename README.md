@@ -1,4 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Explanations
+
+
+
+## Folder structure
+There is two ways in Nextjs. We adopt pages directory structure. <br>
+https://medium.com/@CraftedX/should-you-use-next-js-pages-or-app-directory-38e803fe5cb4
+
+Folder structure is related to routing.<br>
+https://nextjs.org/docs/pages/building-your-application/routing
+
+Folder structure convention. See page router section.<br>
+https://nextjs.org/docs/getting-started/project-structure
+
+The basic behavior of Next.js by naming for file/folders.<br>
+ There are some part which is defferent in between page router and app router.<br>
+https://nextjs.org/docs/app/building-your-application/routing/colocation
+
+
+## Commands
+
+* install<br>
+npm install<br>
+※For development of only frontend, we don't need docker run.
+
+
+
+
+
+
+
+
+# This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
