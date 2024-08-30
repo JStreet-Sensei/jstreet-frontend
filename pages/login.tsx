@@ -4,12 +4,14 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import SelectGame from "./selectGame";
 import { useRouter } from "next/router";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const Login = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const { data: session } = useSession()
   const router = useRouter()
 
   const handleLogin = async (e: FormEvent) => {
@@ -22,16 +24,26 @@ const Login = () => {
     router.push("/404")
   }
 
-  return (
-    <div>
-      <h1>Login page.</h1>
-      <form onSubmit={handleLogin}>
-        <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username"></input>
-        <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"></input>
-        <button type="submit" >Login</button>
-      </form>
-    </div>
-  );
-};
+  return (!session ? (
+    <>
+      <p>Not signed in</p>
+      <br />
+      <button onClick={() => signIn()}>Sign in</button>
+    </>
+  ) : (
+    <>
+      <div>
+        <h1>Login page.</h1>
+        <form onSubmit={handleLogin}>
+          <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username"></input>
+          <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"></input>
+          <button type="submit" >Login</button>
+        </form>
+      </div>
+    </>
+  ))
+}
+
+
 
 export default Login
