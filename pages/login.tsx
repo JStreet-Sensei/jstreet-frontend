@@ -1,26 +1,35 @@
 //This page is for login page.
 //User can login and sign up.
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
+import SelectGame from "./selectGame";
+import { useRouter } from "next/router";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const Login = () => {
-//   const [data, setData] = useState(null);
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const router = useRouter()
 
-//   useEffect(() => {
-//     // Fetch data from the backend using a GET request
-//     fetch(BACKEND_URL + "/test/")
-//       .then((res) => res.json())
-//       .then((data) => setData(data.data))
-//       .catch((error) => console.error("Error fetching data:", error));
-//   }, []); // Empty dependency array ensures this runs only once on component mount
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault();
+    //Add authentication functionality here
+    if (true) {
+      console.log(e)
+      router.push("/selectGame")
+    }
+    router.push("/404")
+  }
 
   return (
     <div>
       <h1>Login page.</h1>
-      {/* <p>{data ? data : "Loading data..."}</p>{" "} */}
-      {/* Display data or loading message */}
+      <form onSubmit={handleLogin}>
+        <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username"></input>
+        <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"></input>
+        <button type="submit" >Login</button>
+      </form>
     </div>
   );
 };
