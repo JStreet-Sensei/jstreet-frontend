@@ -14,7 +14,9 @@ https://nextjs.org/docs/getting-started/project-structure
 
 The basic behavior of Next.js by naming for file/folders.<br>
  There are some part which is defferent in between page router and app router.<br>
-https://nextjs.org/docs/app/building-your-application/routing/colocation
+https://nextjs.org/docs/app/building-your-application/routing/colocation<br>
+
+Page name is case-sensitive.
 
 
 ## Commands
@@ -23,9 +25,17 @@ https://nextjs.org/docs/app/building-your-application/routing/colocation
 npm install<br>
 ※For development of only frontend, we don't need docker run.
 
+## Route
+### Protected route
+https://www.freecodecamp.org/news/secure-routes-in-next-js/
 
+## Authentication
+Using google auth.<br>
+https://blog.stackademic.com/building-a-custom-google-authentication-system-with-django-rest-framework-and-reactjs-ii-794fa8592782
 
-
+Use @react-oauth/google version.<br>
+https://muhammedsahad.medium.com/react-js-a-step-by-step-guide-to-google-authentication-926d0d85edbd<br>
+https://blog.logrocket.com/guide-adding-google-login-react-app/<br>
 
 
 
