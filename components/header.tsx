@@ -1,12 +1,29 @@
+import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
+
 export const Header: React.FC = () => {
+    const { data: session } = useSession()
+    console.log(session)
+
     return (
         <>
             <div className="flex flex-row">
                 <div className="basis-1/6">To Homepage</div>
                 <div className="basis-3/6">This is empty space</div>
-                <div className="basis-1/6">Log in</div>
-                <div className="basis-1/6">Log out</div>
-                <div className="basis-1/6">My page</div>
+                {session ?
+                    <>
+                        <div className="basis-1/6 cursor-pointer" onClick={() => { signOut() }} >
+                            Log out</div>
+                        <div className="basis-1/6 cursor-pointer">
+                            <Link href={"/mypage"}>My page</Link>
+                        </div>
+                    </>
+                    :
+                    <>
+                        <div className="basis-1/6"></div>
+                        <div className="basis-1/6 cursor-pointer" onClick={() => { signIn() }}>Log in</div>
+                    </>
+                }
             </div>
         </>
     )
