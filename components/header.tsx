@@ -1,9 +1,10 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export const Header: React.FC = () => {
     const { data: session } = useSession()
-    console.log(session)
+    const router = useRouter()
 
     return (
         <>
@@ -21,7 +22,7 @@ export const Header: React.FC = () => {
                     :
                     <>
                         <div className="basis-1/6"></div>
-                        <div className="basis-1/6 cursor-pointer" onClick={() => { signIn() }}>Log in</div>
+                        <div className="basis-1/6 cursor-pointer" onClick={() => { router.push("/login") }}>Log in</div>
                     </>
                 }
             </div>

@@ -17,8 +17,7 @@ const Login = () => {
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     //Add authentication functionality here
-    if (true) {
-      console.log(e)
+    if (session) {
       router.push("/selectGame")
     }
     router.push("/404")
@@ -26,20 +25,21 @@ const Login = () => {
 
   return (!session ? (
     <>
-      <p>Not signed in</p>
-      <br />
-      <button onClick={() => signIn()}>Sign in</button>
-    </>
-  ) : (
-    <>
       <div>
         <h1>Login page.</h1>
+        <p>Not signed in</p>
+        <br />
+        <button onClick={() => signIn()}>Login by other providers </button><br></br>
         <form onSubmit={handleLogin}>
           <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username"></input>
           <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"></input>
-          <button type="submit" >Login</button>
+          <button type="submit" >Login by your username</button>
         </form>
       </div>
+    </>
+  ) : (
+    <>
+      Alredy logged in.
     </>
   ))
 }
