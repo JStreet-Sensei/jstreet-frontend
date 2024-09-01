@@ -1,5 +1,5 @@
 import Image, { ImageLoader } from 'next/image'
-import gamePic from "./../../../public/new-expression-fox.png
+import gamePic from "./../../../public/new-expression-fox.png"
 
 const baseUrl = process.env.NEXTAUTH_URL
 
