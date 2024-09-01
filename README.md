@@ -1,6 +1,7 @@
 # Explanations
 
-
+## Figma mockup
+https://www.figma.com/design/8NGJOCtcVqLFtTrS3P0ht7/Nihongo-Alley---copied-with-new-games?node-id=0-88&node-type=CANVAS&t=FZORUYPPwlmsROs0-0
 
 ## Folder structure
 There is two ways in Nextjs. We adopt pages directory structure. <br>
@@ -16,20 +17,45 @@ The basic behavior of Next.js by naming for file/folders.<br>
  There are some part which is defferent in between page router and app router.<br>
 https://nextjs.org/docs/app/building-your-application/routing/colocation<br>
 
+The _app.tsx file is used for every page.<br>
+https://nextjs.org/docs/pages/building-your-application/routing/custom-app
+
 Page name is case-sensitive.
+
+* Commponents<br>
+React components used in each page. For example, flash card, card to show score, ...<br>
+The name should be camel case.
+
+* Pages<br>
+These represents pages.<br>
+
+* apis<br>
+https://next-auth.js.org/getting-started/example<br>
+
 
 
 ## Commands
 
 * install<br>
 npm install<br>
-※For development of only frontend, we don't need docker run.
+※For development of only frontend, we don't need docker run.<br>
+※EbisuG haven't checked running app with docker yet.
+
+* run local<br>
+npm run dev<br>
 
 ## Route
 ### Protected route
-https://www.freecodecamp.org/news/secure-routes-in-next-js/
+https://www.freecodecamp.org/news/secure-routes-in-next-js/<br>
+※EbisuG haven't implemented protecton for some route yet.
 
 ## Authentication
+We use Nextauth.js.
+Detail logic.
+https://refine.dev/blog/nextauth-google-github-authentication-nextjs/#for-githubprovider-you-will-need-a-github-account
+
+
+### Reference
 Using google auth.<br>
 https://blog.stackademic.com/building-a-custom-google-authentication-system-with-django-rest-framework-and-reactjs-ii-794fa8592782
 
