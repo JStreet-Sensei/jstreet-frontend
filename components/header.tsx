@@ -9,7 +9,11 @@ export const Header: React.FC = () => {
     return (
         <>
             <div className="flex flex-row">
-                <div className="basis-1/6">To Homepage</div>
+                <div className="basis-1/6">
+                    <Link href={"/"}>
+                        To Homepage
+                    </Link>
+                </div>
                 <div className="basis-3/6">This is empty space</div>
                 {session ?
                     <>
