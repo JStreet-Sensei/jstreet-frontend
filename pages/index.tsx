@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -19,6 +20,7 @@ const HomePage = () => {
       <h3>With Django, React, Postgres, and Docker</h3>
       <p>{data ? data : "Loading data..."}</p>{" "}
       {/* Display data or loading message */}
+      <Link href={"/selectGame"}> Play game!</Link>
     </div>
   );
 };
