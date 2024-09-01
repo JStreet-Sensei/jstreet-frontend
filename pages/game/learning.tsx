@@ -7,11 +7,14 @@ import PhraseList from "../../components/game/newExpression/phraseList";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const TOPICS = ["First Contact", "Playing together", "Drinking"]
-export const SelectedMaterial = createContext<learningContextType | {}>({})
+export const SelectedMaterial = createContext<learningContextType | null>(null)
 
 const Learning = () => {
   const [selectedTopic, setSelectedTopic] = useState(TOPICS[0])
-  const [selectedPhrase, setSelectedPhrase] = useState<phraseType | null>()
+  const [selectedPhrase, setSelectedPhrase] = useState<phraseType>({
+    id: 0,
+    japanese: "loading...",
+  })
 
   //Just test for appearence, put useEffect here.
   useEffect(() => {
