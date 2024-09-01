@@ -18,7 +18,7 @@ const LearningStart: React.FC = () => {
                 </Link>
             </div>
             <div>
-                <Image loader={imageLoader} width={300} height={300} src={gamePic} alt='Cross nife picture' />
+                <Image loader={imageLoader} width={300} height={300} src={gamePic} alt='Fox picture' />
             </div>
         </div>
     </>)
