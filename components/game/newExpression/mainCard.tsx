@@ -1,6 +1,5 @@
 import { useContext } from "react"
 import { SelectedMaterial } from "../../../pages/game/learning"
-import { phraseType } from "../../../types/types"
 
 //
 const getPhrase = async (id: number) => {

@@ -1,8 +1,7 @@
 //This page is for login page.
 //User can login and sign up.
 
-import React, { useState, useEffect, FormEvent } from "react";
-import SelectGame from "./selectGame";
+import { useState,  FormEvent } from "react";
 import { useRouter } from "next/router";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
