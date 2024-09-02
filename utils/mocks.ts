@@ -1,9 +1,6 @@
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
+const useSession = jest.spyOn(require("next-auth/react"), "useSession");
 
-/**
- * mockNextUseRouter
- * Mocks the useRouter React hook from Next.js on a test-case by test-case basis
- */
 export function mockNextUseRouter(props: {
     route: string;
     pathname: string;
@@ -16,4 +13,23 @@ export function mockNextUseRouter(props: {
         query: props.query,
         asPath: props.asPath,
     }));
+}
+
+export function mockNextUseSession(props: {
+    data: {
+        session: {
+            expires: string,
+            user: {
+                email: string,
+                image: string,
+                name: string
+            }
+        }
+    }
+}) {
+    useSession.mockReturnValue(() => {
+        return {
+            data: props.data
+        }
+    })
 }
