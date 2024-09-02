@@ -2,7 +2,7 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import { useSession } from "next-auth/react";
 import Login from '../../pages/login';
-import { mockNextUseRouter } from '../../utils/mocks';
+import { mockNextUseRouter, mockNextUseSession } from '../../utils/mocks';
 
 jest.mock("next-auth/react");
 
@@ -14,7 +14,7 @@ describe('Login', () => {
             query: "",
             asPath: `/`,
         });
-        (useSession as jest.Mock).mockReturnValue({
+        mockNextUseSession({
             data: {
                 session: {
                     expires: "2024-10-02T05:32:22.302Z",
