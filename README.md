@@ -69,9 +69,13 @@ name:"Test User"}
 
 
 ## Testing
-Use Jest & React-testing-library
-https://github.com/vercel/next.js/issues/7479#issuecomment-587145429
-
+Use Jest + React Testing Libraries
+Basic usage for Jest + React:<br>
+https://www.robinwieruch.de/react-testing-library/<br>
+With Nextjs official tutorial<br>
+https://nextjs.org/docs/pages/building-your-application/testing/jest<br>
+Tips for mock Next router.<br>
+https://github.com/vercel/next.js/issues/7479#issuecomment-587145429<br>
 
 ## Errors
 * App doesn't run after successful build.
