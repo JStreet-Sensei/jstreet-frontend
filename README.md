@@ -54,11 +54,30 @@ Detail logic.
 https://refine.dev/blog/nextauth-google-github-authentication-nextjs/#for-githubprovider-you-will-need-a-github-account
 
 
+example:
+```bash
+const { data: session } = useSession()
+```
+the session is:
+```bash
+{user: {…}, expires: '2024-10-02T05:32:22.302Z'}
+expires: "2024-10-02T05:32:22.302Z"
+user: {email:"testuser@gmail.com"
+image:"https://lh3.googleusercontent.com/....."
+name:"Test User"}
+```
+
+
+## Testing
+Use Jest & React-testing-library
+https://github.com/vercel/next.js/issues/7479#issuecomment-587145429
+
+
 ## Errors
 * App doesn't run after successful build.
 Make sure you use the latest things. Delete your image, container, and volume. Run docker compose commands again.
 
-### Reference
+## Reference
 Using google auth.<br>
 https://blog.stackademic.com/building-a-custom-google-authentication-system-with-django-rest-framework-and-reactjs-ii-794fa8592782
 
