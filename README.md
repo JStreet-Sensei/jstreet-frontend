@@ -77,6 +77,9 @@ https://nextjs.org/docs/pages/building-your-application/testing/jest<br>
 Tips for mock Next router.<br>
 https://github.com/vercel/next.js/issues/7479#issuecomment-587145429<br>
 
+Custom renders
+https://testing-library.com/docs/react-testing-library/setup/#custom-render
+
 ## Errors
 * App doesn't run after successful build.
 Make sure you use the latest things. Delete your image, container, and volume. Run docker compose commands again.
