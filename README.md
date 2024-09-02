@@ -11,7 +11,7 @@ https://github.com/ryanc268/Typescript-Websocket-Game/tree/main
 
 ## Folder structure
 
-There is two ways in Nextjs. We adopt pages directory structure. <br>
+There is two ways in Nextjs for routing. We adopt pages routing, not app routing. <br>
 https://medium.com/@CraftedX/should-you-use-next-js-pages-or-app-directory-38e803fe5cb4
 
 Folder structure is related to routing.<br>
@@ -24,10 +24,10 @@ The basic behavior of Next.js by naming for file/folders.<br>
 There are some part which is defferent in between page router and app router.<br>
 https://nextjs.org/docs/app/building-your-application/routing/colocation<br>
 
-The \_app.tsx file is used for every page.<br>
+The \_app.tsx file is used for rendering every page.<br>
 https://nextjs.org/docs/pages/building-your-application/routing/custom-app
 
-Page name is case-sensitive.
+Page name is case-sensitive. URL is case-sensitive as well.
 
 - Commponents<br>
   React components used in each page. For example, flash card, card to show score, ...<br>
@@ -53,14 +53,19 @@ Page name is case-sensitive.
 
 ### Protected route
 
+Use middleware.ts for protected route.
 https://www.freecodecamp.org/news/secure-routes-in-next-js/<br>
-※EbisuG haven't implemented protecton for some route yet.
 
 ## Authentication
 
 We use Nextauth.js.
 Detail logic.
 https://refine.dev/blog/nextauth-google-github-authentication-nextjs/#for-githubprovider-you-will-need-a-github-account
+
+## Errors
+
+- App doesn't run after successful build.
+  Make sure you use the latest things. Delete your image, container, and volume. Run docker compose commands again.
 
 ### Reference
 

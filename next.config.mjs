@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    optimizePackageImports: ["next-auth"],
+  },
+
   reactStrictMode: true,
   swcMinify: true,
   webpack: (config, context) => {
