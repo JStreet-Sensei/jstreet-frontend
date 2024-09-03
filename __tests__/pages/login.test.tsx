@@ -8,6 +8,7 @@ jest.mock("next-auth/react");
 
 describe('Login', () => {
     it('renders Login component', () => {
+        //use mock router example
         mockNextUseRouter({
             route: "/",
             pathname: "/",

@@ -8,6 +8,7 @@ jest.mock("next-auth/react");
 
 describe('SelectGame', () => {
     it('renders SelectGame component', () => {
+        //use mock session example
         mockNextUseSession({
             data: {
                 session: {
