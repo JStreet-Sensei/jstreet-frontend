@@ -29,4 +29,5 @@ const underTopicPhraseContextRender = (
 ) => render(ui, {wrapper: TopicPhraseProviders, ...options})
 
 export * from '@testing-library/react'
-export {underTopicPhraseContextRender}
+// export default TopicPhraseProviders
+export default underTopicPhraseContextRender
