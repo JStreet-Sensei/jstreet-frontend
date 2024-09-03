@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import SocketIOClient, { io, Socket } from "socket.io-client";
 import { SocketProviderProps } from "../globals/types/next";
+import { useGameState } from "./GameStateProvider";
+import { Lobby } from "../globals/types/game";
 
 //Define all contexts
 const SocketContext = createContext<Socket>({} as Socket);
@@ -16,34 +18,48 @@ export const useUpdateSocket = () => {
 
 const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [socket, setSocket] = useState<Socket>({} as Socket);
+  const { gameState, setGameState } = useGameState();
 
   useEffect(() => {
-    const newSocket: Socket = io({
-      query: {
-        user_id: "1",
-      },
-      path: "/api/socket",
-    });
+    if (gameState) {
+      console.log("Socket provider state:", gameState);
+      const newSocket: Socket = io({
+        query: {
+          user_id: gameState.playerId,
+          username: gameState.playerName,
+        },
+        path: "/api/socket",
+      });
 
-    newSocket.on("connect", () => {
-      console.log("Connected to server");
-    });
+      newSocket.on("connect", () => {
+        console.log("Connected to server");
+      });
 
-    newSocket.on("message", (msg: string) => {
-      console.log("New message:", msg);
-      // useGameState().message = msg;
-    });
+      newSocket.on("join", (lobby: Lobby) => {
+        console.log("New player joined the lobby", lobby);
+        if (lobby) {
+          const newGameState = gameState;
+          newGameState.lobby = lobby;
+          setGameState(newGameState);
+        }
+      });
 
-    newSocket.on("disconnect", () => {
-      console.log("Disconnected from server");
-    });
+      newSocket.on("message", (msg: string) => {
+        console.log("New message:", msg);
+        // useGameState().message = msg;
+      });
 
-    setSocket(newSocket);
+      newSocket.on("disconnect", () => {
+        console.log("Disconnected from server");
+      });
 
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
+      setSocket(newSocket);
+
+      return () => {
+        newSocket.disconnect();
+      };
+    }
+  }, [gameState]);
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );
