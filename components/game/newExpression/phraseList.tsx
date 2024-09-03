@@ -15,10 +15,11 @@ const PhraseList = () => {
     return (
         <>
             <div className="block max-w-full p-6 m-10 bg-white border border-gray-200 rounded-lg shadow 
-            hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700" 
+            hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
             onClick={()=>{selectedMaterial?.selectPhrase({id:2, japanese:"よっす"})}}
             >
                 topic is :{selectedMaterial?.topic}
+                phrase is :{selectedMaterial?.phrase.japanese}
                 よっす
             </div>
             <div className="block max-w-full p-6 m-10 bg-white border border-gray-200 rounded-lg shadow 
