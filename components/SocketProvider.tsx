@@ -44,6 +44,10 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
       });
 
+      newSocket.on("start", () => {
+        console.log("Game is started");
+      });
+
       newSocket.on("message", (msg: string) => {
         console.log("New message:", msg);
         // useGameState().message = msg;

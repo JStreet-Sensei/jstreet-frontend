@@ -86,6 +86,22 @@ image:"https://lh3.googleusercontent.com/....."
 name:"Test User"}
 ```
 
+## Socket
+
+The api request are done to `api/Socket.ts (Server)`
+The socket client is `SocketProvider.tsx (Client)`
+
+`socket.on` is the event for receive status or data
+
+`socket.emit` is the event for send data to everyone
+
+## Game state
+
+Every game contains 2 context provider
+
+- GameState - Contain all information about the game and the status
+- Socket - Contain all information and event about the scoket
+
 ## Testing
 
 Use Jest + React Testing Libraries

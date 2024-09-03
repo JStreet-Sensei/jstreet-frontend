@@ -52,6 +52,12 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
         io.emit("message", msg); // Send a message to all clients
       });
 
+      // When a user press Start to start the game the status will propagate to everyone
+      socket.on("start", () => {
+        console.log("Game start!");
+        io.emit("start");
+      });
+
       socket.on("disconnect", () => {
         // Remove player from lobby
         if (username) {
