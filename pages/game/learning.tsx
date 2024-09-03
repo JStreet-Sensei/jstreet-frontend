@@ -58,7 +58,7 @@ const Learning = () => {
             })}
           </div>
           <div>
-            Each pharese list
+            Each phrase list
             <PhraseList></PhraseList>
           </div>
         </div>

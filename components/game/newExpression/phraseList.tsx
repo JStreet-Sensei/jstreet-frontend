@@ -22,6 +22,7 @@ const PhraseList = () => {
         }}
       >
         topic is :{selectedMaterial?.topic}
+        phrase is :{selectedMaterial?.phrase.japanese}
         よっす
       </div>
       <div
