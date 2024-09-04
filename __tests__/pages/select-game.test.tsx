@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render, screen } from "@testing-library/react";
 import { useSession } from "next-auth/react";
-import SelectGame from "../../pages/selectGame";
+import SelectGame from "../../pages/select-game";
 import { mockNextUseRouter, mockNextUseSession } from "../../utils/mocks";
 
 jest.mock("next-auth/react");
