@@ -1,7 +1,7 @@
 //User can select game.
 
 import React, { useState } from "react";
-import NewExpressionStart from "../components/game/newExpression/start";
+import NewExpressionStart from "../components/game/newWords/Start";
 import PracticeStart from "../components/game/practice/start";
 import StartFlashCard from "../components/game/flashCard/Start";
 
