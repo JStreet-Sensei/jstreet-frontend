@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { SelectedMaterial } from "../../../pages/game/flash-card"
 import { phraseType } from "../../../types/types";
+import styles from "../../../styles/FlashCard.module.css"
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/";
 
@@ -31,7 +32,7 @@ export const FlashCard = () => {
             <div className="block max-w-full p-6 m-10 bg-white border border-gray-200 rounded-lg shadow 
             hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 <div className="flip-card" onClick={() => { setIsback(!isBack) }}>
-                    <div className={`flip-card-inner ${isBack ? "rotateY-card" : ""}`}>
+                    <div className={`flip-card-inner ${isBack ? styles["rotateY-card"] : ""}`}>
                         <div className={`flip-card-front`}>
                             <p className="title">
                                 Flip card front

@@ -8,7 +8,7 @@ const imageLoader: ImageLoader = ({ src, width, quality }) => {
     return `${baseUrl}/${src}?w=${width}&q=${quality || 75}`
 }
 
-const Start: React.FC = () => {
+const StartFlashCard: React.FC = () => {
     return (<>
         <div className="grid grid-cols-2 gap-4">
             <div>
@@ -24,4 +24,4 @@ const Start: React.FC = () => {
     </>)
 }
 
-export default Start
+export default StartFlashCard
