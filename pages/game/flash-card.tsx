@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, createContext } from "react";
 import { phraseType, learningContextType } from "../../types/types";
-import PhraseList from "../../components/game/newExpression/phraseList";
+import PhraseList from "../../components/game/flashCard/PhraseList";
 import { FlashCard } from "../../components/game/flashCard/FlashCard";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -35,6 +35,10 @@ const FlashCardPage = () => {
             <FlashCard></FlashCard>
           </div>
           <div>
+            Each phrase list
+            <PhraseList></PhraseList>
+          </div>
+          <div>
             Choose topic
             {TOPICS.map((elem, ind) => {
               return (
@@ -48,14 +52,10 @@ const FlashCardPage = () => {
               )
             })}
           </div>
-          <div>
-            Each phrase list
-            <PhraseList></PhraseList>
-          </div>
         </div>
       </SelectedMaterial.Provider>
     </>
   );
 };
 
-export default FlashCard;
+export default FlashCardPage;

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import { SelectedMaterial } from "../../../pages/game/flash-card"
 import { phraseType } from "../../../types/types";
 
@@ -7,6 +7,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/";
 export const FlashCard = () => {
 
     const selectedMaterial = useContext(SelectedMaterial)
+    const [isBack, setIsback] = useState(false)
 
     useEffect(() => {
         async () => {
@@ -29,15 +30,15 @@ export const FlashCard = () => {
         <>
             <div className="block max-w-full p-6 m-10 bg-white border border-gray-200 rounded-lg shadow 
             hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <div className="flip-card">
-                    <div className="flip-card-inner">
-                        <div className="flip-card-front">
+                <div className="flip-card" onClick={() => { setIsback(!isBack) }}>
+                    <div className={`flip-card-inner ${isBack ? "rotateY-card" : ""}`}>
+                        <div className={`flip-card-front`}>
                             <p className="title">
                                 Flip card front
                                 {selectedMaterial?.phrase !== undefined ? (<>{selectedMaterial.phrase.english}</>) : <>null</>}<br></br>
                             </p>
                         </div>
-                        <div className="flip-card-back">
+                        <div className={`flip-card-back`}>
                             <p className="title">
                                 Flip card back
                                 {selectedMaterial?.phrase !== undefined ? (<>{selectedMaterial.phrase.japanese}</>) : <>null</>}<br></br>
