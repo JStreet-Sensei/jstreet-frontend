@@ -85,6 +85,11 @@ user: {email:"testuser@gmail.com"
 image:"https://lh3.googleusercontent.com/....."
 name:"Test User"}
 ```
+## Styling
+Use noraml css and tailwind css.
+You should write normal css within global.css file.
+https://nextjs.org/docs/pages/building-your-application/styling/css-modules#css-modules
+https://medium.com/@joel.woodyard/how-to-combine-tailwind-and-css-stylesheets-in-next-js-tutorial-39c522ca639
 
 ## Socket
 

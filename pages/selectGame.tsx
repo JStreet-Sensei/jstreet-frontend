@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import NewExpressionStart from "../components/game/newExpression/start";
 import PracticeStart from "../components/game/practice/start";
+import StartFlashCard from "../components/game/flashCard/Start";
 
-const gameFileNames = ["newExpression", "practice"];
+const gameFileNames = ["newExpression", "practice", "FlashCard"]
 
 const SelectGame = () => {
   const [gameName, setGameName] = useState(gameFileNames[0]);
@@ -30,7 +31,9 @@ const SelectGame = () => {
       case "newExpression":
         return <NewExpressionStart></NewExpressionStart>;
       case "practice":
-        return <PracticeStart></PracticeStart>;
+        return <PracticeStart></PracticeStart>
+      case "FlashCard":
+        return <StartFlashCard></StartFlashCard>
       default:
         return <>Sorry, there is no game.</>;
     }
