@@ -12,7 +12,6 @@ const MyPage = () => {
 
   const getUserDetails = async (useToken: boolean) => {
     try {
-      console.log(session);
       const response = await axios({
         method: "get",
         url: BACKEND_URL + "api/auth/user/",
