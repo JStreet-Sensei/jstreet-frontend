@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    optimizePackageImports: ["next-auth"],
+    optimizePackageImports: ["next-auth","socket.io", "socket.io-client"],
   },
 
   reactStrictMode: true,
