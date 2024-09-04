@@ -1,11 +1,11 @@
 import { Server as NetServer } from "http";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Server as ServerIO } from "socket.io";
-import { NextApiResponseServerIO } from "../../globals/types/next";
+import { NextApiResponseServerIO } from "../../types/next";
 import { Server } from "socket.io";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import { Server as IOServer } from "socket.io";
-import { Lobby } from "../../globals/types/game";
+import { Lobby } from "../../types/game";
 
 export const config = {
   api: {

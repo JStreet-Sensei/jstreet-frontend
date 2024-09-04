@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { GameStateProviderProps } from "../globals/types/next";
-import { GameState, Lobby, GameContexType } from "../globals/types/game";
+import { GameStateProviderProps } from "../types/next";
+import { GameState, Lobby, GameContexType } from "../types/game";
 import { getSession, useSession } from "next-auth/react";
 import { getUserDataWithToken, getUserSession } from "../utils/utils-session";
 

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import SocketIOClient, { io, Socket } from "socket.io-client";
-import { SocketProviderProps } from "../globals/types/next";
+import { SocketProviderProps } from "../types/next";
 import { useGameState } from "./GameStateProvider";
 import { Lobby } from "../globals/types/game";
 
