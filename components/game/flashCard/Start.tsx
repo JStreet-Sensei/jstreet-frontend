@@ -12,9 +12,9 @@ const StartFlashCard: React.FC = () => {
     return (<>
         <div className="grid grid-cols-2 gap-4">
             <div>
-                <span>Practice</span><br></br>
+                <span>Flash card practice</span><br></br>
                 <Link href={"/game/flash-card"}>
-                <span> Practice Mode</span>
+                <span> Flash card practice</span>
                 </Link>
             </div>
             <div>
