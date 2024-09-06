@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import GameQuickAnswer from "../../components/GameQuickAnswer";
-import SocketProvider from "../../components/context/SocketProvider";
-import GameStateProvider from "../../components/context/GameStateProvider";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 

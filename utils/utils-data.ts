@@ -78,4 +78,11 @@ export const checkDataSelectable = (cardDeck: CardData[]) => {
   return false;
 };
 
-export const flipSelectState = () => {};
+export const isObjectEmpty = (obj: object) => {
+  for (let prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
+  return true;
+};

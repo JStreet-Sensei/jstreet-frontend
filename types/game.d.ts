@@ -1,3 +1,4 @@
+import { Socket } from "socket.io-client";
 import { DataItem } from "./types";
 
 export interface CardData extends DataItem {
@@ -10,17 +11,24 @@ export interface Player {
   score: number;
 }
 
+/**
+ * @param {number} turn is the player ID
+ */
 export type GameState = {
   message: string;
   playerId: number;
   lobby: Lobby | null;
   playerName: string;
+  cardDeck: CardData[];
+  turn: number; //Player Id
 };
 
 export type GameContexType = {
   gameState: GameState;
-  setGameState: (value: GameState) => void;
-  gameStateInRef: RefObject<GameState | undefined>;
+};
+
+export type SocketContextType = {
+  socket: Socket;
 };
 
 export type Lobby = {

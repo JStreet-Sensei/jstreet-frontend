@@ -25,7 +25,8 @@
       "@/data/*": ["data/*"],
       "@/pages/*": ["pages/*"],
       "@/public/*": ["public/*"],
-      "@/utils/*": ["utils/*"]
+      "@/utils/*": ["utils/*"],
+      "@/context/*": ["components/context/*"]
     }
   },
   "include": [

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useSocket } from "./SocketProvider";
-import { useGameState } from "./GameStateProvider";
+import { useSocket } from "@/context/SocketProvider";
+import { useGameState } from "@/context/GameStateProvider";
 
 export default function GameQuickAnswer() {
-  const socket = useSocket();
+  const { socket } = useSocket();
   const gameState = useGameState();
 
   const [useResponse, setResponse] = useState("No answer");

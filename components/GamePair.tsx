@@ -1,40 +1,45 @@
 import { useEffect, useState } from "react";
-import { useSocket } from "./SocketProvider";
-import { useGameState } from "./GameStateProvider";
-import { Matrix } from "./game/findPairGame/Matrix";
-import PlayerList from "./game/PlayerList";
-import { fetchData } from "../utils/utils-data";
-import { DataItem } from "../types/types";
+import { useSocket } from "@/context/SocketProvider";
+import { Matrix } from "@/components/game/findPairGame/Matrix";
+import PlayerList from "@/components/game/PlayerList";
+import { fetchData, isObjectEmpty } from "@/utils/utils-data";
+import { DataItem } from "@/types/types";
+import { CardData, GameState, Player } from "@/types/game";
 
-export default function GamePair() {
-  const socket = useSocket();
-  const [useCardData, setCardData] = useState<DataItem[]>([] as DataItem[]);
-  const { gameState, gameStateInRef } = useGameState();
-  const [usePlayerList, setPlayerList] = useState<string[]>();
+type Props = {
+  gameState: GameState;
+  handleUpdateDeck: (cardDeck: CardData[]) => void;
+};
+
+export default function GamePair({ gameState, handleUpdateDeck }: Props) {
+  const { socket } = useSocket();
+
+  const [useGameState, setGameState] = useState(gameState);
+  const [usePlayerList, setPlayerList] = useState<Player[]>();
+  const [usePlayerTurn, setPlayerTurn] = useState(1);
 
   // Game state
   const [useReady, setReady] = useState(false);
 
+  //From the parent update
   useEffect(() => {
-    console.log("Update players! ", gameState.lobby?.players);
-  }, [gameState.lobby?.players.length]);
+    setGameState(gameState);
+    setPlayerTurn(gameState.turn);
+    console.log("update gamestate from game", useGameState);
+  }, [gameState]);
+
+  // Refresh users
+  useEffect(() => {
+    handleUpdateLobby();
+  }, [useGameState]);
 
   // Fetch data cards
-  useEffect(() => {
-    fetchData().then((data) => {
-      setCardData(data);
-    });
-  }, []);
-
-  // Request a refresh of joined users
-  const handleUpdateLobby = () => {
-    setPlayerList(gameState.lobby?.players);
-  };
+  useEffect(() => {}, []);
 
   // Game will start from here
   const handleGameStart = () => {
-    if (gameState.lobby) {
-      if (gameState.lobby?.players.length > 1) {
+    if (useGameState.lobby) {
+      if (useGameState.lobby?.players.length > 1) {
         setReady(true);
         socket.emit("start");
       } else {
@@ -43,9 +48,21 @@ export default function GamePair() {
     }
   };
 
+  const handleUpdateLobby = () => {
+    setPlayerList(useGameState.lobby?.players);
+  };
+
+  if (isObjectEmpty(socket)) {
+    console.log("The game is not ready");
+    return <p>The game state and the socket is loading...</p>;
+  }
+
   return (
     <>
-      <Matrix cardData={useCardData}></Matrix>
+      <Matrix
+        handleUpdateDeck={handleUpdateDeck}
+        gameState={useGameState}
+      ></Matrix>
       <div className="m-5">
         <button className="bg-green-700 m-2" onClick={handleUpdateLobby}>
           Refresh
@@ -57,7 +74,7 @@ export default function GamePair() {
         {useReady ? <p>Game is running</p> : <p></p>}
         <p>Players</p>
         <PlayerList
-          currentPlayerUsername={gameState.playerName}
+          currentPlayerUsername={useGameState.playerName}
           players={usePlayerList}
         ></PlayerList>
       </div>

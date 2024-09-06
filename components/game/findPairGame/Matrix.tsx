@@ -1,30 +1,41 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import Card from "./Card";
-import { DataItem } from "../../../types/types";
+import { DataItem } from "@/types/types";
 import {
   checkCardMatch,
   checkDataSelectable,
   getSelectedCards,
   prepareCardDeck,
-} from "../../../utils/utils-data";
-import { CardData } from "../../../types/game";
+} from "@/utils/utils-data";
+import { CardData, GameState } from "@/types/game";
+import { useSocket } from "@/context/SocketProvider";
+import { clone } from "lodash";
 
 type MatrixProps = {
-  cardData: DataItem[];
+  handleUpdateDeck: (cardDeck: CardData[]) => void;
+  gameState: GameState;
 };
-export const Matrix: React.FC<MatrixProps> = ({ cardData }) => {
+export const Matrix: React.FC<MatrixProps> = ({
+  handleUpdateDeck,
+  gameState,
+}) => {
   // Default value
   const GRID_SIZE = 4;
 
+  // Socket
+  const { socket } = useSocket();
+
   // Card elements state
   const [useCardElement, setCardElement] = useState<ReactNode>([]);
-  const [useCardDeck, setCardDeck] = useState<CardData[]>([]);
   const [useRefresh, setRefresh] = useState(false);
+  const [useGameState, setGameState] = useState(gameState);
+  const [useCardDeck, setCardDeck] = useState(useGameState.cardDeck);
 
-  // Initiliaze card deck
   useEffect(() => {
-    setCardDeck(prepareCardDeck(cardData));
-  }, [cardData]);
+    setCardDeck(gameState.cardDeck);
+    setGameState(gameState);
+    console.log("Game state is changed inside the matrix", useCardDeck);
+  }, [gameState]);
 
   // Create all cards
   useEffect(() => {
@@ -49,6 +60,8 @@ export const Matrix: React.FC<MatrixProps> = ({ cardData }) => {
         }
       }
       setCardElement(cardList);
+      // // Send the update to the socket and gameState
+      // handleUpdateDeck(useCardDeck);
     }
   }, [useCardDeck, useRefresh]);
 
@@ -57,8 +70,8 @@ export const Matrix: React.FC<MatrixProps> = ({ cardData }) => {
     // Check if the card match
     if (checkCardMatch(useCardDeck)) {
       // Change card to gueseed
-      setCardDeck((prevState) => {
-        const newCardDeck = [...prevState];
+      setCardDeck(() => {
+        const newCardDeck = useCardDeck;
         // Change to gueesed
 
         // Extract index of the selected cards
@@ -72,30 +85,35 @@ export const Matrix: React.FC<MatrixProps> = ({ cardData }) => {
         newCardDeck[cardIndex2].selected = false;
         return newCardDeck;
       });
-      alert("Card gueesed!");
+      console.log("Card gueesed!");
     } else if (selectedCards.length === 2) {
       console.log(selectedCards);
-      setCardDeck((prevState) => {
-        const newCardDeck = [...prevState];
+      setCardDeck(() => {
+        const newCardDeck = useCardDeck;
         // Extract index of the selected cards
         const cardIndex1 = selectedCards[0];
         const cardIndex2 = selectedCards[1];
         // Change to unselected
         newCardDeck[cardIndex1].selected = false;
         newCardDeck[cardIndex2].selected = false;
+        handleUpdateDeck(newCardDeck);
         return newCardDeck;
       });
-      alert("Wrong!");
+
+      console.log("Wrong!");
     }
   }, [useCardDeck]);
 
   // Handle the selection of a card
   const handleSelectACard = (index: number, lastState: boolean) => {
     // Helper function to flip card
-    const flipCard = (prevState: CardData[]) => {
-      const newCardDeck = [...prevState];
+    console.log("Call handle deck");
+    const flipCard = () => {
+      const newCardDeck = clone(useCardDeck);
       // Flip the value
       newCardDeck[index].selected = !lastState;
+      console.log("Call handle deck");
+      handleUpdateDeck(newCardDeck);
       return newCardDeck;
     };
 
@@ -110,6 +128,7 @@ export const Matrix: React.FC<MatrixProps> = ({ cardData }) => {
     } else {
       return false;
     }
+
     return true;
   };
 
