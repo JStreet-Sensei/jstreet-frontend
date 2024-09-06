@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useSocket } from "@/context/SocketProvider";
 import { Matrix } from "@/components/game/findPairGame/Matrix";
 import PlayerList from "@/components/game/PlayerList";
-import { fetchData, isObjectEmpty } from "@/utils/utils-data";
-import { DataItem } from "@/types/types";
+import { isObjectEmpty } from "@/utils/utils-data";
 import { CardData, GameState, Player } from "@/types/game";
 
 type Props = {
@@ -25,7 +24,6 @@ export default function GamePair({ gameState, handleUpdateDeck }: Props) {
   useEffect(() => {
     setGameState(gameState);
     setPlayerTurn(gameState.turn);
-    console.log("update gamestate from game", useGameState);
   }, [gameState]);
 
   // Refresh users

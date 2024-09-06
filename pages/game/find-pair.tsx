@@ -68,9 +68,7 @@ const FindPair = () => {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(useGameState);
-  }, [useGameState]);
+  useEffect(() => {}, [useGameState]);
 
   // Initilialize socket after the gameState
   useEffect(() => {
@@ -117,29 +115,12 @@ const FindPair = () => {
 
       // Get the update of the deck
       newSocket.on("gameUpdate", (cardDeck: CardData[], turn: number) => {
-        console.log("Received an update", cardDeck);
+        console.log("Received an update");
         setGameState(() => {
           const newGameState = clone(useGameState);
           newGameState.cardDeck = cardDeck;
           return newGameState;
         });
-        // const sameDeck = isEqual(cardDeck, useGameState.cardDeck);
-        // if (!useGameState.cardDeck) {
-        // 	console.log("Game state deck is null use the new one");
-        // 	setGameState(() => {
-        // 		const newGameState = clone(useGameState);
-        // 		newGameState.cardDeck = cardDeck;
-        // 		return newGameState;
-        // 	});
-        // }
-        // if (!sameDeck) {
-        // 	console.log("Change the game state deck");
-        // 	setGameState(() => {
-        // 		const newGameState = clone(useGameState);
-        // 		newGameState.cardDeck = cardDeck;
-        // 		return newGameState;
-        // 	});
-        // }
       });
 
       newSocket.on("message", (msg: string) => {
