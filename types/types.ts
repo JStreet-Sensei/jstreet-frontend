@@ -11,4 +11,14 @@ interface phraseType {
   description?: string;
 }
 
-export type { learningContextType, phraseType };
+interface DataItem {
+  front: string;
+  back: string;
+  match: number;
+}
+
+interface ApiResponse {
+  data: DataItem[];
+}
+
+export type { learningContextType, phraseType, DataItem, ApiResponse };

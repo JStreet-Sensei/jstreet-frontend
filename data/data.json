@@ -1,0 +1,20 @@
+{
+  "data": [
+    { "front": "Nihon", "back": "めっちゃいい！", "match": 15 },
+    { "front": "Nihon", "back": "すげぇな！", "match": 2 },
+    { "front": "Nihon", "back": "すごいですね。", "match": 1 },
+    { "front": "Nihon", "back": "ありがと！", "match": 4 },
+    { "front": "Nihon", "back": "ありがとう。", "match": 3 },
+    { "front": "Nihon", "back": "わからないです。", "match": 13 },
+    { "front": "Nihon", "back": "めんどいな。", "match": 10 },
+    { "front": "Nihon", "back": "大変ですね。", "match": 9 },
+    { "front": "Nihon", "back": "もうやめますね。", "match": 14 },
+    { "front": "Nihon", "back": "やばい！", "match": 7 },
+    { "front": "Nihon", "back": "面倒くさいです。", "match": 6 },
+    { "front": "Nihon", "back": "やっとくよ。", "match": 12 },
+    { "front": "Nihon", "back": "やっておきます。", "match": 11 },
+    { "front": "Nihon", "back": "わからん。", "match": 5 },
+    { "front": "Nihon", "back": "もうやめとくわ。", "match": 8 },
+    { "front": "Nihon", "back": "とてもいいですね。", "match": 0 }
+  ]
+}
