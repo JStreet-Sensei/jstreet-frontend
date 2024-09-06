@@ -1,9 +1,9 @@
 //User can play learning page.
 
 import React, { useState, useEffect, createContext } from "react";
-import MainCard from "../../components/game/newExpression/mainCard";
+import MainCard from "../../components/game/newWords/MainCard";
 import { phraseType, learningContextType } from "../../types/types";
-import PhraseList from "../../components/game/newExpression/phraseList";
+import PhraseList from "../../components/game/newWords/PhraseList";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const TOPICS = ["First Contact", "Playing together", "Drinking"];

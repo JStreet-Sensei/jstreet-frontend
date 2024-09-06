@@ -1,15 +1,67 @@
-# Explanations
+# Design
 
 ## Figma mockup
 
 https://www.figma.com/design/8NGJOCtcVqLFtTrS3P0ht7/Nihongo-Alley---copied-with-new-games?node-id=0-88&node-type=CANVAS&t=FZORUYPPwlmsROs0-0
 
-# Websocket
+# Implementation
+
+## Websocket
 
 https://medium.com/@RajeshSharma-dev/websockets-with-nextjs-for-building-real-time-responsive-application-bc4bedd19eec
 https://github.com/ryanc268/Typescript-Websocket-Game/tree/main
 
-## Folder structure
+## Route
+
+### Protected route
+
+Use middleware.ts for protected route.
+https://www.freecodecamp.org/news/secure-routes-in-next-js/<br>
+
+## Authentication
+
+We use Nextauth.js.
+Detail logic.
+https://refine.dev/blog/nextauth-google-github-authentication-nextjs/#for-githubprovider-you-will-need-a-github-account
+
+example:
+
+```bash
+const { data: session } = useSession()
+```
+
+the session is:
+
+```bash
+{user: {…}, expires: '2024-10-02T05:32:22.302Z'}
+expires: "2024-10-02T05:32:22.302Z"
+user: {email:"testuser@gmail.com"
+image:"https://lh3.googleusercontent.com/....."
+name:"Test User"}
+```
+## Styling
+Use noraml css and tailwind css.
+You should write normal css within global.css file.
+https://nextjs.org/docs/pages/building-your-application/styling/css-modules#css-modules
+https://medium.com/@joel.woodyard/how-to-combine-tailwind-and-css-stylesheets-in-next-js-tutorial-39c522ca639
+
+## Socket
+
+The api request are done to `api/Socket.ts (Server)`
+The socket client is `SocketProvider.tsx (Client)`
+
+`socket.on` is the event for receive status or data
+
+`socket.emit` is the event for send data to everyone
+
+## Game state
+
+Every game contains 2 context provider
+
+- GameState - Contain all information about the game and the status
+- Socket - Contain all information and event about the scoket
+
+# Folder structure
 
 There is two ways in Nextjs for routing. We adopt pages routing, not app routing. <br>
 https://medium.com/@CraftedX/should-you-use-next-js-pages-or-app-directory-38e803fe5cb4
@@ -44,7 +96,7 @@ Page name is case-sensitive. URL is case-sensitive as well.
   mocks.ts<br>
   Mock funcitons for test.
 
-## Commands
+# Commands
 
 - install<br>
   npm install<br>
@@ -57,53 +109,22 @@ Page name is case-sensitive. URL is case-sensitive as well.
 * run test<br>
   npm run test
 
-## Route
 
-### Protected route
 
-Use middleware.ts for protected route.
-https://www.freecodecamp.org/news/secure-routes-in-next-js/<br>
+# Testing
 
-## Authentication
+## Plan
+The purpose is to prevent degradation and reduce time run test mannually.
 
-We use Nextauth.js.
-Detail logic.
-https://refine.dev/blog/nextauth-google-github-authentication-nextjs/#for-githubprovider-you-will-need-a-github-account
+Component/Page test<br>
+・Check successfully rendering.<br>
+・Check fetching data.<br>
+・Check state changes correctly.<br>
 
-example:
+End-to-end test<br>
+・Check scenario of user events.<br>
 
-```bash
-const { data: session } = useSession()
-```
-
-the session is:
-
-```bash
-{user: {…}, expires: '2024-10-02T05:32:22.302Z'}
-expires: "2024-10-02T05:32:22.302Z"
-user: {email:"testuser@gmail.com"
-image:"https://lh3.googleusercontent.com/....."
-name:"Test User"}
-```
-
-## Socket
-
-The api request are done to `api/Socket.ts (Server)`
-The socket client is `SocketProvider.tsx (Client)`
-
-`socket.on` is the event for receive status or data
-
-`socket.emit` is the event for send data to everyone
-
-## Game state
-
-Every game contains 2 context provider
-
-- GameState - Contain all information about the game and the status
-- Socket - Contain all information and event about the scoket
-
-## Testing
-
+## Tools
 Use Jest + React Testing Libraries
 Basic usage for Jest + React:<br>
 https://www.robinwieruch.de/react-testing-library/<br>
@@ -114,12 +135,12 @@ https://github.com/vercel/next.js/issues/7479#issuecomment-587145429<br>
 Custom renders for mock context.<br>
 https://testing-library.com/docs/react-testing-library/setup/#custom-render
 
-## Errors
+# Errors
 
 - App doesn't run after successful build.
   Make sure you use the latest things. Delete your image, container, and volume. Run docker compose commands again.
 
-## Reference
+# Reference
 
 Using google auth.<br>
 https://blog.stackademic.com/building-a-custom-google-authentication-system-with-django-rest-framework-and-reactjs-ii-794fa8592782

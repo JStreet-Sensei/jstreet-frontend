@@ -18,7 +18,7 @@ const Login = () => {
     e.preventDefault();
     //Add authentication functionality here
     if (session) {
-      router.push("/selectGame");
+      router.push("/select-game");
     }
     router.push("/404");
   };
