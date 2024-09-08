@@ -1,50 +1,50 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
-import Card from "./Card";
-import { checkDataSelectable } from "@/utils/utils-data";
-import { CardData, ClientGameState } from "@/types/game";
-import { clone } from "lodash";
+import { ReactNode, useEffect, useRef, useState } from 'react'
+import Card from './Card'
+import { checkDataSelectable } from '@/utils/utils-data'
+import { CardData, ClientGameState } from '@/types/game'
+import { clone } from 'lodash'
 
 type MatrixProps = {
-  handleUpdateDeck: (cardDeck: CardData[]) => void;
-  gameState: ClientGameState;
-};
+  handleUpdateDeck: (cardDeck: CardData[]) => void
+  gameState: ClientGameState
+}
 export const Matrix: React.FC<MatrixProps> = ({
   handleUpdateDeck,
   gameState,
 }) => {
   // Default value
-  const GRID_SIZE = 4;
+  const GRID_SIZE = 4
 
   // Card elements state
-  const [useCardElement, setCardElement] = useState<ReactNode>([]);
-  const [useRefresh, setRefresh] = useState(false);
-  const [useGameState, setGameState] = useState(gameState);
-  const [useCardDeck, setCardDeck] = useState(gameState.cardDeck);
-  const [isCardClickable, setCardClickable] = useState(false);
+  const [useCardElement, setCardElement] = useState<ReactNode>([])
+  const [useRefresh, setRefresh] = useState(false)
+  const [useGameState, setGameState] = useState(gameState)
+  const [useCardDeck, setCardDeck] = useState(gameState.cardDeck)
+  const [isCardClickable, setCardClickable] = useState(false)
 
-  const moveCounter = useRef(0);
+  const moveCounter = useRef(0)
 
   useEffect(() => {
-    setCardDeck([...gameState.cardDeck]);
-    setGameState(gameState);
-  }, [gameState]);
+    setCardDeck([...gameState.cardDeck])
+    setGameState(gameState)
+  }, [gameState])
 
   //Is clickable logic
   useEffect(() => {
-    console.log("Turn state: ", gameState.user_id, gameState.turn);
-    if (gameState.user_id === gameState.turn) setCardClickable(true);
-    else setCardClickable(false);
-    setRefresh(!useRefresh);
-  }, [gameState]);
+    console.log('Turn state: ', gameState.user_id, gameState.turn)
+    if (gameState.user_id === gameState.turn) setCardClickable(true)
+    else setCardClickable(false)
+    setRefresh(!useRefresh)
+  }, [gameState])
 
   // Create all cards
   useEffect(() => {
     if (useCardDeck.length != 0) {
-      const cardList = [];
-      let counterKey = 0;
+      const cardList = []
+      let counterKey = 0
       for (let row = 0; row < GRID_SIZE; row++) {
         for (let col = 0; col < GRID_SIZE; col++) {
-          let actualCard = useCardDeck[counterKey];
+          let actualCard = useCardDeck[counterKey]
           cardList.push(
             <Card
               frontText={actualCard.front}
@@ -55,53 +55,53 @@ export const Matrix: React.FC<MatrixProps> = ({
               guessed={actualCard.guessedFrom}
               selected={actualCard.selected}
               isCardClickable={isCardClickable}
-            ></Card>,
-          );
-          counterKey += 1;
+            ></Card>
+          )
+          counterKey += 1
         }
       }
-      setCardElement(cardList);
+      setCardElement(cardList)
     }
-  }, [useCardDeck, useRefresh]);
+  }, [useCardDeck, useRefresh])
 
-  useEffect(() => {}, [useCardDeck]);
+  useEffect(() => {}, [useCardDeck])
 
   // Handle the selection of a card
   const handleSelectACard = (index: number, lastState: boolean) => {
     // Helper function to flip card
     const flipCard = () => {
-      const newCardDeck = clone(useCardDeck);
+      const newCardDeck = clone(useCardDeck)
       // Flip the value
-      newCardDeck[index].selected = true;
-      handleUpdateDeckWithDelay(newCardDeck);
+      newCardDeck[index].selected = true
+      handleUpdateDeckWithDelay(newCardDeck)
 
-      return newCardDeck;
-    };
+      return newCardDeck
+    }
 
     // If not flipped flip
     if (lastState === false) {
-      setCardDeck(flipCard);
-      return true;
+      setCardDeck(flipCard)
+      return true
     }
     // Check if there are less than 2 cards selected
     else if (checkDataSelectable(useCardDeck)) {
-      setCardDeck(flipCard);
+      setCardDeck(flipCard)
     } else {
-      return false;
+      return false
     }
 
-    return true;
-  };
+    return true
+  }
 
   // Helper function that enable the delay after 2 cards choosed
   const handleUpdateDeckWithDelay = (newCardDeck: CardData[]) => {
     const timer = new Promise((resolve) => {
-      setCardClickable(false);
-      setTimeout(resolve, 200);
+      setCardClickable(false)
+      setTimeout(resolve, 200)
     }).then(() => {
-      handleUpdateDeck(newCardDeck);
-    });
-  };
+      handleUpdateDeck(newCardDeck)
+    })
+  }
 
   return (
     <>
@@ -109,5 +109,5 @@ export const Matrix: React.FC<MatrixProps> = ({
         {useCardElement}
       </div>
     </>
-  );
-};
+  )
+}
