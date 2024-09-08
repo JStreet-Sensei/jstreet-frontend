@@ -4,7 +4,7 @@ const nextConfig = {
     optimizePackageImports: ["next-auth", "socket.io", "socket.io-client"],
   },
   output: "standalone",
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   webpack: (config, context) => {
     // Enable polling based on env variable being set
