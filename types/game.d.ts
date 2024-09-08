@@ -9,6 +9,7 @@ export interface CardData extends DataItem {
 export interface Player {
   username: string;
   score: number;
+  user_id: number;
 }
 
 /**
@@ -24,15 +25,33 @@ export type GameState = {
 };
 
 export type GameContexType = {
-  gameState: GameState;
+  gameState: ClientGameState;
 };
 
 export type SocketContextType = {
-  socket: Socket;
+  socket: ClientGameState;
 };
 
 export type Lobby = {
   name: string;
-  owner: string;
+  owner: number; // User_id
   players: Player[];
+  turn: number; // User_id
 };
+
+export type ServerGameState = {
+  turn: number;
+  cardDeck: CardData[];
+};
+
+export type ServerLobby = {
+  name: string;
+  owner: number; // User_id
+  players: Set<Player>;
+  gameState: ServerGameState;
+};
+
+export interface ClientGameState extends ServerGameState {
+  username: string;
+  user_id: number;
+}
