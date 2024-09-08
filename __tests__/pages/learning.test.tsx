@@ -25,13 +25,13 @@ describe("PhraseList", () => {
     underTopicPhraseContextRender(<Learning />);
 
     //check the difference of rendered page before and after example
-    screen.debug();
+    // screen.debug();
     expect((await screen.findAllByText("Playing together")).length === 1);
     expect((await screen.findAllByText("First Contact")).length !== 1);
     const phraseList = await screen.findAllByText("Playing together");
     await userEvent.click(phraseList[0]);
     expect((await screen.findAllByText("Playing together")).length !== 1);
     expect((await screen.findAllByText("First Contact")).length === 1);
-    screen.debug();
+    // screen.debug();
   });
 });

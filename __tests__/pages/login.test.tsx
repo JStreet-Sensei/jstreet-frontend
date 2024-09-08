@@ -30,6 +30,6 @@ describe("Login", () => {
 
     render(<Login />);
 
-    screen.debug();
+    // screen.debug();
   });
 });

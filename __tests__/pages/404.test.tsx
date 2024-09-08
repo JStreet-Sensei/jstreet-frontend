@@ -7,6 +7,6 @@ describe("Error404", () => {
   it("renders Error404 component", () => {
     render(<Error404 />);
 
-    screen.debug();
+    // screen.debug();
   });
 });
