@@ -1,80 +1,80 @@
-import { Server as NetServer } from "http";
-import { NextApiRequest } from "next";
-import { NextApiResponseServerIO } from "@/types/next";
-import { Server as SocketIOServer, Socket } from "socket.io";
-import { Server as IOServer } from "socket.io";
-import { CardData, Player, ServerGameState, ServerLobby } from "@/types/game";
+import { Server as NetServer } from 'http'
+import { NextApiRequest } from 'next'
+import { NextApiResponseServerIO } from '@/types/next'
+import { Server as SocketIOServer, Socket } from 'socket.io'
+import { Server as IOServer } from 'socket.io'
+import { CardData, Player, ServerGameState, ServerLobby } from '@/types/game'
 import {
   extractDataFromQuery,
   serializeServerObject,
-} from "@/utils/utils-socket";
+} from '@/utils/utils-socket'
 import {
   checkCardMatch,
   checkDataSelectable,
   getSelectedCards,
-} from "@/utils/utils-data";
+} from '@/utils/utils-data'
 
-import path from "path";
-import { promises as fs } from "fs";
+import path from 'path'
+import { promises as fs } from 'fs'
 
 export const config = {
   api: {
     bodyParser: false,
   },
-};
+}
 
 const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
   if (!res.socket.server.io) {
-    console.log("Initializing Socket.io");
+    console.log('Initializing Socket.io')
 
-    const httpServer: NetServer = res.socket.server as any;
+    const httpServer: NetServer = res.socket.server as any
 
     const io = new IOServer(httpServer, {
-      path: "/api/socket",
-    });
+      path: '/api/socket',
+    })
 
-    const lobbies: { [key: string]: ServerLobby } = {};
+    const lobbies: { [key: string]: ServerLobby } = {}
 
-    io.on("connection", async (socket: Socket) => {
+    io.on('connection', async (socket: Socket) => {
       // Get data from query connection
-      const { player, lobby_id } = extractDataFromQuery(socket.handshake.query);
-      let lobby: ServerLobby | undefined;
-      let gameState: ServerGameState;
+      const { player, lobby_id } = extractDataFromQuery(socket.handshake.query)
+      let lobby: ServerLobby | undefined
+      let gameState: ServerGameState
 
       //Socket join the room;
-      socket.join(lobby_id.toString());
+      socket.join(lobby_id.toString())
 
       if (lobbies[lobby_id] === undefined) {
         // Create the game state
         gameState = {
           cardDeck: await prepareCardDeckFromServer(), //Prepare the deck
           turn: player.user_id,
-        };
+        }
 
         // Create the lobby - first connection
         lobbies[lobby_id] = {
-          name: "Game",
+          name: 'Game',
           owner: player.user_id,
           players: new Set<Player>(),
           gameState: gameState,
-        };
+        }
 
         // Save the actual lobby
-        lobby = lobbies[lobby_id];
+        lobby = lobbies[lobby_id]
 
         //Add the player to the lobby
-        lobby.players.add(player);
+        lobby.players.add(player)
 
-        console.log("New client connected ", player.username);
-        console.log("New lobby created ", lobby);
-        io.emit("join", serializeServerObject(lobby));
+        console.log('New client connected ', player.username)
+        console.log('New lobby created ', lobby)
+        io.emit('join', serializeServerObject(lobby))
       } else {
-        lobby = lobbies[lobby_id];
-        lobby.players.add(player);
-        console.log("New client connected ", player.username);
-        console.log("Change lobby ", lobby);
+        lobby = lobbies[lobby_id]
+        lobby.players.add(player)
+        console.log('New client connected ', player.username)
+        console.log('Change lobby ', lobby)
         // Send the new lobby to everyone
-        io.emit("join", serializeServerObject(lobby));
+        io.emit('join', serializeServerObject(lobby))
       }
 
       // // When a user press Start to start the game the status will propagate to everyone
@@ -83,71 +83,67 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
       // 	io.emit("start");
       // });
 
-      socket.on("send-game-update", (cardDeck: CardData[]) => {
-        let responseMessage = "";
-        // let player: Player = getPlayerFromSet(
-        // 	lobby?.players,
-        // 	lobby?.gameState.turn
-        // );
+      socket.on('send-game-update', (cardDeck: CardData[]) => {
+        let responseMessage = ''
 
-        console.log("Received card deck");
-        console.log("Check the number of selected cards");
-        const selectedCardsIndexes = getSelectedCards(cardDeck);
-        console.log("There is/are ", selectedCardsIndexes.length, " cards");
+        console.log('Received card deck')
+        console.log('Check the number of selected cards')
+        const selectedCardsIndexes = getSelectedCards(cardDeck)
+        console.log('There is/are ', selectedCardsIndexes.length, ' cards')
         if (checkDataSelectable(cardDeck)) {
-          const selectedCards = getSelectedCards(cardDeck);
+          const selectedCards = getSelectedCards(cardDeck)
           // Check if the card match
           if (checkCardMatch(cardDeck)) {
             // Change card to gueseed
             // Extract index of the selected cards
-            const cardIndex1 = selectedCards[0];
-            const cardIndex2 = selectedCards[1];
+            const cardIndex1 = selectedCards[0]
+            const cardIndex2 = selectedCards[1]
             // Change the state to gueeesed
-            cardDeck[cardIndex1].guessedFrom = player.user_id;
-            cardDeck[cardIndex2].guessedFrom = player.user_id;
+            cardDeck[cardIndex1].guessedFrom = player.user_id
+            cardDeck[cardIndex2].guessedFrom = player.user_id
             // Change to unselected
-            cardDeck[cardIndex1].selected = false;
-            cardDeck[cardIndex2].selected = false;
+            cardDeck[cardIndex1].selected = false
+            cardDeck[cardIndex2].selected = false
 
-            console.log("Card gueesed!");
+            console.log('Card gueesed!')
             if (player) {
-              responseMessage = `${player.username} gueesed 2 cards!`;
-              player.score = player.score + 10;
+              responseMessage = `${player.username} gueesed 2 cards!`
+              player.score = player.score + 10
             }
           } else if (selectedCards.length === 2) {
             // Extract index of the selected cards
-            const cardIndex1 = selectedCards[0];
-            const cardIndex2 = selectedCards[1];
+            const cardIndex1 = selectedCards[0]
+            const cardIndex2 = selectedCards[1]
             // Change to unselected
-            cardDeck[cardIndex1].selected = false;
-            cardDeck[cardIndex2].selected = false;
+            cardDeck[cardIndex1].selected = false
+            cardDeck[cardIndex2].selected = false
 
-            console.log("Wrong!");
+            console.log('Wrong!')
             if (player) {
-              responseMessage = `${player.username} made a mistake!`;
+              responseMessage = `${player.username} made a mistake!`
             }
           }
 
           if (lobby?.players.size === 2) {
             // Swap the player id with for change turn
-            const playerArray = Array.from(lobby.players);
+            const playerArray = Array.from(lobby.players)
             if (playerArray[0].user_id === lobby.gameState.turn)
-              lobby.gameState.turn = playerArray[1].user_id;
+              lobby.gameState.turn = playerArray[1].user_id
             else if (playerArray[1].user_id === lobby.gameState.turn)
-              lobby.gameState.turn = playerArray[0].user_id;
+              lobby.gameState.turn = playerArray[0].user_id
           }
           // Update the card deck
-          if (lobby) lobby.gameState.cardDeck = cardDeck;
-          console.log("New server lobby with change turn is ", lobby);
-          io.emit("change-turn", lobby);
-          io.emit("message", responseMessage);
+          if (lobby) lobby.gameState.cardDeck = cardDeck
+          console.log('New server lobby with change turn is ', lobby)
+          if (lobby) io.emit('change-turn', serializeServerObject(lobby))
+          io.emit('message', responseMessage)
         } else {
-          console.log("Emit an update no change turn");
-          console.log(lobby?.gameState);
-          console.log("New card deck");
-          io.emit("receive-game-update", cardDeck, lobby?.gameState.turn);
+          console.log('Emit an update no change turn')
+          console.log(lobby?.gameState)
+          console.log('New card deck')
+          io.emit('receive-game-update', cardDeck, lobby?.gameState.turn)
         }
-      });
+      })
 
       // socket.on("changeTurn", (user_id: number) => {
       // 	console.log("Change turn, last user was ", user_id);
@@ -162,35 +158,35 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
       // 	}
       // });
 
-      socket.on("disconnect", () => {
+      socket.on('disconnect', () => {
         // Send the new lobby to everyone
-        io.emit("left", lobbies[lobby_id]);
+        io.emit('left', lobbies[lobby_id])
         // Remove player from lobby
         if (player && lobby) {
           // Remove from the array
-          lobby.players.delete(player);
+          lobby.players.delete(player)
 
           // Update all the user is disconnected
-          io.emit("left", lobby);
-          console.log("Client left and emit and update to everyone. ");
+          io.emit('left', lobby)
+          console.log('Client left and emit and update to everyone. ')
           // Delete the lobby if empty
           if (lobby.players.size === 0) {
-            lobby = undefined;
-            delete lobbies[lobby_id];
-            console.log("Delete the lobby");
+            lobby = undefined
+            delete lobbies[lobby_id]
+            console.log('Delete the lobby')
           }
         }
 
-        console.log("Client disconnected ", player.username);
-      });
-    });
+        console.log('Client disconnected ', player.username)
+      })
+    })
 
-    res.socket.server.io = io;
+    res.socket.server.io = io
   }
-  res.end();
-};
+  res.end()
+}
 
-export default SocketHandler;
+export default SocketHandler
 
 // Prepare card deck with initial values
 /**
@@ -200,20 +196,20 @@ export default SocketHandler;
 const prepareCardDeckFromServer = async (): Promise<CardData[]> => {
   try {
     // Trova il percorso assoluto della directory "data"
-    const jsonDirectory = path.join(process.cwd(), "data");
+    const jsonDirectory = path.join(process.cwd(), 'data')
 
     // Leggi il file "data.json"
     const fileContents = await fs.readFile(
-      path.join(jsonDirectory, "data.json"),
-      "utf8",
-    );
+      path.join(jsonDirectory, 'data.json'),
+      'utf8'
+    )
 
     // Converte il contenuto del file in JSON
-    const cardDeck = JSON.parse(fileContents);
+    const cardDeck = JSON.parse(fileContents)
 
     // Verifica che il file abbia il formato corretto (es. che contenga una proprietà "data" con un array)
     if (!Array.isArray(cardDeck.data)) {
-      throw new Error("Invalid data format: expected 'data' to be an array.");
+      throw new Error("Invalid data format: expected 'data' to be an array.")
     }
 
     // Espande ogni card aggiungendo le proprietà "guessedFrom" e "selected"
@@ -222,12 +218,12 @@ const prepareCardDeckFromServer = async (): Promise<CardData[]> => {
         ...card,
         guessedFrom: 0,
         selected: false,
-      };
-    });
+      }
+    })
 
-    return expandedDeck;
+    return expandedDeck
   } catch (error) {
-    console.error("Error preparing card deck:", error);
-    throw new Error("Failed to prepare card deck from server.");
+    console.error('Error preparing card deck:', error)
+    throw new Error('Failed to prepare card deck from server.')
   }
-};
+}

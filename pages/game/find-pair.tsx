@@ -95,18 +95,22 @@ const FindPair = () => {
         setMessage(message)
       })
 
-      newSocket.on('change-turn', (lobby: ServerLobby) => {
-        console.log('Time to change turn! Now is ', lobby.gameState.turn)
+      newSocket.on('change-turn', (receivedLobby: ServerLobby) => {
+        receivedLobby.players = new Set(receivedLobby.players)
+        console.log(
+          'Time to change turn! Now is ',
+          receivedLobby.gameState.turn
+        )
         // Wait 1 seconds before change turn!
         new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
-          setMessage(`Change turn to ${lobby.gameState.turn}`)
+          setMessage(`Change turn to ${receivedLobby.gameState.turn}`)
           // This update the score
-          setServerLobby(lobby)
+          setServerLobby(receivedLobby)
           // This update the deck and the turn
           setClientGameState({
             ...useClientGameState,
-            turn: lobby.gameState.turn,
-            cardDeck: lobby.gameState.cardDeck,
+            turn: receivedLobby.gameState.turn,
+            cardDeck: receivedLobby.gameState.cardDeck,
           })
         })
       })
