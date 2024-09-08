@@ -1,82 +1,59 @@
-//User can play quick answer game.
-"use client";
+import dynamic from "next/dynamic";
 import GameStateProvider from "../../components/context/GameStateProvider";
 import SocketProvider from "../../components/context/SocketProvider";
 import GamePair from "../../components/GamePair";
-import isEqual from "lodash/isEqual";
 
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { CardData, GameState, Lobby } from "@/types/game";
+import { CardData, ClientGameState, ServerLobby } from "@/types/game";
 import { getSession } from "next-auth/react";
-import { clone, compact } from "lodash";
-import { DataItem } from "@/types/types";
-import { fetchData, prepareCardDeck } from "@/utils/utils-data";
+import Message from "@/components/game/findPairGame/Message";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const FindPair = () => {
   // Socket or state
   const [useSocket, setSocket] = useState<Socket>({} as Socket);
-  const [useGameState, setGameState] = useState<GameState>({
-    message: "",
-    lobby: null,
-    playerName: "",
-    playerId: 0,
-    cardDeck: [] as CardData[],
-    turn: 1, // First player
-  } as GameState);
+  const [useClientGameState, setClientGameState] = useState<ClientGameState>(
+    {} as ClientGameState,
+  );
+  const [useServerLobby, setServerLobby] = useState<ServerLobby>(
+    {} as ServerLobby,
+  );
+  //Message state
+  const [useMessage, setMessage] = useState("");
 
   // State if game is ready or not
   const [isGameStateReady, setGameStateReady] = useState(false);
   const [isSocketReady, setSocketReady] = useState(false);
+  const [isDeckReady, setDeckReady] = useState(false);
 
-  // Card states
-  const [useCardData, setCardData] = useState<DataItem[]>([] as DataItem[]);
-  const [useCardDeck, setCardDeck] = useState<CardData[]>([]);
-
-  // Initilialize Card Deck
-  useEffect(() => {
-    fetchData().then((data) => {
-      setCardData(data);
-    });
-  }, []);
-
-  // Initiliaze card deck
-  useEffect(() => {
-    setCardDeck(prepareCardDeck(useCardData));
-  }, [useCardData]);
-
-  // Save the card deck inside the game state
-  useEffect(() => {
-    setGameState((prevState) => {
-      prevState.cardDeck = useCardDeck;
-      return prevState;
-    });
-  }, [useCardDeck]);
-
-  // Initilialize gameState and socket
+  // Initialize game state
   useEffect(() => {
     console.log("Initilialize gameState");
+    setGameStateReady(false);
+
     getSession().then((session) => {
-      setGameState((prevGameState) => {
-        prevGameState.playerName = session?.user.username || "Player";
-        prevGameState.playerId = session?.user.pk || 0;
-        return prevGameState;
-      });
-      setGameStateReady(true);
+      const username = session?.user.username || "Player";
+      const user_id = session?.user.pk || 0;
+      setClientGameState({ username, user_id, cardDeck: [], turn: 0 });
     });
   }, []);
 
-  useEffect(() => {}, [useGameState]);
+  useEffect(() => {
+    console.log("Client game state ready");
+    console.log(useClientGameState);
+    setGameStateReady(true);
+  }, [useClientGameState]);
 
   // Initilialize socket after the gameState
   useEffect(() => {
-    if (isGameStateReady) {
+    if (isGameStateReady && useClientGameState.username !== undefined) {
       const newSocket: Socket = io({
         query: {
-          user_id: useGameState.playerId,
-          username: useGameState.playerName,
+          user_id: useClientGameState.user_id,
+          username: useClientGameState.username,
+          lobby_id: 1,
         },
         path: "/api/socket",
       });
@@ -89,43 +66,47 @@ const FindPair = () => {
         console.log("Game is started");
       });
 
-      newSocket.on("join", (lobby: Lobby) => {
-        console.log("New player joined the lobby", lobby);
-        if (lobby) {
-          const clone = structuredClone(lobby);
-          setGameState(() => {
-            const gameState = structuredClone(useGameState);
-            gameState.lobby = clone;
-            return gameState;
-          });
-        }
-      });
-
-      newSocket.on("left", (lobby: Lobby) => {
-        console.log("A player left the lobby", lobby);
-        if (lobby) {
-          const clone = structuredClone(lobby);
-          setGameState(() => {
-            const gameState = structuredClone(useGameState);
-            gameState.lobby = clone;
-            return gameState;
-          });
-        }
-      });
-
-      // Get the update of the deck
-      newSocket.on("gameUpdate", (cardDeck: CardData[], turn: number) => {
-        console.log("Received an update");
-        setGameState(() => {
-          const newGameState = clone(useGameState);
-          newGameState.cardDeck = cardDeck;
-          return newGameState;
+      newSocket.on("join", (receivedLobby: ServerLobby) => {
+        receivedLobby.players = new Set(receivedLobby.players);
+        console.log("New player joined the lobby", receivedLobby.players);
+        setServerLobby(receivedLobby);
+        setClientGameState({
+          ...useClientGameState,
+          cardDeck: receivedLobby.gameState.cardDeck,
+          turn: receivedLobby.gameState.turn,
         });
       });
 
-      newSocket.on("message", (msg: string) => {
-        console.log("New message:", msg);
-        // useGameState().message = msg;
+      newSocket.on("left", (receivedLobby: ServerLobby) => {
+        console.log("A player left the lobby", receivedLobby.players);
+        setServerLobby(receivedLobby);
+      });
+
+      // Get the update of the deck
+      newSocket.on(
+        "receive-game-update",
+        (cardDeck: CardData[], turn: number) => {
+          console.log("Received an update, turn: ", turn);
+          setMessage(`Received a deck update...`);
+          setClientGameState({ ...useClientGameState, cardDeck, turn });
+        },
+      );
+
+      newSocket.on("message", (message: string) => {
+        setMessage(message);
+      });
+
+      newSocket.on("change-turn", (lobby: ServerLobby) => {
+        console.log("Time to change turn! Now is ", lobby.gameState.turn);
+        // Wait 1 seconds before change turn!
+        new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
+          setMessage(`Change turn to ${lobby.gameState.turn}`);
+          setClientGameState({
+            ...useClientGameState,
+            turn: lobby.gameState.turn,
+            cardDeck: lobby.gameState.cardDeck,
+          });
+        });
       });
 
       newSocket.on("disconnect", () => {
@@ -138,29 +119,22 @@ const FindPair = () => {
       return () => {
         newSocket.disconnect();
       };
-    }
+    } else setGameStateReady(false);
   }, [isGameStateReady]);
 
   // Get the update from the child and emit to every client!
   const handleUpdateDeck = (cardDeck: CardData[]) => {
-    if (!isEqual(cardDeck, useGameState.cardDeck)) {
-      console.log(
-        "Handle and update of the deck. Current game state",
-        useGameState.cardDeck,
-        " New deck is ",
-        cardDeck,
-      );
-      setGameState(() => {
-        const gameState = clone(useGameState);
-        gameState.cardDeck = cardDeck;
-        return gameState;
-      });
-      console.log("Send update to everyone");
-    }
-    useSocket.emit("gameUpdate", cardDeck);
+    console.log("Handle update", cardDeck);
+    setClientGameState({ ...useClientGameState, cardDeck });
+    console.log("Send update to server");
+    useSocket.emit("send-game-update", cardDeck, useClientGameState.user_id);
   };
 
-  if (!isGameStateReady || !isSocketReady) {
+  if (
+    !isGameStateReady ||
+    !isSocketReady ||
+    useClientGameState.cardDeck.length === 0
+  ) {
     return (
       <div>
         <h1>Please wait...</h1>
@@ -172,9 +146,11 @@ const FindPair = () => {
   return (
     <div>
       <SocketProvider parentSocket={useSocket}>
-        <GameStateProvider parentGameState={useGameState}>
+        <GameStateProvider parentGameState={useClientGameState}>
+          <Message message={useMessage}></Message>
           <GamePair
-            gameState={useGameState}
+            players={useServerLobby.players}
+            gameState={useClientGameState}
             handleUpdateDeck={handleUpdateDeck}
           ></GamePair>
         </GameStateProvider>
@@ -183,4 +159,6 @@ const FindPair = () => {
   );
 };
 
-export default FindPair;
+export default dynamic(() => Promise.resolve(FindPair), {
+  ssr: false,
+});

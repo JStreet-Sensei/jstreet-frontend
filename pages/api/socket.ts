@@ -1,12 +1,21 @@
 import { Server as NetServer } from "http";
-import { NextApiRequest, NextApiResponse } from "next";
-import { Server as ServerIO } from "socket.io";
+import { NextApiRequest } from "next";
 import { NextApiResponseServerIO } from "@/types/next";
-import { Server } from "socket.io";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import { Server as IOServer } from "socket.io";
-import { CardData, Lobby, Player } from "@/types/game";
-import { isEqual } from "lodash";
+import { CardData, Player, ServerGameState, ServerLobby } from "@/types/game";
+import {
+  extractDataFromQuery,
+  serializeServerObject,
+} from "@/utils/utils-socket";
+import {
+  checkCardMatch,
+  checkDataSelectable,
+  getSelectedCards,
+} from "@/utils/utils-data";
+
+import path from "path";
+import { promises as fs } from "fs";
 
 export const config = {
   api: {
@@ -18,77 +27,161 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
   if (!res.socket.server.io) {
     console.log("Initializing Socket.io");
 
-    // Define the lobby
-    const lobby: Lobby = {
-      name: "Game",
-      owner: "",
-      players: [],
-    };
-
     const httpServer: NetServer = res.socket.server as any;
 
     const io = new IOServer(httpServer, {
       path: "/api/socket",
     });
 
-    io.on("connection", (socket: Socket) => {
+    const lobbies: { [key: string]: ServerLobby } = {};
+
+    io.on("connection", async (socket: Socket) => {
       // Get data from query connection
-      const user_id = socket.handshake.query.user_id;
-      let username = socket.handshake.query.username;
-      let player: Player;
-      let matchDeck: CardData[];
+      const { player, lobby_id } = extractDataFromQuery(socket.handshake.query);
+      let lobby: ServerLobby | undefined;
+      let gameState: ServerGameState;
 
-      if (username) {
-        // In case of username is an array we keep only first username
-        if (Array.isArray(username)) username = username[0];
-        // Create the player and save
-        const playerInit: Player = { username, score: 0 };
-        player = playerInit;
-        // Push only if is not inside the lobby
-        if (lobby.players.indexOf(player)) lobby.players.push(player);
+      //Socket join the room;
+      socket.join(lobby_id.toString());
 
-        console.log("New client connected " + username);
-        console.log("New lobby status is: ", lobby);
+      if (lobbies[lobby_id] === undefined) {
+        // Create the game state
+        gameState = {
+          cardDeck: await prepareCardDeckFromServer(), //Prepare the deck
+          turn: player.user_id,
+        };
 
+        // Create the lobby - first connection
+        lobbies[lobby_id] = {
+          name: "Game",
+          owner: player.user_id,
+          players: new Set<Player>(),
+          gameState: gameState,
+        };
+
+        // Save the actual lobby
+        lobby = lobbies[lobby_id];
+
+        //Add the player to the lobby
+        lobby.players.add(player);
+
+        console.log("New client connected ", player.username);
+        console.log("New lobby created ", lobby);
+        io.emit("join", serializeServerObject(lobby));
+      } else {
+        lobby = lobbies[lobby_id];
+        lobby.players.add(player);
+        console.log("New client connected ", player.username);
+        console.log("Change lobby ", lobby);
         // Send the new lobby to everyone
-        io.emit("join", lobby);
+        io.emit("join", serializeServerObject(lobby));
       }
-      // Send broadcast message
-      socket.on("message", (msg: string) => {
-        console.log("Message received:", msg);
-        io.emit("message", msg); // Send a message to all clients
-      });
 
-      // When a user press Start to start the game the status will propagate to everyone
-      socket.on("start", () => {
-        console.log("Game start!");
-        io.emit("start");
-      });
+      // // When a user press Start to start the game the status will propagate to everyone
+      // socket.on("start", () => {
+      // 	console.log("Game start!");
+      // 	io.emit("start");
+      // });
 
-      socket.on("gameUpdate", (cardDeck: CardData) => {
-        console.log("Receivde a deck check if send...");
-        if (isEqual(cardDeck, matchDeck)) console.log("Deck is equal, skip...");
-        else {
-          io.emit("gameUpdate", cardDeck);
-          console.log("Send update...");
+      socket.on("send-game-update", (cardDeck: CardData[]) => {
+        let responseMessage = "";
+        // let player: Player = getPlayerFromSet(
+        // 	lobby?.players,
+        // 	lobby?.gameState.turn
+        // );
+
+        console.log("Received card deck");
+        console.log("Check the number of selected cards");
+        const selectedCardsIndexes = getSelectedCards(cardDeck);
+        console.log("There is/are ", selectedCardsIndexes.length, " cards");
+        if (checkDataSelectable(cardDeck)) {
+          const selectedCards = getSelectedCards(cardDeck);
+          // Check if the card match
+          if (checkCardMatch(cardDeck)) {
+            // Change card to gueseed
+            // Extract index of the selected cards
+            const cardIndex1 = selectedCards[0];
+            const cardIndex2 = selectedCards[1];
+            // Change the state to gueeesed
+            cardDeck[cardIndex1].guessedFrom = player.user_id;
+            cardDeck[cardIndex2].guessedFrom = player.user_id;
+            // Change to unselected
+            cardDeck[cardIndex1].selected = false;
+            cardDeck[cardIndex2].selected = false;
+
+            console.log("Card gueesed!");
+            if (player) {
+              responseMessage = `${player.username} gueesed 2 cards!`;
+              player.score = player.score + 10;
+            }
+          } else if (selectedCards.length === 2) {
+            // Extract index of the selected cards
+            const cardIndex1 = selectedCards[0];
+            const cardIndex2 = selectedCards[1];
+            // Change to unselected
+            cardDeck[cardIndex1].selected = false;
+            cardDeck[cardIndex2].selected = false;
+
+            console.log("Wrong!");
+            if (player) {
+              responseMessage = `${player.username} made a mistake!`;
+            }
+          }
+
+          if (lobby?.players.size === 2) {
+            // Swap the player id with for change turn
+            const playerArray = Array.from(lobby.players);
+            if (playerArray[0].user_id === lobby.gameState.turn)
+              lobby.gameState.turn = playerArray[1].user_id;
+            else if (playerArray[1].user_id === lobby.gameState.turn)
+              lobby.gameState.turn = playerArray[0].user_id;
+          }
+          // Update the card deck
+          if (lobby) lobby.gameState.cardDeck = cardDeck;
+          console.log("New server lobby with change turn is ", lobby);
+          io.emit("change-turn", lobby);
+          io.emit("message", responseMessage);
+        } else {
+          console.log("Emit an update no change turn");
+          console.log(lobby?.gameState);
+          console.log("New card deck");
+          io.emit("receive-game-update", cardDeck, lobby?.gameState.turn);
         }
       });
 
+      // socket.on("changeTurn", (user_id: number) => {
+      // 	console.log("Change turn, last user was ", user_id);
+      // 	const player1ID = lobby.players[0].user_id;
+      // 	const player2ID = lobby.players[1].user_id;
+      // 	if (player1ID !== user_id) {
+      // 		console.log("New player turn is ", player1ID);
+      // 		io.emit("switchTurn", player1ID);
+      // 	} else {
+      // 		console.log("New player turn is ", player2ID);
+      // 		io.emit("switchTurn", player2ID);
+      // 	}
+      // });
+
       socket.on("disconnect", () => {
         // Send the new lobby to everyone
-        io.emit("left", lobby);
+        io.emit("left", lobbies[lobby_id]);
         // Remove player from lobby
-        if (player) {
+        if (player && lobby) {
           // Remove from the array
-          const usernameIndex = lobby.players.indexOf(player);
-          if (usernameIndex !== -1) lobby.players.splice(usernameIndex, 1);
+          lobby.players.delete(player);
 
           // Update all the user is disconnected
           io.emit("left", lobby);
           console.log("Client left and emit and update to everyone. ");
+          // Delete the lobby if empty
+          if (lobby.players.size === 0) {
+            lobby = undefined;
+            delete lobbies[lobby_id];
+            console.log("Delete the lobby");
+          }
         }
 
-        console.log("Client disconnected ", username);
+        console.log("Client disconnected ", player.username);
       });
     });
 
@@ -98,3 +191,43 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
 };
 
 export default SocketHandler;
+
+// Prepare card deck with initial values
+/**
+ * Helper function for retrive data from file
+ * @returns {CardData} with initial default values
+ */
+const prepareCardDeckFromServer = async (): Promise<CardData[]> => {
+  try {
+    // Trova il percorso assoluto della directory "data"
+    const jsonDirectory = path.join(process.cwd(), "data");
+
+    // Leggi il file "data.json"
+    const fileContents = await fs.readFile(
+      path.join(jsonDirectory, "data.json"),
+      "utf8",
+    );
+
+    // Converte il contenuto del file in JSON
+    const cardDeck = JSON.parse(fileContents);
+
+    // Verifica che il file abbia il formato corretto (es. che contenga una proprietà "data" con un array)
+    if (!Array.isArray(cardDeck.data)) {
+      throw new Error("Invalid data format: expected 'data' to be an array.");
+    }
+
+    // Espande ogni card aggiungendo le proprietà "guessedFrom" e "selected"
+    const expandedDeck: CardData[] = cardDeck.data.map((card: CardData) => {
+      return {
+        ...card,
+        guessedFrom: 0,
+        selected: false,
+      };
+    });
+
+    return expandedDeck;
+  } catch (error) {
+    console.error("Error preparing card deck:", error);
+    throw new Error("Failed to prepare card deck from server.");
+  }
+};

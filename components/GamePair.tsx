@@ -3,11 +3,12 @@ import { useSocket } from "@/context/SocketProvider";
 import { Matrix } from "@/components/game/findPairGame/Matrix";
 import PlayerList from "@/components/game/PlayerList";
 import { isObjectEmpty } from "@/utils/utils-data";
-import { CardData, GameState, Player } from "@/types/game";
+import { CardData, ClientGameState, Player } from "@/types/game";
 
 type Props = {
-  gameState: GameState;
   handleUpdateDeck: (cardDeck: CardData[]) => void;
+  gameState: ClientGameState;
+  players: Set<Player>;
 };
 
 export default function GamePair({ gameState, handleUpdateDeck }: Props) {
@@ -15,40 +16,10 @@ export default function GamePair({ gameState, handleUpdateDeck }: Props) {
 
   const [useGameState, setGameState] = useState(gameState);
   const [usePlayerList, setPlayerList] = useState<Player[]>();
-  const [usePlayerTurn, setPlayerTurn] = useState(1);
 
-  // Game state
-  const [useReady, setReady] = useState(false);
-
-  //From the parent update
   useEffect(() => {
     setGameState(gameState);
-    setPlayerTurn(gameState.turn);
   }, [gameState]);
-
-  // Refresh users
-  useEffect(() => {
-    handleUpdateLobby();
-  }, [useGameState]);
-
-  // Fetch data cards
-  useEffect(() => {}, []);
-
-  // Game will start from here
-  const handleGameStart = () => {
-    if (useGameState.lobby) {
-      if (useGameState.lobby?.players.length > 1) {
-        setReady(true);
-        socket.emit("start");
-      } else {
-        alert("You need more players!");
-      }
-    }
-  };
-
-  const handleUpdateLobby = () => {
-    setPlayerList(useGameState.lobby?.players);
-  };
 
   if (isObjectEmpty(socket)) {
     console.log("The game is not ready");
@@ -62,17 +33,10 @@ export default function GamePair({ gameState, handleUpdateDeck }: Props) {
         gameState={useGameState}
       ></Matrix>
       <div className="m-5">
-        <button className="bg-green-700 m-2" onClick={handleUpdateLobby}>
-          Refresh
-        </button>
-
-        <button className="bg-green-700 m-2 " onClick={handleGameStart}>
-          Start
-        </button>
-        {useReady ? <p>Game is running</p> : <p></p>}
+        <p>User_id turn: {useGameState.turn}</p>
         <p>Players</p>
         <PlayerList
-          currentPlayerUsername={useGameState.playerName}
+          currentPlayerUsername={useGameState.username}
           players={usePlayerList}
         ></PlayerList>
       </div>

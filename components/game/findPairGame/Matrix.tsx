@@ -1,16 +1,12 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import Card from "./Card";
-import {
-  checkCardMatch,
-  checkDataSelectable,
-  getSelectedCards,
-} from "@/utils/utils-data";
-import { CardData, GameState } from "@/types/game";
+import { checkDataSelectable } from "@/utils/utils-data";
+import { CardData, ClientGameState } from "@/types/game";
 import { clone } from "lodash";
 
 type MatrixProps = {
   handleUpdateDeck: (cardDeck: CardData[]) => void;
-  gameState: GameState;
+  gameState: ClientGameState;
 };
 export const Matrix: React.FC<MatrixProps> = ({
   handleUpdateDeck,
@@ -23,11 +19,22 @@ export const Matrix: React.FC<MatrixProps> = ({
   const [useCardElement, setCardElement] = useState<ReactNode>([]);
   const [useRefresh, setRefresh] = useState(false);
   const [useGameState, setGameState] = useState(gameState);
-  const [useCardDeck, setCardDeck] = useState(useGameState.cardDeck);
+  const [useCardDeck, setCardDeck] = useState(gameState.cardDeck);
+  const [isCardClickable, setCardClickable] = useState(false);
+
+  const moveCounter = useRef(0);
 
   useEffect(() => {
-    setCardDeck(gameState.cardDeck);
+    setCardDeck([...gameState.cardDeck]);
     setGameState(gameState);
+  }, [gameState]);
+
+  //Is clickable logic
+  useEffect(() => {
+    console.log("Turn state: ", gameState.user_id, gameState.turn);
+    if (gameState.user_id === gameState.turn) setCardClickable(true);
+    else setCardClickable(false);
+    setRefresh(!useRefresh);
   }, [gameState]);
 
   // Create all cards
@@ -47,6 +54,7 @@ export const Matrix: React.FC<MatrixProps> = ({
               index={counterKey}
               guessed={actualCard.guessedFrom}
               selected={actualCard.selected}
+              isCardClickable={isCardClickable}
             ></Card>,
           );
           counterKey += 1;
@@ -56,44 +64,7 @@ export const Matrix: React.FC<MatrixProps> = ({
     }
   }, [useCardDeck, useRefresh]);
 
-  useEffect(() => {
-    const selectedCards = getSelectedCards(useCardDeck);
-    // Check if the card match
-    if (checkCardMatch(useCardDeck)) {
-      // Change card to gueseed
-      setCardDeck(() => {
-        const newCardDeck = useCardDeck;
-        // Change to gueesed
-        // Extract index of the selected cards
-        const cardIndex1 = selectedCards[0];
-        const cardIndex2 = selectedCards[1];
-        // Change the state to gueeesed
-        newCardDeck[cardIndex1].guessedFrom = 1;
-        newCardDeck[cardIndex2].guessedFrom = 1;
-        // Change to unselected
-        newCardDeck[cardIndex1].selected = false;
-        newCardDeck[cardIndex2].selected = false;
-        handleUpdateDeckWithDelay(newCardDeck);
-        return newCardDeck;
-      });
-      console.log("Card gueesed!");
-    } else if (selectedCards.length === 2) {
-      console.log(selectedCards);
-      setCardDeck(() => {
-        const newCardDeck = useCardDeck;
-        // Extract index of the selected cards
-        const cardIndex1 = selectedCards[0];
-        const cardIndex2 = selectedCards[1];
-        // Change to unselected
-        newCardDeck[cardIndex1].selected = false;
-        newCardDeck[cardIndex2].selected = false;
-        handleUpdateDeckWithDelay(newCardDeck);
-        return newCardDeck;
-      });
-
-      console.log("Wrong!");
-    }
-  }, [useCardDeck]);
+  useEffect(() => {}, [useCardDeck]);
 
   // Handle the selection of a card
   const handleSelectACard = (index: number, lastState: boolean) => {
@@ -101,14 +72,14 @@ export const Matrix: React.FC<MatrixProps> = ({
     const flipCard = () => {
       const newCardDeck = clone(useCardDeck);
       // Flip the value
-      newCardDeck[index].selected = !lastState;
-      handleUpdateDeck(newCardDeck);
+      newCardDeck[index].selected = true;
+      handleUpdateDeckWithDelay(newCardDeck);
 
       return newCardDeck;
     };
 
-    // If already flipped filp again
-    if (lastState) {
+    // If not flipped flip
+    if (lastState === false) {
       setCardDeck(flipCard);
       return true;
     }
@@ -125,8 +96,11 @@ export const Matrix: React.FC<MatrixProps> = ({
   // Helper function that enable the delay after 2 cards choosed
   const handleUpdateDeckWithDelay = (newCardDeck: CardData[]) => {
     const timer = new Promise((resolve) => {
-      setTimeout(resolve, 2000);
-    }).then(() => handleUpdateDeck(newCardDeck));
+      setCardClickable(false);
+      setTimeout(resolve, 200);
+    }).then(() => {
+      handleUpdateDeck(newCardDeck);
+    });
   };
 
   return (
