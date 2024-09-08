@@ -1,61 +1,15 @@
-# Explanations
+# Design
 
 ## Figma mockup
 
 https://www.figma.com/design/8NGJOCtcVqLFtTrS3P0ht7/Nihongo-Alley---copied-with-new-games?node-id=0-88&node-type=CANVAS&t=FZORUYPPwlmsROs0-0
 
-# Websocket
+# Implementation
+
+## Websocket
 
 https://medium.com/@RajeshSharma-dev/websockets-with-nextjs-for-building-real-time-responsive-application-bc4bedd19eec
 https://github.com/ryanc268/Typescript-Websocket-Game/tree/main
-
-## Folder structure
-
-There is two ways in Nextjs for routing. We adopt pages routing, not app routing. <br>
-https://medium.com/@CraftedX/should-you-use-next-js-pages-or-app-directory-38e803fe5cb4
-
-Folder structure is related to routing.<br>
-https://nextjs.org/docs/pages/building-your-application/routing
-
-Folder structure convention. See page router section.<br>
-https://nextjs.org/docs/getting-started/project-structure
-
-The basic behavior of Next.js by naming for file/folders.<br>
-There are some part which is defferent in between page router and app router.<br>
-https://nextjs.org/docs/app/building-your-application/routing/colocation<br>
-
-The \_app.tsx file is used for rendering every page.<br>
-https://nextjs.org/docs/pages/building-your-application/routing/custom-app
-
-Page name is case-sensitive. URL is case-sensitive as well.
-
-- Commponents<br>
-  React components used in each page. For example, flash card, card to show score, ...<br>
-  The name should be camel case.
-
-- Pages<br>
-  These represents pages.<br>
-
-- apis<br>
-  https://next-auth.js.org/getting-started/example<br>
-
-* utils<br>
-  mocks-tsx.tsx<br>
-  mocks.ts<br>
-  Mock funcitons for test.
-
-## Commands
-
-- install<br>
-  npm install<br>
-  ※For development of only frontend, we don't need docker run.<br>
-  ※EbisuG haven't checked running app with docker yet.
-
-* run local<br>
-  npm run dev<br>
-
-* run test<br>
-  npm run test
 
 ## Route
 
@@ -107,8 +61,70 @@ Every game contains 2 context provider
 - GameState - Contain all information about the game and the status
 - Socket - Contain all information and event about the scoket
 
-## Testing
+# Folder structure
 
+There is two ways in Nextjs for routing. We adopt pages routing, not app routing. <br>
+https://medium.com/@CraftedX/should-you-use-next-js-pages-or-app-directory-38e803fe5cb4
+
+Folder structure is related to routing.<br>
+https://nextjs.org/docs/pages/building-your-application/routing
+
+Folder structure convention. See page router section.<br>
+https://nextjs.org/docs/getting-started/project-structure
+
+The basic behavior of Next.js by naming for file/folders.<br>
+There are some part which is defferent in between page router and app router.<br>
+https://nextjs.org/docs/app/building-your-application/routing/colocation<br>
+
+The \_app.tsx file is used for rendering every page.<br>
+https://nextjs.org/docs/pages/building-your-application/routing/custom-app
+
+Page name is case-sensitive. URL is case-sensitive as well.
+
+- Commponents<br>
+  React components used in each page. For example, flash card, card to show score, ...<br>
+  The name should be camel case.
+
+- Pages<br>
+  These represents pages.<br>
+
+- apis<br>
+  https://next-auth.js.org/getting-started/example<br>
+
+* utils<br>
+  mocks-tsx.tsx<br>
+  mocks.ts<br>
+  Mock funcitons for test.
+
+# Commands
+
+- install<br>
+  npm install<br>
+  ※For development of only frontend, we don't need docker run.<br>
+  ※EbisuG haven't checked running app with docker yet.
+
+* run local<br>
+  npm run dev<br>
+
+* run test<br>
+  npm run test
+
+
+
+# Testing
+
+## Plan
+The purpose is to prevent degradation and reduce time run test mannually.
+
+Component/Page test<br>
+・Check successfully rendering.<br>
+・Check fetching data.<br>
+・Check state changes correctly.<br>
+
+End-to-end test<br>
+・Check scenario of user events.<br>
+
+## Tools
 Use Jest + React Testing Libraries
 Basic usage for Jest + React:<br>
 https://www.robinwieruch.de/react-testing-library/<br>
@@ -119,12 +135,12 @@ https://github.com/vercel/next.js/issues/7479#issuecomment-587145429<br>
 Custom renders for mock context.<br>
 https://testing-library.com/docs/react-testing-library/setup/#custom-render
 
-## Errors
+# Errors
 
 - App doesn't run after successful build.
   Make sure you use the latest things. Delete your image, container, and volume. Run docker compose commands again.
 
-## Reference
+# Reference
 
 Using google auth.<br>
 https://blog.stackademic.com/building-a-custom-google-authentication-system-with-django-rest-framework-and-reactjs-ii-794fa8592782
