@@ -8,10 +8,14 @@ import { io, Socket } from 'socket.io-client';
 import { CardData, ClientGameState, ServerLobby } from '@/types/game';
 import { getSession } from 'next-auth/react';
 import Message from '@/components/game/findPairGame/Message';
+import { useRouter } from 'next/router';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const FindPair = () => {
+  // Before show the cards you need to show the lobby Components and the players must be 2 and the owner should press start
+  // List of players inside the ServerLobby
+
   // Socket or state
   const [useSocket, setSocket] = useState<Socket>({} as Socket);
   const [useClientGameState, setClientGameState] = useState<ClientGameState>({} as ClientGameState);
@@ -22,6 +26,10 @@ const FindPair = () => {
   // State if game is ready or not
   const [isGameStateReady, setGameStateReady] = useState(false);
   const [isSocketReady, setSocketReady] = useState(false);
+
+  // Get query arguments
+  const router = useRouter();
+  const { game_id, name } = router.query;
 
   // Initialize game state
   useEffect(() => {
@@ -48,7 +56,7 @@ const FindPair = () => {
         query: {
           user_id: useClientGameState.user_id,
           username: useClientGameState.username,
-          lobby_id: 1,
+          lobby_id: game_id,
         },
         path: '/api/socket',
       });
@@ -59,6 +67,8 @@ const FindPair = () => {
 
       newSocket.on('start', () => {
         console.log('Game is started');
+
+        // send to server the event start //io.emit("start");
       });
 
       newSocket.on('join', (receivedLobby: ServerLobby) => {

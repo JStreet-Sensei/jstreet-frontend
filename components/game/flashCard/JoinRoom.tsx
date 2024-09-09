@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
 import { useRouter } from 'next/router';
 
 interface Player {
@@ -10,45 +9,10 @@ interface Player {
 
 const JoinRoom: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
-  const [socket, setSocket] = useState<any>(null);
   const router = useRouter();
   const { game_id, name } = router.query;
 
-  useEffect(() => {
-    if (game_id && name) {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-      const newSocket = io(backendUrl, {
-        query: { game_id, name },
-        path: '/api/socket',
-      });
-
-      newSocket.on('connect', () => {
-        console.log('Connected to server');
-      });
-
-      newSocket.on('players-update', (updatedPlayers: Player[]) => {
-        setPlayers(updatedPlayers);
-      });
-
-      newSocket.on('disconnect', () => {
-        console.log('Disconnected from server');
-      });
-
-      setSocket(newSocket);
-
-      return () => {
-        newSocket.disconnect();
-      };
-    }
-  }, [game_id, name]);
-
-  const handleStartGame = () => {
-    if (socket) {
-      socket.emit('start-game', { game_id });
-    }
-  };
-
-  const isReadyToStart = players.length >= 2; 
+  const isReadyToStart = players.length >= 2;
 
   return (
     <div className="bg-gray-200 min-h-screen flex flex-col items-center p-6">
@@ -61,8 +25,10 @@ const JoinRoom: React.FC = () => {
         <div className="mb-6">
           <h2 className="text-3xl font-bold mb-4 text-[#A4161A]">Players in Room</h2>
           <ul>
-            {players.map(player => (
-              <li key={player.id} className="text-[#A4161A] mb-2">{player.name}</li>
+            {players.map((player) => (
+              <li key={player.id} className="text-[#A4161A] mb-2">
+                {player.name}
+              </li>
             ))}
           </ul>
           {players.length === 1 && (
@@ -72,7 +38,7 @@ const JoinRoom: React.FC = () => {
 
         <div className="text-center mb-6">
           <button
-            onClick={handleStartGame}
+            onClick={() => {}}
             disabled={!isReadyToStart}
             className={`py-3 px-6 rounded-md shadow-md ${isReadyToStart ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400'}`}
           >
