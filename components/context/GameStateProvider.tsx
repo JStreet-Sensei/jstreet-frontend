@@ -1,21 +1,21 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { GameStateProviderProps } from "@/types/next";
-import { GameContexType, ClientGameState } from "@/types/game";
+import { createContext, useContext, useEffect, useState } from 'react'
+import { GameStateProviderProps } from '@/types/next'
+import { GameContexType, ClientGameState } from '@/types/game'
 
 //Define all contexts
 
-const GameStateContext = createContext<GameContexType>({} as GameContexType);
+const GameStateContext = createContext<GameContexType>({} as GameContexType)
 
 export const useGameState = () => {
-  return useContext(GameStateContext);
-};
+  return useContext(GameStateContext)
+}
 
 export const updateGameState = () => {
-  return;
-};
+  return
+}
 
 interface MyGameStateProviderProps extends GameStateProviderProps {
-  parentGameState: ClientGameState;
+  parentGameState: ClientGameState
 }
 
 const GameStateProvider: React.FC<MyGameStateProviderProps> = ({
@@ -23,17 +23,17 @@ const GameStateProvider: React.FC<MyGameStateProviderProps> = ({
   parentGameState,
 }) => {
   // Initiliaize the game state
-  const [gameState, setGameState] = useState<ClientGameState>(parentGameState);
+  const [gameState, setGameState] = useState<ClientGameState>(parentGameState)
 
   useEffect(() => {
-    setGameState(gameState);
-  }, [parentGameState]);
+    setGameState(gameState)
+  }, [parentGameState])
 
   return (
     <GameStateContext.Provider value={{ gameState }}>
       {children}
     </GameStateContext.Provider>
-  );
-};
+  )
+}
 
-export default GameStateProvider;
+export default GameStateProvider
