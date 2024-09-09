@@ -11,11 +11,7 @@ type Props = {
   players: Set<Player>;
 };
 
-export default function GamePair({
-  gameState,
-  handleUpdateDeck,
-  players,
-}: Props) {
+export default function GamePair({ gameState, handleUpdateDeck, players }: Props) {
   const { socket } = useSocket();
 
   const [useGameState, setGameState] = useState(gameState);
@@ -36,17 +32,11 @@ export default function GamePair({
 
   return (
     <>
-      <Matrix
-        handleUpdateDeck={handleUpdateDeck}
-        gameState={useGameState}
-      ></Matrix>
+      <Matrix handleUpdateDeck={handleUpdateDeck} gameState={useGameState}></Matrix>
       <div className="m-5">
         <p>User_id turn: {useGameState.turn}</p>
         <p>Players</p>
-        <PlayerList
-          currentPlayerUsername={useGameState.username}
-          players={usePlayerList}
-        ></PlayerList>
+        <PlayerList currentPlayerUsername={useGameState.username} players={usePlayerList}></PlayerList>
       </div>
     </>
   );

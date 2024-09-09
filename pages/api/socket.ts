@@ -4,15 +4,8 @@ import { NextApiResponseServerIO } from '@/types/next';
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { Server as IOServer } from 'socket.io';
 import { CardData, Player, ServerGameState, ServerLobby } from '@/types/game';
-import {
-  extractDataFromQuery,
-  serializeServerObject,
-} from '@/utils/utils-socket';
-import {
-  checkCardMatch,
-  checkDataSelectable,
-  getSelectedCards,
-} from '@/utils/utils-data';
+import { extractDataFromQuery, serializeServerObject } from '@/utils/utils-socket';
+import { checkCardMatch, checkDataSelectable, getSelectedCards } from '@/utils/utils-data';
 
 import path from 'path';
 import { promises as fs } from 'fs';
@@ -132,10 +125,8 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
           if (lobby?.players.size === 2) {
             // Swap the player id with for change turn
             const playerArray = Array.from(lobby.players);
-            if (playerArray[0].user_id === lobby.gameState.turn)
-              lobby.gameState.turn = playerArray[1].user_id;
-            else if (playerArray[1].user_id === lobby.gameState.turn)
-              lobby.gameState.turn = playerArray[0].user_id;
+            if (playerArray[0].user_id === lobby.gameState.turn) lobby.gameState.turn = playerArray[1].user_id;
+            else if (playerArray[1].user_id === lobby.gameState.turn) lobby.gameState.turn = playerArray[0].user_id;
           }
           // Update the card deck
           if (lobby) lobby.gameState.cardDeck = cardDeck;
@@ -148,19 +139,6 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
           io.emit('receive-game-update', cardDeck, lobby?.gameState.turn);
         }
       });
-
-      // socket.on("changeTurn", (user_id: number) => {
-      // 	console.log("Change turn, last user was ", user_id);
-      // 	const player1ID = lobby.players[0].user_id;
-      // 	const player2ID = lobby.players[1].user_id;
-      // 	if (player1ID !== user_id) {
-      // 		console.log("New player turn is ", player1ID);
-      // 		io.emit("switchTurn", player1ID);
-      // 	} else {
-      // 		console.log("New player turn is ", player2ID);
-      // 		io.emit("switchTurn", player2ID);
-      // 	}
-      // });
 
       socket.on('disconnect', () => {
         // Send the new lobby to everyone
@@ -203,10 +181,7 @@ const prepareCardDeckFromServer = async (): Promise<CardData[]> => {
     const jsonDirectory = path.join(process.cwd(), 'data');
 
     // Leggi il file "data.json"
-    const fileContents = await fs.readFile(
-      path.join(jsonDirectory, 'data.json'),
-      'utf8'
-    );
+    const fileContents = await fs.readFile(path.join(jsonDirectory, 'data.json'), 'utf8');
 
     // Converte il contenuto del file in JSON
     const cardDeck = JSON.parse(fileContents);

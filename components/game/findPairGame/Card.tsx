@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 type CardProps = {
   frontText: string;
@@ -43,7 +43,7 @@ export const Card: React.FC<CardProps> = ({
 
   return (
     <div className={`flip-card`} onClick={handleFlip}>
-      <div className={`flip-card-inner ${useFlip ? "flip" : ""}`}>
+      <div className={`flip-card-inner ${useFlip ? 'flip' : ''} `}>
         <div className="flip-card-front">
           <p className="title">{frontText}</p>
           <p>Hover Me</p>

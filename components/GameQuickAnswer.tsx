@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import { useSocket } from "@/context/SocketProvider";
-import { useGameState } from "@/context/GameStateProvider";
+import { useEffect, useState } from 'react';
+import { useSocket } from '@/context/SocketProvider';
+import { useGameState } from '@/context/GameStateProvider';
 
 export default function GameQuickAnswer() {
   const { socket } = useSocket();
   const gameState = useGameState();
 
-  const [useResponse, setResponse] = useState("No answer");
+  const [useResponse, setResponse] = useState('No answer');
 
   useEffect(() => {
-    console.log("gamestate ", gameState, ".");
+    console.log('gamestate ', gameState, '.');
   }, [gameState]);
 
   const sendMessage = () => {
     if (socket) {
       // Invia un messaggio al server
-      socket.emit("message", "Hello from GameQuickAnswer");
+      socket.emit('message', 'Hello from GameQuickAnswer');
     }
   };
 

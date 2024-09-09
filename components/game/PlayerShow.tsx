@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Player } from "../../types/game";
+import { useEffect, useState } from 'react';
+import { Player } from '../../types/game';
 
 type PlayerListProps = {
   player: Player | undefined;

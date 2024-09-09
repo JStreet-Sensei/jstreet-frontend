@@ -7,11 +7,7 @@ type PlayerListProps = {
   currentPlayerUsername: string;
 };
 
-export const PlayerList = ({
-  currentPlayerUsername,
-  players,
-  ...props
-}: PlayerListProps) => {
+export const PlayerList = ({ currentPlayerUsername, players, ...props }: PlayerListProps) => {
   const [usePlayers, setPlayers] = useState<ReactNode>();
   const [usePlayerName, setPlayerName] = useState('');
 
@@ -22,9 +18,7 @@ export const PlayerList = ({
       const newPlayersComponets: ReactNode[] = [];
       let counterKey = 0;
       players.forEach((player: Player) => {
-        newPlayersComponets.push(
-          <PlayerShow player={player} key={counterKey}></PlayerShow>
-        );
+        newPlayersComponets.push(<PlayerShow player={player} key={counterKey}></PlayerShow>);
         counterKey += 1;
       });
       setPlayers(newPlayersComponets);
