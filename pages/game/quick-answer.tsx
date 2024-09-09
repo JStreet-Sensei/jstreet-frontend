@@ -182,7 +182,7 @@ export default function GameQuickAnswer() {
 
             <div>
               <h4>Scores:</h4>
-              {playerScores.map((elem,ind) => (
+              {playerScores.map((elem, ind) => (
                 <p key={ind}>
                   {Object.keys(elem)[0]}: {Object.values(elem)[0]} points
                 </p>

@@ -1,6 +1,6 @@
-import { useSession, signOut } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { useSession, signOut } from 'next-auth/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export const Header: React.FC = () => {
   const { data: session } = useSession();
@@ -10,7 +10,7 @@ export const Header: React.FC = () => {
     <>
       <div className="flex flex-row">
         <div className="basis-1/6">
-          <Link href={"/"}>To Homepage</Link>
+          <Link href={'/'}>To Homepage</Link>
         </div>
         <div className="basis-3/6">This is empty space</div>
         {session ? (
@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
               Log out
             </div>
             <div className="basis-1/6 cursor-pointer">
-              <Link href={"/mypage"}>My page</Link>
+              <Link href={'/mypage'}>My page</Link>
             </div>
           </>
         ) : (
@@ -33,7 +33,7 @@ export const Header: React.FC = () => {
             <div
               className="basis-1/6 cursor-pointer"
               onClick={() => {
-                router.push("/login");
+                router.push('/login');
               }}
             >
               Log in

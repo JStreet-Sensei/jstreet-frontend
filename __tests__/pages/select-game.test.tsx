@@ -24,6 +24,6 @@ describe("SelectGame", () => {
 
     render(<SelectGame />);
 
-    screen.debug();
+    // screen.debug();
   });
 });

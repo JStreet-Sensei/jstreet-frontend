@@ -1,21 +1,28 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from 'react';
+import { Player } from '@/types/game';
+import PlayerShow from '@/components/game/PlayerShow';
 
 type PlayerListProps = {
-  players: string[] | undefined;
+  players: Set<Player>;
   currentPlayerUsername: string;
 };
 
-export const PlayerList = ({
-  currentPlayerUsername,
-  players,
-  ...props
-}: PlayerListProps) => {
-  const [usePlayers, setPlayers] = useState(players);
-  const [usePlayerName, setPlayerName] = useState("");
+export const PlayerList = ({ currentPlayerUsername, players, ...props }: PlayerListProps) => {
+  const [usePlayers, setPlayers] = useState<ReactNode>();
+  const [usePlayerName, setPlayerName] = useState('');
 
+  // Update the player list
   useEffect(() => {
-    setPlayers(players);
     setPlayerName(currentPlayerUsername);
+    if (players) {
+      const newPlayersComponets: ReactNode[] = [];
+      let counterKey = 0;
+      players.forEach((player: Player) => {
+        newPlayersComponets.push(<PlayerShow player={player} key={counterKey}></PlayerShow>);
+        counterKey += 1;
+      });
+      setPlayers(newPlayersComponets);
+    }
   }, [players, currentPlayerUsername]);
 
   return (
