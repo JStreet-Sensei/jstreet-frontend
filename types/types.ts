@@ -21,4 +21,9 @@ interface ApiResponse {
   data: DataItem[];
 }
 
+export type guessQuickAnswer = {
+  userId: number,
+  gueesedAnswerId: number,
+}
+
 export type { learningContextType, phraseType, DataItem, ApiResponse };
