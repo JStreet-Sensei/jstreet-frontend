@@ -141,16 +141,21 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
         console.log(arg)
         if (arg.gueesedAnswerId === gameState.problems[gameState.currentTurn].content_id) {
           //Update score
-
-          //update current turn
+          gameState.players = updateScore(gameState.players, arg.userId)
+          gameState.currentTurn++
 
           //if game should continue,
-          //send next set of a problem and deals
+          if (gameState.currentTurn <= 9) {
+            //send next set of a problem and deals
+            sendNextTurnData(gameState.problems, gameState.currentTurn, gameState.deals, io, lobby_id)
+          } else {
+            //if the game should end,
+            //send result information to each client
+            //update scores to DB
+            //and close connection
+            endGame(socket, gameState.players, io, lobby_id, lobbies)
+          }
 
-          //if the game should end,
-          //send result information to each client
-          //update scores to DB
-          //and close connection
         }
 
         //if every one is answered and no one find the answer, game will change to next step
@@ -167,13 +172,16 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
         // Remove player from lobby
         if (player && lobby) {
           // Remove from the array
-          lobby.players.delete(player);
-
+          for (let i = 0; i <= gameState.players.length - 1; i++) {
+            if (gameState.players[i].user_id === player.user_id) {
+              gameState.players = gameState.players.slice(0, i).concat(gameState.players.slice(i + 1,))
+            }
+          }
           // Update all the user is disconnected
           io.emit('left', lobby);
           console.log('Client left and emit and update to everyone. ');
           // Delete the lobby if empty
-          if (lobby.players.size === 0) {
+          if (gameState.players.length === 0) {
             lobby = undefined;
             delete lobbies[lobby_id];
             console.log('Delete the lobby');
@@ -183,7 +191,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
         console.log('Client disconnected ', player.username);
       });
 
-      //finish game process
+
     });
 
     res.socket.server.io = io;
@@ -206,18 +214,47 @@ const updateScore = (currentPlayers: Player[], playerId: number) => {
   return copied
 }
 
-// const sendNextTurnData = async (problems: contentForQuickAnswer[], currentTurn: number) => {
-//   return problems[currentTurn++]
-// }
+const sendNextTurnData = (problems: contentForQuickAnswer[], currentTurn: number, deals: contentForQuickAnswer[][],
+  io: SocketIOServer<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>, lobby_id: number) => {
+  const nextData = shuffle([problems[currentTurn]].concat(deals[currentTurn]))
+  io.to(lobby_id.toString())
+    .emit("next", nextData)
+}
 
 const endGame = async (socket: Socket, currentPlayers: Player[],
-  io: SocketIOServer<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>, lobbyId: number) => {
+  io: SocketIOServer<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>, lobbyId: number,
+  lobbies: { [key: string]: QuickAnswerServerLobby }
+) => {
   //send game result
-  io.to(lobbyId.toString())
+  io.to(lobbyId.toString()).emit("result", currentPlayers)
 
   //insert record to db
-  //disconnect web socket
+  //    path('scores/create', create_score, name='create_score')
+  //Need to create scores of all users
 
+  //disconnect web socket
+  // lobby = undefined;
+  delete lobbies[lobbyId];
+  console.log('Delete the lobby');
+
+  // console.log('Client disconnected ', player.username);
+
+}
+
+const shuffle = (array: any[]) => {
+  let currentIndex = array.length;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+
+    // Pick a remaining element...
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
 }
 
 
@@ -227,34 +264,34 @@ const endGame = async (socket: Socket, currentPlayers: Player[],
  * Helper function for retrive data from file
  * @returns {CardData} with initial default values
  */
-const prepareCardDeckFromServer = async (): Promise<CardData[]> => {
-  try {
-    // Trova il percorso assoluto della directory "data"
-    const jsonDirectory = path.join(process.cwd(), 'data');
+// const prepareCardDeckFromServer = async (): Promise<CardData[]> => {
+//   try {
+//     // Trova il percorso assoluto della directory "data"
+//     const jsonDirectory = path.join(process.cwd(), 'data');
 
-    // Leggi il file "data.json"
-    const fileContents = await fs.readFile(path.join(jsonDirectory, 'data.json'), 'utf8');
+//     // Leggi il file "data.json"
+//     const fileContents = await fs.readFile(path.join(jsonDirectory, 'data.json'), 'utf8');
 
-    // Converte il contenuto del file in JSON
-    const cardDeck = JSON.parse(fileContents);
+//     // Converte il contenuto del file in JSON
+//     const cardDeck = JSON.parse(fileContents);
 
-    // Verifica che il file abbia il formato corretto (es. che contenga una proprietà "data" con un array)
-    if (!Array.isArray(cardDeck.data)) {
-      throw new Error("Invalid data format: expected 'data' to be an array.");
-    }
+//     // Verifica che il file abbia il formato corretto (es. che contenga una proprietà "data" con un array)
+//     if (!Array.isArray(cardDeck.data)) {
+//       throw new Error("Invalid data format: expected 'data' to be an array.");
+//     }
 
-    // Espande ogni card aggiungendo le proprietà "guessedFrom" e "selected"
-    const expandedDeck: CardData[] = cardDeck.data.map((card: CardData) => {
-      return {
-        ...card,
-        guessedFrom: 0,
-        selected: false,
-      };
-    });
+//     // Espande ogni card aggiungendo le proprietà "guessedFrom" e "selected"
+//     const expandedDeck: CardData[] = cardDeck.data.map((card: CardData) => {
+//       return {
+//         ...card,
+//         guessedFrom: 0,
+//         selected: false,
+//       };
+//     });
 
-    return expandedDeck;
-  } catch (error) {
-    console.error('Error preparing card deck:', error);
-    throw new Error('Failed to prepare card deck from server.');
-  }
-};
+//     return expandedDeck;
+//   } catch (error) {
+//     console.error('Error preparing card deck:', error);
+//     throw new Error('Failed to prepare card deck from server.');
+//   }
+// };
