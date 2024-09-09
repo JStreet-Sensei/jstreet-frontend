@@ -45,6 +45,7 @@ export type QuickAnswerGameServerState = {
   problems: contentForQuickAnswer[]
   deals: contentForQuickAnswer[][]
   currentTurn: number
+  answeredUserId: number[]
   // rank:
 }
 export interface contentForQuickAnswer {
