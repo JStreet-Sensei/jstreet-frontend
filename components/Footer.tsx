@@ -1,11 +1,9 @@
 export const Footer: React.FC = () => {
-    return (
-        <>
-            <div >
-            Footer is here.
-            </div>
-        </>
-    )
-}
+  return (
+    <>
+      <div>Footer is here.</div>
+    </>
+  );
+};
 
-export default Footer
+export default Footer;

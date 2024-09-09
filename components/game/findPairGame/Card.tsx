@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 type CardProps = {
   frontText: string;
@@ -7,6 +7,7 @@ type CardProps = {
   index: number;
   guessed: number;
   selected: boolean;
+  isCardClickable: boolean;
 };
 
 export const Card: React.FC<CardProps> = ({
@@ -16,9 +17,15 @@ export const Card: React.FC<CardProps> = ({
   index,
   selected,
   guessed,
+  isCardClickable,
 }) => {
   // Flip true means that show the back of the cards
   const [useFlip, setFlip] = useState(false);
+  const [useIsClickable, setIsClickable] = useState(isCardClickable);
+
+  useEffect(() => {
+    setIsClickable(isCardClickable);
+  }, [isCardClickable]);
 
   // Flip the card on states of gueesed and selected
   useEffect(() => {
@@ -28,12 +35,15 @@ export const Card: React.FC<CardProps> = ({
   }, [selected, guessed]);
 
   const handleFlip = () => {
-    if (selectCard(index, selected) && guessed === 0) setFlip(!useFlip);
+    console.log(useIsClickable);
+    if (useIsClickable) {
+      if (selectCard(index, selected) && guessed === 0) setFlip(!useFlip);
+    }
   };
 
   return (
     <div className={`flip-card`} onClick={handleFlip}>
-      <div className={`flip-card-inner ${useFlip ? "flip" : ""}`}>
+      <div className={`flip-card-inner ${useFlip ? 'flip' : ''} `}>
         <div className="flip-card-front">
           <p className="title">{frontText}</p>
           <p>Hover Me</p>

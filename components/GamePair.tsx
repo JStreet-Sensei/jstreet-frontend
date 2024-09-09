@@ -1,65 +1,42 @@
-import { useEffect, useState } from "react";
-import { useSocket } from "./SocketProvider";
-import { useGameState } from "./GameStateProvider";
-import { Matrix } from "./game/findPairGame/Matrix";
-import PlayerList from "./game/PlayerList";
-import { fetchData } from "../utils/utils-data";
-import { DataItem } from "../types/types";
+import { useEffect, useState } from 'react';
+import { useSocket } from '@/context/SocketProvider';
+import { Matrix } from '@/components/game/findPairGame/Matrix';
+import PlayerList from '@/components/game/PlayerList';
+import { isObjectEmpty } from '@/utils/utils-data';
+import { CardData, ClientGameState, Player } from '@/types/game';
 
-export default function GamePair() {
-  const socket = useSocket();
-  const [useCardData, setCardData] = useState<DataItem[]>([] as DataItem[]);
-  const { gameState, gameStateInRef } = useGameState();
-  const [usePlayerList, setPlayerList] = useState<string[]>();
+type Props = {
+  handleUpdateDeck: (cardDeck: CardData[]) => void;
+  gameState: ClientGameState;
+  players: Set<Player>;
+};
 
-  // Game state
-  const [useReady, setReady] = useState(false);
+export default function GamePair({ gameState, handleUpdateDeck, players }: Props) {
+  const { socket } = useSocket();
+
+  const [useGameState, setGameState] = useState(gameState);
+  const [usePlayerList, setPlayerList] = useState(players);
 
   useEffect(() => {
-    console.log("Update players! ", gameState.lobby?.players);
-  }, [gameState.lobby?.players.length]);
+    setGameState(gameState);
+  }, [gameState]);
 
-  // Fetch data cards
   useEffect(() => {
-    fetchData().then((data) => {
-      setCardData(data);
-    });
-  }, []);
+    setPlayerList(players);
+  }, [players]);
 
-  // Request a refresh of joined users
-  const handleUpdateLobby = () => {
-    setPlayerList(gameState.lobby?.players);
-  };
-
-  // Game will start from here
-  const handleGameStart = () => {
-    if (gameState.lobby) {
-      if (gameState.lobby?.players.length > 1) {
-        setReady(true);
-        socket.emit("start");
-      } else {
-        alert("You need more players!");
-      }
-    }
-  };
+  if (isObjectEmpty(socket)) {
+    console.log('The game is not ready');
+    return <p>The game state and the socket is loading...</p>;
+  }
 
   return (
     <>
-      <Matrix cardData={useCardData}></Matrix>
+      <Matrix handleUpdateDeck={handleUpdateDeck} gameState={useGameState}></Matrix>
       <div className="m-5">
-        <button className="bg-green-700 m-2" onClick={handleUpdateLobby}>
-          Refresh
-        </button>
-
-        <button className="bg-green-700 m-2 " onClick={handleGameStart}>
-          Start
-        </button>
-        {useReady ? <p>Game is running</p> : <p></p>}
+        <p>User_id turn: {useGameState.turn}</p>
         <p>Players</p>
-        <PlayerList
-          currentPlayerUsername={gameState.playerName}
-          players={usePlayerList}
-        ></PlayerList>
+        <PlayerList currentPlayerUsername={useGameState.username} players={usePlayerList}></PlayerList>
       </div>
     </>
   );

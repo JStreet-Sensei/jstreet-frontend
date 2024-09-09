@@ -6,9 +6,11 @@ import { ApiResponse, DataItem } from "../types/types";
  * Read the data json from the api
  * @returns {DataItem} inside data.json
  */
-export const fetchData = async (): Promise<DataItem[]> => {
+export const fetchData = async (
+  path: string = "/api/data",
+): Promise<DataItem[]> => {
   try {
-    const response = await fetch("/api/data");
+    const response = await fetch(path);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -74,8 +76,15 @@ export const checkDataSelectable = (cardDeck: CardData[]) => {
     return counter;
   }, 0);
 
-  if (number < 2) return true;
+  if (number === 2) return true;
   return false;
 };
 
-export const flipSelectState = () => {};
+export const isObjectEmpty = (obj: object) => {
+  for (let prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
+  return true;
+};
