@@ -12,12 +12,18 @@ export default function GameQuickAnswer() {
 
   const [currentQuestion, setCurrentQuestion] = useState<string | null>(null); //Question to show each user
   const [currentTurn, setCurrentTurn] = useState(0); //Current turn
+  interface deal {
+    id: number
+    content: string
+  }
+  const [deals, setDeals] = useState<deal[] | null>(null)
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
   const [timer, setTimer] = useState(15); // 15 seconds timer
   const intervalRef = useRef(null); // Reference for the timer interval
 
   const players: string[] = gameState?.gameState?.lobby?.players || []; // Todo: need to plyers type 'GameContexType'
-  const initialPlayerScores: Record<string, number> = Object.fromEntries(players.map((el) => [el, 0]))
+  const initialPlayerScores: Record<string, number>[] = (players.map((el) => Object.fromEntries([[el, 0]])))
+  // const initialPlayerScores: Record<string, number> = Object.fromEntries(players.map((el) => [el, 0]))
   const [playerScores, setPlayerScores] = useState(initialPlayerScores);
   const maxTurns = 10;
 
@@ -81,29 +87,45 @@ export default function GameQuickAnswer() {
   };
 
   const handleCorrectAnswer = (playerName: string) => {
-    setPlayerScores((playerScores) => ({
-      ...playerScores,
-      [playerName]: (playerScores[playerName] || 0) + 1,
-    }));
-    setTimeout(() => {
-      nextQuestion();
-    }, 1000); // Add 1 sec before moving to the next question. Need to check with members
-  };
-
-  const nextQuestion = () => {
-    clearInterval(intervalRef.current); // Reset the timer
-    if (currentTurn < maxTurns) {
-      startTurn();
-    } else {
-      endGame();
+    let newPlayerScores = playerScores
+    for (let i = 0; i <= newPlayerScores.length - 1; i++) {
+      // for (const i of (newPlayerScores)) {
+      const key = Object.keys(newPlayerScores[i])[0]
+      if (key === playerName) {
+        const previousScore = newPlayerScores[i][key]
+        newPlayerScores[i] = Object.fromEntries([[key, previousScore + 1]])
+      }
     }
+    setPlayerScores(newPlayerScores)
+    // setPlayerScores((playerScores) => ({
+    //   ...playerScores,
+    //   [playerName]: (playerScores[playerName] || 0) + 1,
+    // }));
+    // setTimeout(() => {
+    //   nextQuestion();
+    // }, 1000); // Add 1 sec before moving to the next question. Need to check with members
   };
 
-  const endGame = () => {
-    setGameActive(false);
-    // Todo: link to game-result
-    socket.emit("endGame");
-  };
+  const calcPlayerRank = () => {
+    playerScores.sort(function (a, b) {
+      return a[1] - b[1];
+    })
+  }
+
+  // const nextQuestion = () => {
+  //   clearInterval(intervalRef.current); // Reset the timer
+  //   if (currentTurn < maxTurns) {
+  //     startTurn();
+  //   } else {
+  //     endGame();
+  //   }
+  // };
+
+  // const endGame = () => {
+  //   setGameActive(false);
+  //   // Todo: link to game-result
+  //   socket.emit("endGame");
+  // };
 
   return (
     <div>
@@ -118,9 +140,16 @@ export default function GameQuickAnswer() {
 
             {currentQuestion && (
               <div>
-                <h3>Question: {currentQuestion.text}</h3>
+                <h3>Question: {currentQuestion}</h3>
                 <p>Choose your answer:</p>
-                <div className="cards">
+                {deals?.map((elem) => {
+                  return (
+                    <div key={elem.id} onClick={() => { handleCardSelect(elem.id, gameState.gameState.playerName) }}>
+                      {elem.content}
+                    </div>
+                  )
+                })}
+                {/* <div className="cards">
                   {gameState?.players.map((player) => (
                     <div key={player.id} className="player-cards">
                       {player.id === gameState.currentPlayerId ? (
@@ -139,22 +168,23 @@ export default function GameQuickAnswer() {
                       )}
                     </div>
                   ))}
-                </div>
+                </div> */}
 
-                {selectedCard && (
+
+                {/* {selectedCard && (
                   <p>
                     Player {gameState.currentPlayerId} selected:{" "}
                     {selectedCard.text}
                   </p>
-                )}
+                )} */}
               </div>
             )}
 
             <div>
               <h4>Scores:</h4>
-              {players.map((player) => (
-                <p key={player.id}>
-                  {player.name}: {playerScores[player.id] || 0} points
+              {playerScores.map((elem,ind) => (
+                <p key={ind}>
+                  {Object.keys(elem)[0]}: {Object.values(elem)[0]} points
                 </p>
               ))}
             </div>
