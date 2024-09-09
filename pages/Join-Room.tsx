@@ -15,14 +15,8 @@ const JoinRoom: React.FC = () => {
   const { game_id, name } = router.query;
 
   useEffect(() => {
-    if (typeof game_id === 'string' && typeof name === 'string') {
-      // Check if NEXT_PUBLIC_BACKEND_URL is defined
+    if (game_id && name) {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-      if (!backendUrl) {
-        console.error('NEXT_PUBLIC_BACKEND_URL is not defined');
-        return;
-      }
-
       const newSocket = io(backendUrl, {
         query: { game_id, name },
         path: '/api/socket',
@@ -49,19 +43,19 @@ const JoinRoom: React.FC = () => {
   }, [game_id, name]);
 
   const handleStartGame = () => {
-    if (socket && typeof game_id === 'string') {
+    if (socket) {
       socket.emit('start-game', { game_id });
     }
   };
 
-  const isReadyToStart = players.length >= 2;
+  const isReadyToStart = players.length >= 2; 
 
   return (
     <div className="bg-gray-200 min-h-screen flex flex-col items-center p-6">
       <div className="bg-white rounded-lg shadow-md p-6 max-w-4xl w-full border border-[#A4161A]">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-[#A4161A] mb-4">Game ID: {game_id || 'N/A'}</h1>
-          <h2 className="text-xl font-semibold mb-4">Room: {name || 'N/A'}</h2>
+          <h1 className="text-2xl font-bold text-[#A4161A] mb-4">Game ID: {game_id}</h1>
+          <h2 className="text-xl font-semibold mb-4">Room: {name}</h2>
         </div>
 
         <div className="mb-6">
