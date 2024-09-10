@@ -13,7 +13,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const body = req.body;
   const method = req.method;
   const authorization = req.headers.authorization;
-  console.log(authorization);
   return new Promise<void>((resolve, reject) => {
     axios({
       url: `${getBackendURL()}${path}`,
