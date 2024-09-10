@@ -1,6 +1,6 @@
-import Image, { ImageLoader } from "next/image";
-import gamePic from "./../../../public/new-expression-fox.png";
-import Link from "next/link";
+import Image, { ImageLoader } from 'next/image';
+import gamePic from './../../../public/new-expression-fox.png';
+import Link from 'next/link';
 
 const baseUrl = process.env.NEXTAUTH_URL;
 
@@ -13,20 +13,16 @@ const LearningStart: React.FC = () => {
     <>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <span>New Expression</span>
+          <Link href={'/game/expression'}>
+            <span>Expression</span>
+          </Link>
           <br></br>
-          <Link href={"/game/learning"}>
+          <Link href={'/game/learning'}>
             <span> Learning Mode</span>
           </Link>
         </div>
         <div>
-          <Image
-            loader={imageLoader}
-            width={300}
-            height={300}
-            src={gamePic}
-            alt="Fox picture"
-          />
+          <Image loader={imageLoader} width={300} height={300} src={gamePic} alt="Fox picture" />
         </div>
       </div>
     </>
