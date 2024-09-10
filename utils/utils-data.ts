@@ -1,14 +1,12 @@
-import { CardData } from "../types/game";
-import { ApiResponse, DataItem } from "../types/types";
+import { CardData } from '@/types/game';
+import { ApiResponse, DataItem } from '@/types/types';
 
 //Fetch data from an API for pair game
 /**
  * Read the data json from the api
  * @returns {DataItem} inside data.json
  */
-export const fetchData = async (
-  path: string = "/api/data",
-): Promise<DataItem[]> => {
+export const fetchData = async (path: string = '/api/data'): Promise<DataItem[]> => {
   try {
     const response = await fetch(path);
 
@@ -19,7 +17,7 @@ export const fetchData = async (
     const result: ApiResponse = await response.json();
     return result.data;
   } catch (error) {
-    console.error("Fetch error:", error);
+    console.error('Fetch error:', error);
     throw error;
   }
 };
@@ -87,4 +85,8 @@ export const isObjectEmpty = (obj: object) => {
     }
   }
   return true;
+};
+
+export const getBackendURL = () => {
+  return process.env.NEXT_PUBLIC_BACKEND_URL;
 };
