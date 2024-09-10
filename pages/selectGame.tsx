@@ -37,7 +37,7 @@ const SelectGame: React.FC = () => {
         onClick={goLeftGame}
         className="absolute left-10 bg-blue-500 text-white px-8 py-2 rounded-full transform -translate-y-1/2 top-1/2 hover:bg-blue-700 transition"
       >
-        {'<'} Go Left
+        {'<'} Left
       </button>
 
       <div className="text-center bg-white">
@@ -49,7 +49,7 @@ const SelectGame: React.FC = () => {
         onClick={goRightGame}
         className="absolute right-10 bg-blue-500 text-white px-8 py-2 rounded-full transform -translate-y-1/2 top-1/2 hover:bg-blue-700 transition"
       >
-        Go Right {'>'}
+        Right {'>'}
       </button>
 
       <footer className="absolute bottom-0 w-full bg-blue-900 text-white text-center py-4"></footer>
