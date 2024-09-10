@@ -11,20 +11,19 @@ const imageLoader: ImageLoader = ({ src, width, quality }) => {
 const LearningStart: React.FC = () => {
   return (
     <>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Link href={'/game/expression'}>
-            <span>Expression</span>
-          </Link>
-          <br></br>
-          <Link href={'/game/learning'}>
-            <span> Learning Mode</span>
-          </Link>
+      <Link href={'/game/expression'}>
+        <div className="grid grid-cols-2 gap-4 h-full items-center cursor-pointer">
+          <div className="flex justify-center items-center">
+            <div>
+              <h3 className="text-3xl text-center">Expression</h3>
+            </div>
+          </div>
+
+          <div className="flex justify-center items-center">
+            <Image loader={imageLoader} width={300} height={300} src={gamePic} alt="Fox picture" />
+          </div>
         </div>
-        <div>
-          <Image loader={imageLoader} width={300} height={300} src={gamePic} alt="Fox picture" />
-        </div>
-      </div>
+      </Link>
     </>
   );
 };

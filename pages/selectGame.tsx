@@ -41,7 +41,7 @@ const SelectGame: React.FC = () => {
       </button>
 
       <div className="text-center bg-white">
-        <h1 className="text-2xl mb-4">Select Game</h1>
+        <h1 className="text-5xl mb-4">Select Game</h1>
         <div className="p-4 bg-white">{showGameTitle(gameName)}</div>
       </div>
 
