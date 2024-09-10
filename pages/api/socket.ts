@@ -33,9 +33,10 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
       const { player, lobby_id } = extractDataFromQuery(socket.handshake.query);
       let lobby: ServerLobby | undefined;
       let gameState: ServerGameState;
+      const lobbyRoom = lobby_id.toString();
 
       //Socket join the room;
-      socket.join(lobby_id.toString());
+      socket.join(lobbyRoom);
 
       if (lobbies[lobby_id] === undefined) {
         // Create the game state
@@ -60,20 +61,20 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
 
         console.log('New client connected ', player.username);
         console.log('New lobby created ', lobby);
-        io.emit('join', serializeServerObject(lobby));
+        io.to(lobbyRoom).emit('join', serializeServerObject(lobby));
       } else {
         lobby = lobbies[lobby_id];
         lobby.players.add(player);
         console.log('New client connected ', player.username);
         console.log('Change lobby ', lobby);
         // Send the new lobby to everyone
-        io.emit('join', serializeServerObject(lobby));
+        io.to(lobbyRoom).emit('join', serializeServerObject(lobby));
       }
 
       // // When a user press Start to start the game the status will propagate to everyone
       socket.on('start', () => {
         console.log('Game start!');
-        io.emit('start');
+        io.to(lobbyRoom).emit('start');
       });
 
       socket.on('send-game-update', (cardDeck: CardData[]) => {
@@ -87,7 +88,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
           // First send the deck update and after check if match
           console.log('Emit an update and check the match');
           console.log('New card deck');
-          io.emit('receive-game-update', cardDeck, lobby?.gameState.turn);
+          io.to(lobbyRoom).emit('receive-game-update', cardDeck, lobby?.gameState.turn);
 
           const selectedCards = getSelectedCards(cardDeck);
           // Check if the card match
@@ -131,25 +132,25 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
           // Update the card deck
           if (lobby) lobby.gameState.cardDeck = cardDeck;
           console.log('New server lobby with change turn is ', lobby);
-          if (lobby) io.emit('change-turn', serializeServerObject(lobby));
-          io.emit('message', responseMessage);
+          if (lobby) io.to(lobbyRoom).emit('change-turn', serializeServerObject(lobby));
+          io.to(lobbyRoom).emit('message', responseMessage);
         } else {
           console.log('Emit an update no change turn');
           console.log('New card deck');
-          io.emit('receive-game-update', cardDeck, lobby?.gameState.turn);
+          io.to(lobbyRoom).emit('receive-game-update', cardDeck, lobby?.gameState.turn);
         }
       });
 
       socket.on('disconnect', () => {
         // Send the new lobby to everyone
-        io.emit('left', lobbies[lobby_id]);
+        io.to(lobbyRoom).emit('left', lobbies[lobby_id]);
         // Remove player from lobby
         if (player && lobby) {
           // Remove from the array
           lobby.players.delete(player);
 
           // Update all the user is disconnected
-          io.emit('left', lobby);
+          io.to(lobbyRoom).emit('left', lobby);
           console.log('Client left and emit and update to everyone. ');
           // Delete the lobby if empty
           if (lobby.players.size === 0) {

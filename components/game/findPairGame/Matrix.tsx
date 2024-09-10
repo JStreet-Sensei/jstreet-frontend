@@ -25,7 +25,7 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) =
     if (gameState.user_id === gameState.turn) setCardClickable(true);
     else setCardClickable(false);
     setRefresh(!useRefresh);
-  }, [gameState, useRefresh]);
+  }, [gameState]);
 
   // Create all cards
   useEffect(() => {

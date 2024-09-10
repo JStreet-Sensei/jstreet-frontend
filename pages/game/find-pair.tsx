@@ -52,7 +52,6 @@ const FindPair = () => {
 
   useEffect(() => {
     console.log('Client game state ready');
-    console.log(useClientGameState);
     setGameStateReady(true);
   }, [useClientGameState]);
 
@@ -75,12 +74,11 @@ const FindPair = () => {
       newSocket.on('start', () => {
         console.log('Game is started');
         setStart(true); // Update the start state to true
-        // send to server the event start //io.emit("start");
       });
 
       newSocket.on('join', (receivedLobby: ServerLobby) => {
         receivedLobby.players = new Set(receivedLobby.players);
-        console.log('New player joined the lobby', receivedLobby.players);
+        console.log('New player joined the lobby');
         setServerLobby(receivedLobby);
         setClientGameState({
           ...useClientGameState,
@@ -92,7 +90,7 @@ const FindPair = () => {
       });
 
       newSocket.on('left', (receivedLobby: ServerLobby) => {
-        console.log('A player left the lobby', receivedLobby.players);
+        console.log('A player left the lobby');
         setServerLobby(receivedLobby);
       });
 
@@ -139,7 +137,6 @@ const FindPair = () => {
 
   // Get the update from the child and emit to every client!
   const handleUpdateDeck = (cardDeck: CardData[]) => {
-    console.log('Handle update', cardDeck);
     setClientGameState({ ...useClientGameState, cardDeck });
     console.log('Send update to server');
     useSocket.emit('send-game-update', cardDeck, useClientGameState.user_id);
