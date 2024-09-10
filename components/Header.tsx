@@ -8,6 +8,7 @@ export const Header: React.FC = () => {
 
   const isGamePage = router.pathname.includes('/game');
   const isMyPage = router.pathname === '/mypage';
+  const isSelectGamePage = router.pathname === '/selectGame';
   const isExpressionPage = router.pathname === '/game/expression';
   const isLearningPage = router.pathname === '/game/learning';
   const isGameFindPair = router.pathname === '/game/find-pair';
@@ -20,22 +21,22 @@ export const Header: React.FC = () => {
           <div className="cursor-pointer">
             <Link href={'/'}>Home</Link>
           </div>
-          {!isExpressionPage && (
+          {!isExpressionPage && !isSelectGamePage && (
             <div className="cursor-pointer">
               <Link href={'/game/expression'}>Expression</Link>
             </div>
           )}
-          {!isLearningPage && (
+          {!isLearningPage && !isSelectGamePage && (
             <div className="cursor-pointer">
               <Link href={'/game/learning'}>Learning</Link>
             </div>
           )}
-          {!isGameFindPair && (
+          {!isGameFindPair && !isSelectGamePage && (
             <div className="cursor-pointer">
               <Link href={'/game/find-pair'}>Paring Game</Link>
             </div>
           )}
-          {!isGameQuickAnswer && (
+          {!isGameQuickAnswer && !isSelectGamePage && (
             <div className="cursor-pointer">
               <Link href={'/game/quick-answer'}>Quick Answer Game</Link>
             </div>
