@@ -19,7 +19,7 @@ export const Header: React.FC = () => {
         <div className="basis-1/6">
           <Link href={'/'}>Home</Link>
         </div>
-        {!isExpressionPage && (
+        {/* {!isExpressionPage && (
           <div className="basis-1/6 cursor-pointer">
             <Link href={'/game/expression'}>Expression</Link>
           </div>
@@ -38,7 +38,7 @@ export const Header: React.FC = () => {
           <div className="basis-1/6 cursor-pointer">
             <Link href={'/game/quick-answer'}>Quick Answer Game</Link>
           </div>
-        )}
+        )} */}
         {session ? (
           <>
             {!isGamePage && (

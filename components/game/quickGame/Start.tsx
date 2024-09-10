@@ -1,5 +1,5 @@
-import Image, { ImageLoader } from "next/image";
-import gamePic from "./../../../public/practice-nife.png";
+import Image, { ImageLoader } from 'next/image';
+import gamePic from './../../../public/practice-nife.png';
 
 const baseUrl = process.env.NEXTAUTH_URL;
 
@@ -17,13 +17,7 @@ const PracticeStart: React.FC = () => {
           <span> Practice Mode</span>
         </div>
         <div>
-          <Image
-            loader={imageLoader}
-            width={300}
-            height={300}
-            src={gamePic}
-            alt="Cross nife picture"
-          />
+          <Image loader={imageLoader} width={300} height={300} src={gamePic} alt="Cross nife picture" />
         </div>
       </div>
     </>
