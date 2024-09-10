@@ -29,7 +29,7 @@ const Lobby: React.FC = () => {
 
   useEffect(() => {
     fetchLobbies();
-  }, []);
+  }, [fetchLobbies]);
 
   useEffect(() => {
     getSession().then((session) => {
@@ -87,7 +87,9 @@ const Lobby: React.FC = () => {
   return (
     <div className="relative p-6">
       <h2 className="text-2xl font-bold mb-4">Lobbies</h2>
-      <p className="mb-6">Select an existing Lobby from the list below, or click "Create Lobby" to Open a Lobby.</p>
+      <p className="mb-6">
+        Select an existing Lobby from the list below, or click &quot;Create Lobby&quot; to Open a Lobby.
+      </p>
 
       <button className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded">Enter the name of your lobby</button>
 
