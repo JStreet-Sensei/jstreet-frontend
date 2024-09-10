@@ -54,7 +54,7 @@ const FindPair = () => {
     console.log('Client game state ready');
     console.log(useClientGameState);
     setGameStateReady(true);
-  }, [useClientGameState]);
+  }, [useClientGameState, game_id]);
 
   // Initilialize socket after the gameState
   useEffect(() => {
