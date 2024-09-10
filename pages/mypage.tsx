@@ -1,6 +1,6 @@
 //User can review their history.
 
-import { getBackendURL } from '@/utils/utils-data';
+import { getFetchBackendURL } from '@/utils/utils-data';
 import axios from 'axios';
 import { signOut, useSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
@@ -16,7 +16,7 @@ const MyPage = () => {
     try {
       const response = await axios({
         method: 'get',
-        url: getBackendURL() + '/api/auth/user/',
+        url: getFetchBackendURL('/api/auth/user/'),
         headers: useToken ? { Authorization: 'Bearer ' + session?.access_token } : {},
       });
       setResponse(JSON.stringify(response.data));

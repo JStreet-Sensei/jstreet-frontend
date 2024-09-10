@@ -177,8 +177,6 @@ export default SocketHandler;
  */
 const prepareCardDeckFromServer = async (): Promise<CardData[]> => {
   try {
-    console.log('Backend url: ', getBackendURL());
-
     // Trova il percorso assoluto della directory "data"
     const jsonDirectory = path.join(process.cwd(), 'data');
 

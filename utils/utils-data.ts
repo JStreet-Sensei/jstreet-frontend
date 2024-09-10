@@ -87,6 +87,19 @@ export const isObjectEmpty = (obj: object) => {
   return true;
 };
 
+/**
+ * Return the backend URL from the env var NEXT_PUBLIC_BACKEND_URL
+ * @returns the url of the backend URL
+ */
 export const getBackendURL = () => {
   return process.env.NEXT_PUBLIC_BACKEND_URL;
+};
+
+/**
+ * Generate the Nextjs api call to be forwarded to backend
+ * @param path of the backend endpoint
+ * @returns void
+ */
+export const getFetchBackendURL = (path: string) => {
+  return `api/backend?path=${path}`;
 };
