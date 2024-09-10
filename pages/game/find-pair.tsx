@@ -135,7 +135,7 @@ const FindPair = () => {
         newSocket.disconnect();
       };
     } else setGameStateReady(false);
-  }, [isGameStateReady, useClientGameState, game_id]);
+  }, [isGameStateReady]);
 
   // Get the update from the child and emit to every client!
   const handleUpdateDeck = (cardDeck: CardData[]) => {
