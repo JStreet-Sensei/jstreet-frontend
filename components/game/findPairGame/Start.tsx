@@ -1,12 +1,12 @@
 import Image, { ImageLoader } from 'next/image';
-import gamePic from './../../../public/pair-game-fox.png';
+// import gamePic from './../../../public/pair-game-fox.png';
 import Link from 'next/link';
 
-const baseUrl = process.env.NEXTAUTH_URL;
+// const baseUrl = process.env.NEXTAUTH_URL;
 
-const imageLoader: ImageLoader = ({ src, width, quality }) => {
-  return `${baseUrl}/${src}?w=${width}&q=${quality || 75}`;
-};
+// const imageLoader: ImageLoader = ({ src, width, quality }) => {
+//   return `${baseUrl}/${src}?w=${width}&q=${quality || 75}`;
+// };
 
 const StartPairGame: React.FC = () => {
   return (
@@ -20,7 +20,8 @@ const StartPairGame: React.FC = () => {
           </div>
 
           <div className="flex justify-center items-center">
-            <Image loader={imageLoader} width={300} height={300} src={gamePic} alt="Find Pair Fox Picture" />
+            {/* <Image loader={imageLoader} width={300} height={300} src={gamePic} alt="Find Pair Fox Picture" /> */}
+            <Image width={300} height={300} src="/pair-game-fox.png" alt="Find Pair Fox Picture" />
           </div>
         </div>
       </Link>

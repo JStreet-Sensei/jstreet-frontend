@@ -1,12 +1,12 @@
 import Image, { ImageLoader } from 'next/image';
-import gamePic from './../../../public/new-expression-fox.png';
 import Link from 'next/link';
+// import gamePic from './../../../public/new-expression-fox.png';
 
-const baseUrl = process.env.NEXTAUTH_URL;
+// const baseUrl = process.env.NEXTAUTH_URL;
 
-const imageLoader: ImageLoader = ({ src, width, quality }) => {
-  return `${baseUrl}/${src}?w=${width}&q=${quality || 75}`;
-};
+// const imageLoader: ImageLoader = ({ src, width, quality }) => {
+//   return `${baseUrl}/${src}?w=${width}&q=${quality || 75}`;
+// };
 
 const LearningStart: React.FC = () => {
   return (
@@ -20,7 +20,8 @@ const LearningStart: React.FC = () => {
           </div>
 
           <div className="flex justify-center items-center">
-            <Image loader={imageLoader} width={300} height={300} src={gamePic} alt="Fox picture" />
+            {/* <Image loader={imageLoader} width={300} height={300} src={gamePic} alt="Fox picture" /> */}
+            <Image width={300} height={300} src="/new-expression-fox.png" alt="Fox picture" />
           </div>
         </div>
       </Link>

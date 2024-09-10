@@ -1,12 +1,12 @@
 import Image, { ImageLoader } from 'next/image';
-import gamePic from './../../../public/practice-nife.png';
+// import gamePic from './../../../public/practice-nife.png';
 import Link from 'next/link';
 
-const baseUrl = process.env.NEXTAUTH_URL;
+// const baseUrl = process.env.NEXTAUTH_URL;
 
-const imageLoader: ImageLoader = ({ src, width, quality }) => {
-  return `${baseUrl}/${src}?w=${width}&q=${quality || 75}`;
-};
+// const imageLoader: ImageLoader = ({ src, width, quality }) => {
+//   return `${baseUrl}/${src}?w=${width}&q=${quality || 75}`;
+// };
 
 const StartFlashCard: React.FC = () => {
   return (
@@ -20,7 +20,8 @@ const StartFlashCard: React.FC = () => {
           </div>
 
           <div className="flex justify-center items-center">
-            <Image loader={imageLoader} width={300} height={300} src={gamePic} alt="Cross nife picture" />
+            {/* <Image loader={imageLoader} width={300} height={300} src={gamePic} alt="Cross nife picture" /> */}
+            <Image width={300} height={300} src="/practice-nife.png" alt="Cross nife picture" />
           </div>
         </div>
       </Link>
