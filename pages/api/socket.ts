@@ -71,10 +71,10 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
       }
 
       // // When a user press Start to start the game the status will propagate to everyone
-      // socket.on("start", () => {
-      // 	console.log("Game start!");
-      // 	io.emit("start");
-      // });
+      socket.on('start', () => {
+        console.log('Game start!');
+        io.emit('start');
+      });
 
       socket.on('send-game-update', (cardDeck: CardData[]) => {
         let responseMessage = '';

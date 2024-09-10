@@ -8,10 +8,14 @@ import { io, Socket } from 'socket.io-client';
 import { CardData, ClientGameState, ServerLobby } from '@/types/game';
 import { getSession } from 'next-auth/react';
 import Message from '@/components/game/findPairGame/Message';
+import { useRouter } from 'next/router';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const FindPair = () => {
+  // Before show the cards you need to show the lobby Components and the players must be 2 and the owner should press start
+  // List of players inside the ServerLobby
+
   // Socket or state
   const [useSocket, setSocket] = useState<Socket>({} as Socket);
   const [useClientGameState, setClientGameState] = useState<ClientGameState>({} as ClientGameState);
@@ -19,9 +23,20 @@ const FindPair = () => {
   //Message state
   const [useMessage, setMessage] = useState('');
 
+  //State to start the game,  states
+  const [start, setStart] = useState<boolean>(false);
+  const [players, setPlayers] = useState<any[]>([]);
+
+  //the game requires 2 or more players to start
+  const isReadyToStart = players.length >= 2;
+
   // State if game is ready or not
   const [isGameStateReady, setGameStateReady] = useState(false);
   const [isSocketReady, setSocketReady] = useState(false);
+
+  // Get query arguments
+  const router = useRouter();
+  const { game_id, name } = router.query;
 
   // Initialize game state
   useEffect(() => {
@@ -48,7 +63,7 @@ const FindPair = () => {
         query: {
           user_id: useClientGameState.user_id,
           username: useClientGameState.username,
-          lobby_id: 1,
+          lobby_id: game_id,
         },
         path: '/api/socket',
       });
@@ -59,6 +74,8 @@ const FindPair = () => {
 
       newSocket.on('start', () => {
         console.log('Game is started');
+        setStart(true); // Update the start state to true
+        // send to server the event start //io.emit("start");
       });
 
       newSocket.on('join', (receivedLobby: ServerLobby) => {
@@ -70,6 +87,8 @@ const FindPair = () => {
           cardDeck: receivedLobby.gameState.cardDeck,
           turn: receivedLobby.gameState.turn,
         });
+        //show players on join page
+        setPlayers(Array.from(receivedLobby.players));
       });
 
       newSocket.on('left', (receivedLobby: ServerLobby) => {
@@ -135,18 +154,60 @@ const FindPair = () => {
     );
   }
 
+  //handle start button send to server the event start
+  const handleStartButton = () => {
+    useSocket.emit('start');
+  };
+
   return (
     <div>
-      <SocketProvider parentSocket={useSocket}>
-        <GameStateProvider parentGameState={useClientGameState}>
-          <Message message={useMessage}></Message>
-          <GamePair
-            players={useServerLobby.players}
-            gameState={useClientGameState}
-            handleUpdateDeck={handleUpdateDeck}
-          ></GamePair>
-        </GameStateProvider>
-      </SocketProvider>
+      {start === false ? (
+        <div className="bg-gray-200 min-h-screen flex flex-col items-center p-6">
+          <div className="bg-white rounded-lg shadow-md p-6 max-w-4xl w-full border border-[#A4161A]">
+            <div className="text-center mb-6">
+              <h1 className="text-2xl font-bold text-[#A4161A] mb-4">Game ID: {game_id}</h1>
+              <h2 className="text-xl font-semibold mb-4">Room: {name}</h2>
+            </div>
+
+            <div className="mb-6">
+              <h2 className="text-3xl font-bold mb-4 text-[#A4161A]">Players in Room</h2>
+              <ul>
+                {players.map((player) => (
+                  <li key={player.id} className="text-[#A4161A] mb-2">
+                    {player.username}
+                  </li>
+                ))}
+              </ul>
+              {players.length < 2 && (
+                <p className="text-red-600 mt-4">Need at least one more player to start the game.</p>
+              )}
+            </div>
+
+            <div className="text-center mb-6">
+              <button
+                onClick={() => handleStartButton()}
+                disabled={!isReadyToStart}
+                className={`py-3 px-6 rounded-md shadow-md ${
+                  isReadyToStart ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400'
+                }`}
+              >
+                Start Game
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <SocketProvider parentSocket={useSocket}>
+          <GameStateProvider parentGameState={useClientGameState}>
+            <Message message={useMessage} />
+            <GamePair
+              players={useServerLobby.players}
+              gameState={useClientGameState}
+              handleUpdateDeck={handleUpdateDeck}
+            />
+          </GameStateProvider>
+        </SocketProvider>
+      )}
     </div>
   );
 };

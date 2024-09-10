@@ -26,6 +26,10 @@ const HomePage = () => {
         {" "}
         Play game!
       </Link>
+      <Link href={"/lobby"} className="mt-4">
+        {" "}
+        Lobby
+      </Link>
       <div className={styles.graffiti}>
         <div className="relative flex flex-col items-center justify-center min-h-screen bg-[url('/LandingPage/wave_top_draw.svg')] bg-no-repeat bg-top bg-contain">
           <div className="absolute inset-0 bg-[url('/LandingPage/wave_bottom_draw.svg')] bg-no-repeat bg-bottom bg-contain z-0" />

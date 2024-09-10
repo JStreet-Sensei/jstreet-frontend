@@ -24,7 +24,7 @@ const GameStateProvider: React.FC<MyGameStateProviderProps> = ({ children, paren
 
   useEffect(() => {
     setGameState(gameState);
-  }, [parentGameState]);
+  }, [parentGameState, gameState]);
 
   return <GameStateContext.Provider value={{ gameState }}>{children}</GameStateContext.Provider>;
 };
