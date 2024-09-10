@@ -47,3 +47,7 @@ export interface LobbyType {
   owner_id?: number;
   state: any;
 }
+
+export interface oneCardResult {
+  (): Promise<phraseType>;
+}
