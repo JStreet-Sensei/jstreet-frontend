@@ -9,6 +9,9 @@ const MyPage = () => {
   const { data: session, status } = useSession({ required: true });
   const [response, setResponse] = useState('{}');
 
+  const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL;
+  console.log(BACKEND);
+
   const getUserDetails = async (useToken: boolean) => {
     try {
       const response = await axios({
