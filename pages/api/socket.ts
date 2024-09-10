@@ -5,7 +5,7 @@ import { Server as SocketIOServer, Socket } from 'socket.io';
 import { Server as IOServer } from 'socket.io';
 import { CardData, Player, ServerGameState, ServerLobby } from '@/types/game';
 import { extractDataFromQuery, serializeServerObject } from '@/utils/utils-socket';
-import { checkCardMatch, checkDataSelectable, getSelectedCards } from '@/utils/utils-data';
+import { checkCardMatch, checkDataSelectable, getBackendURL, getSelectedCards } from '@/utils/utils-data';
 
 import path from 'path';
 import { promises as fs } from 'fs';
@@ -177,6 +177,8 @@ export default SocketHandler;
  */
 const prepareCardDeckFromServer = async (): Promise<CardData[]> => {
   try {
+    console.log('Backend url: ', getBackendURL());
+
     // Trova il percorso assoluto della directory "data"
     const jsonDirectory = path.join(process.cwd(), 'data');
 

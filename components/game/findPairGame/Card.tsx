@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import styles from '@/styles/Card.module.css';
+import NinjaLogo from '@/public/ninjaLogo.svg';
+import Image from 'next/image';
 
 type CardProps = {
   frontText: string;
@@ -42,15 +45,22 @@ export const Card: React.FC<CardProps> = ({
   };
 
   return (
-    <div className={`flip-card`} onClick={handleFlip}>
-      <div className={`flip-card-inner ${useFlip ? 'flip' : ''} `}>
-        <div className="flip-card-front">
-          <p className="title">{frontText}</p>
-          <p>Hover Me</p>
+    <div className={styles.flip_card} onClick={handleFlip}>
+      <div className={`${styles.flip_card_inner} ${useFlip ? styles.flip : ''} `}>
+        <div className={styles.flip_card_front}>
+          <div className="mx-auto">
+            <Image
+              src={NinjaLogo}
+              alt="NinjaLogo"
+              width={100}
+              height={100}
+              className="bg-white rounded-full p-0.5"
+            ></Image>
+          </div>
+          <p className={styles.title + ' drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]'}>J-Sensei</p>
         </div>
-        <div className="flip-card-back">
-          <p className="title">{backText}</p>
-          <p>Leave Me</p>
+        <div className={styles.flip_card_back}>
+          <p className={styles.title + ' drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]'}>{backText}</p>
         </div>
       </div>
     </div>

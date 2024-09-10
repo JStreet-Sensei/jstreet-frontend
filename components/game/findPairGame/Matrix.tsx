@@ -15,19 +15,12 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) =
   // Card elements state
   const [useCardElement, setCardElement] = useState<ReactNode>([]);
   const [useRefresh, setRefresh] = useState(false);
-  const [useGameState, setGameState] = useState(gameState);
   const [useCardDeck, setCardDeck] = useState(gameState.cardDeck);
   const [isCardClickable, setCardClickable] = useState(false);
 
-  const moveCounter = useRef(0);
-
-  useEffect(() => {
-    setCardDeck([...gameState.cardDeck]);
-    setGameState(gameState);
-  }, [gameState]);
-
   //Is clickable logic
   useEffect(() => {
+    setCardDeck([...gameState.cardDeck]);
     console.log('Turn state: ', gameState.user_id, gameState.turn);
     if (gameState.user_id === gameState.turn) setCardClickable(true);
     else setCardClickable(false);
@@ -102,7 +95,7 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) =
 
   return (
     <>
-      <div className="grid grid-cols 4 gap-4 border-double border-4 border-slate-600 grid-cols-4 place-items-center md:grid-cols-3 sm:grid-cols-2">
+      <div className="grid grid-cols 4 gap-4 border-double border-4 border-slate-600 grid-cols-4 place-items-center md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-8 align-middle justify-self-auto">
         {useCardElement}
       </div>
     </>
