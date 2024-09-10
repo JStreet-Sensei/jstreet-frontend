@@ -4,8 +4,11 @@ import { phraseType } from '@/types/types';
 import styles from '@/styles/Card.module.css';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + '/';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + '/';
 
 export const FlashCard = () => {
+  const selectedMaterial = useContext(SelectedMaterial);
+  const [isBack, setIsback] = useState(false);
   const selectedMaterial = useContext(SelectedMaterial);
   const [isBack, setIsback] = useState(false);
 
@@ -14,8 +17,16 @@ export const FlashCard = () => {
       const phrase = await getOneCard();
       selectedMaterial?.selectPhrase(phrase);
     };
-  }, []);
+  }, [selectedMaterial]);
 
+  interface oneCardResult {
+    (): Promise<phraseType>;
+  }
+  const getOneCard: oneCardResult = async () => {
+    const fetched = await fetch(BACKEND_URL);
+    const result: Promise<phraseType> = await fetched.json();
+    return result;
+  };
   interface oneCardResult {
     (): Promise<phraseType>;
   }
