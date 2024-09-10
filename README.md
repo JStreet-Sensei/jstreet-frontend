@@ -39,7 +39,9 @@ user: {email:"testuser@gmail.com"
 image:"https://lh3.googleusercontent.com/....."
 name:"Test User"}
 ```
+
 ## Styling
+
 Use noraml css and tailwind css.
 You should write normal css within global.css file.
 https://nextjs.org/docs/pages/building-your-application/styling/css-modules#css-modules
@@ -109,11 +111,10 @@ Page name is case-sensitive. URL is case-sensitive as well.
 * run test<br>
   npm run test
 
-
-
 # Testing
 
 ## Plan
+
 The purpose is to prevent degradation and reduce time run test mannually.
 
 Component/Page test<br>
@@ -125,6 +126,7 @@ End-to-end test<br>
 ・Check scenario of user events.<br>
 
 ## Tools
+
 Use Jest + React Testing Libraries
 Basic usage for Jest + React:<br>
 https://www.robinwieruch.de/react-testing-library/<br>
@@ -151,3 +153,6 @@ https://blog.logrocket.com/guide-adding-google-login-react-app/<br>
 
 React test components whole overview from unit test to integration test with tools<br>
 https://medium.com/@dev.emondas/testing-react-components-a-complete-guideline-b84f1e23d176
+
+Signup logic<br>
+https://github.com/VulcanWM/login-signup-nextjs
