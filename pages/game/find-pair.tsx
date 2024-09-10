@@ -54,7 +54,7 @@ const FindPair = () => {
     console.log('Client game state ready');
     console.log(useClientGameState);
     setGameStateReady(true);
-  }, [useClientGameState, game_id]);
+  }, [useClientGameState]);
 
   // Initilialize socket after the gameState
   useEffect(() => {
@@ -135,7 +135,7 @@ const FindPair = () => {
         newSocket.disconnect();
       };
     } else setGameStateReady(false);
-  }, [isGameStateReady, useClientGameState.username, game_id]);
+  }, [isGameStateReady, useClientGameState, game_id]);
 
   // Get the update from the child and emit to every client!
   const handleUpdateDeck = (cardDeck: CardData[]) => {

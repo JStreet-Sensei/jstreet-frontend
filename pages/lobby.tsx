@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { LobbyType } from '@/types/game';
 
 const Lobby: React.FC = () => {
-  const [LobbieName, setLobbieName] = useState<string>('');
+  const [lobbyName, setLobbyName] = useState<string>('');
   const [Lobbies, setLobbies] = useState<LobbyType[]>([]);
   const [error, setError] = useState<string>('');
   const [error2, setError2] = useState<string>('');
@@ -39,7 +39,7 @@ const Lobby: React.FC = () => {
   }, []);
 
   const handleCreateLobby = async () => {
-    if (!LobbieName) {
+    if (!lobbyName) {
       setError('Field is required.');
       return;
     }
@@ -53,7 +53,7 @@ const Lobby: React.FC = () => {
         body: JSON.stringify({
           owner: userInfo,
           game_type: 1,
-          name: LobbieName,
+          name: lobbyName,
         }),
       });
 
@@ -63,7 +63,7 @@ const Lobby: React.FC = () => {
       }
 
       await fetchLobbies();
-      setLobbieName('');
+      setLobbyName('');
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -95,8 +95,8 @@ const Lobby: React.FC = () => {
         <input
           type="text"
           placeholder="Name"
-          value={LobbieName}
-          onChange={(e) => setLobbieName(e.target.value)}
+          value={lobbyName}
+          onChange={(e) => setLobbyName(e.target.value)}
           className="w-full px-4 py-2 border rounded"
         />
         {error && <p className="text-red-600">{error}</p>}
