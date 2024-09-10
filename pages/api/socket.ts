@@ -178,22 +178,24 @@ export default SocketHandler;
  */
 const prepareCardDeckFromServer = async (): Promise<CardData[]> => {
   try {
-    // Trova il percorso assoluto della directory "data"
-    const jsonDirectory = path.join(process.cwd(), 'data');
+    const cardDeck = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/memo-game/game-contents`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => data.data);
 
-    // Leggi il file "data.json"
-    const fileContents = await fs.readFile(path.join(jsonDirectory, 'data.json'), 'utf8');
+    // const jsonDirectory = path.join(process.cwd(), 'data');
+    // const fileContents = await fs.readFile(path.join(jsonDirectory, 'data.json'), 'utf8');
+    // const cardDeck = JSON.parse(fileContents);
 
-    // Converte il contenuto del file in JSON
-    const cardDeck = JSON.parse(fileContents);
-
-    // Verifica che il file abbia il formato corretto (es. che contenga una proprietà "data" con un array)
-    if (!Array.isArray(cardDeck.data)) {
+    if (!Array.isArray(cardDeck)) {
       throw new Error("Invalid data format: expected 'data' to be an array.");
     }
 
-    // Espande ogni card aggiungendo le proprietà "guessedFrom" e "selected"
-    const expandedDeck: CardData[] = cardDeck.data.map((card: CardData) => {
+    const expandedDeck: CardData[] = cardDeck.map((card: CardData) => {
       return {
         ...card,
         guessedFrom: 0,

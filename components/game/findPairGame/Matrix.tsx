@@ -3,6 +3,7 @@ import Card from './Card';
 import { checkDataSelectable } from '@/utils/utils-data';
 import { CardData, ClientGameState } from '@/types/game';
 import { clone } from 'lodash';
+import styles from '@/styles/Game.module.css';
 
 type MatrixProps = {
   handleUpdateDeck: (cardDeck: CardData[]) => void;
@@ -95,7 +96,9 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) =
 
   return (
     <>
-      <div className="grid grid-cols 4 gap-4 border-double border-4 border-slate-600 grid-cols-4 place-items-center md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-8 align-middle justify-self-auto">
+      <div
+        className={`${styles.pattern_bg} grid grid-cols 4 gap-4 border-double border-4 border-slate-600 grid-cols-4 place-items-center md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-8 align-middle justify-self-auto`}
+      >
         {useCardElement}
       </div>
     </>

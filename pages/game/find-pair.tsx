@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
-import GameStateProvider from '../../components/context/GameStateProvider';
-import SocketProvider from '../../components/context/SocketProvider';
-import GamePair from '../../components/GamePair';
+import GameStateProvider from '@/components/context/GameStateProvider';
+import SocketProvider from '@/components/context/SocketProvider';
+import GamePair from '@/components/GamePair';
 
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
