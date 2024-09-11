@@ -2,6 +2,8 @@ import React, { useState, useEffect, createContext } from 'react';
 import { phraseType, learningContextType } from '../../types/types';
 import FlashCard from '../../components/game/flashCard/FlashCard';
 import { getSession } from 'next-auth/react';
+import { getFetchBackendURL } from '@/utils/utils-data'
+import Link from 'next/link'; // Import Link from next/link
 
 export const SelectedMaterial = createContext<LearningContextProps | null>(null);
 
@@ -58,7 +60,7 @@ const FlashCardPage = () => {
   const fetchPhrases = async () => {
     setLoading(true); // Set loading to true
     try {
-      const response = await fetch(`${BACKEND_URL}/api/flash-card?limits=10&user-id=4`);
+      const response = await fetch(getFetchBackendURL('/api/flash-card?limits=10&user-id=4'));
       const result = await response.json();
       console.log('API Response:', result);
       console.log(userInfo);
@@ -108,6 +110,11 @@ const FlashCardPage = () => {
     >
       <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <FlashCard loading={loading} />
+      <Link href="/game/flash-card">
+  
+            Go to Flash Card Game
+       
+        </Link>
       </div>
     </SelectedMaterial.Provider>
   );

@@ -1,14 +1,12 @@
-import { CardData } from "../types/game";
-import { ApiResponse, DataItem } from "../types/types";
+import { CardData } from '@/types/game';
+import { ApiResponse, DataItem } from '@/types/types';
 
 //Fetch data from an API for pair game
 /**
  * Read the data json from the api
  * @returns {DataItem} inside data.json
  */
-export const fetchData = async (
-  path: string = "/api/data",
-): Promise<DataItem[]> => {
+export const fetchData = async (path: string = '/api/data'): Promise<DataItem[]> => {
   try {
     const response = await fetch(path);
 
@@ -19,7 +17,7 @@ export const fetchData = async (
     const result: ApiResponse = await response.json();
     return result.data;
   } catch (error) {
-    console.error("Fetch error:", error);
+    console.error('Fetch error:', error);
     throw error;
   }
 };
@@ -30,6 +28,15 @@ export const getSelectedCards = (data: CardData[]) => {
     if (actualCard.selected) accumulator.push(currentIndex);
     return accumulator;
   }, [] as number[]);
+};
+
+export const isUngussedCardsAvaible = (cardDeck: CardData[]) => {
+  const count = cardDeck.reduce((counter: number, actualCard: CardData) => {
+    if (actualCard.guessedFrom === 0) return counter + 1;
+    return counter;
+  }, 0);
+  console.log('Remaning cards: ', count);
+  return count < 2;
 };
 
 // Check if the card match
@@ -87,4 +94,21 @@ export const isObjectEmpty = (obj: object) => {
     }
   }
   return true;
+};
+
+/**
+ * Return the backend URL from the env var NEXT_PUBLIC_BACKEND_URL
+ * @returns the url of the backend URL
+ */
+export const getBackendURL = () => {
+  return process.env.NEXT_PUBLIC_BACKEND_URL;
+};
+
+/**
+ * Generate the Nextjs api call to be forwarded to backend
+ * @param path of the backend endpoint
+ * @returns void
+ */
+export const getFetchBackendURL = (path: string) => {
+  return `api/backend?path=${path}`;
 };

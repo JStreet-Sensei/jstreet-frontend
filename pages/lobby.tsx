@@ -1,7 +1,9 @@
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { LobbyType } from '@/types/game';
+import styles from '@/styles/Game.module.css';
+import { getFetchBackendURL } from '@/utils/utils-data';
 
 const Lobby: React.FC = () => {
   const [lobbyName, setLobbyName] = useState<string>('');
@@ -12,24 +14,32 @@ const Lobby: React.FC = () => {
   const [selectedLobbyName, setSelectedLobbyName] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<any>('');
 
+  // Session and router
+  const { data: session, status } = useSession({ required: true });
+
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const fetchLobbies = async () => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/lobbies`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch lobbies');
+    return new Promise((resolve) => {
+      setTimeout(resolve, 1000);
+    }).then(async () => {
+      try {
+        const response = await fetch(getFetchBackendURL('/api/lobbies'));
+        if (!response.ok) {
+          throw new Error('Failed to fetch lobbies');
+        }
+        const data: LobbyType[] = await response.json();
+        setLobbies(data);
+        fetchLobbies();
+      } catch (error) {
+        console.error('Error fetching lobbies:', error);
       }
-      const data: LobbyType[] = await response.json();
-      setLobbies(data);
-    } catch (error) {
-      console.error('Error fetching lobbies:', error);
-    }
+    });
   };
 
   useEffect(() => {
     fetchLobbies();
-  }, [fetchLobbies]);
+  }, []);
 
   useEffect(() => {
     getSession().then((session) => {
@@ -45,7 +55,7 @@ const Lobby: React.FC = () => {
     }
 
     try {
-      const response = await fetch(BACKEND_URL + '/api/lobbies/create', {
+      const response = await fetch(getFetchBackendURL('/api/lobbies/create'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,51 +95,63 @@ const Lobby: React.FC = () => {
   };
 
   return (
-    <div className="relative p-6">
-      <h2 className="text-2xl font-bold mb-4">Lobbies</h2>
-      <p className="mb-6">
-        Select an existing Lobby from the list below, or click &quot;Create Lobby&quot; to Open a Lobby.
-      </p>
-
-      <button className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded">Enter the name of your lobby</button>
-
-      <div className="space-y-4">
-        <input
-          type="text"
-          placeholder="Name"
-          value={lobbyName}
-          onChange={(e) => setLobbyName(e.target.value)}
-          className="w-full px-4 py-2 border rounded"
-        />
-        {error && <p className="text-red-600">{error}</p>}
-        <button onClick={handleCreateLobby} className="w-full px-4 py-2 bg-green-600 text-white rounded">
-          Create
+    <>
+      <div className="relative p-6">
+        <h2 className="text-2xl font-bold mb-4 text-white ">Lobbies</h2>
+        <p className="mb-6 text-white ">
+          Select an existing Lobby from the list below, or click &quot;Create Lobby&quot; to Open a Lobby.
+        </p>
+        <div className="flex items-center">
+          <p className="mt-4 py-2 mx-auto text-white rounded">Enter the name of your lobby</p>
+        </div>
+        <button className="w-full mt-4 px-4 py-2 bg-[#43346dff] text-white rounded">
+          Enter the name of your lobby
         </button>
+
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="Name"
+            value={lobbyName}
+            onChange={(e) => setLobbyName(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
+          />
+          {error && <p className="text-red-600">{error}</p>}
+          <button
+            onClick={handleCreateLobby}
+            className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]"
+          >
+            Create
+          </button>
+        </div>
+        <div className="my-4">
+          <ul className="list-disc pl-5">
+            {Lobbies.map((lobby, index) => (
+              <li
+                key={index}
+                className={`py-2 cursor-pointer hover:text-[#43346dff] ${selectedLobbyId === lobby.game_id ? 'bg-blue-100' : ''}`}
+                onClick={() => handleLobbieClick(lobby.game_id, lobby.name)}
+              >
+                {lobby.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+        {selectedLobbyId === null ? (
+          <button
+            onClick={handleJoinButton}
+            className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]"
+          >
+            Join
+            {error2 && <p className="text-[#f3308cff]">{error2}</p>}
+          </button>
+        ) : (
+          <Link href={`game/find-pair?game_id=${selectedLobbyId}&name=${selectedLobbyName}`} className="mt-4">
+            <button className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]">Join</button>
+          </Link>
+        )}
       </div>
-      <div className="my-4">
-        <ul className="list-disc pl-5">
-          {Lobbies.map((lobby, index) => (
-            <li
-              key={index}
-              className={`py-2 cursor-pointer hover:text-blue-600 ${selectedLobbyId === lobby.game_id ? 'bg-blue-100' : ''}`}
-              onClick={() => handleLobbieClick(lobby.game_id, lobby.name)}
-            >
-              {lobby.name}
-            </li>
-          ))}
-        </ul>
-      </div>
-      {selectedLobbyId === null ? (
-        <button onClick={handleJoinButton} className="w-full px-4 py-2 bg-green-600 text-white rounded">
-          Join
-          {error2 && <p className="text-red-600">{error2}</p>}
-        </button>
-      ) : (
-        <Link href={`game/find-pair?game_id=${selectedLobbyId}&name=${selectedLobbyName}`} className="mt-4">
-          <button className="w-full px-4 py-2 bg-green-600 text-white rounded">Join</button>
-        </Link>
-      )}
-    </div>
+    </>
   );
 };
 
