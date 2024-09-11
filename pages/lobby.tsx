@@ -1,26 +1,34 @@
 import { getSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { LobbyType } from '@/types/game';
+import Link from "next/link";
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+interface Lobby {
+  LobbieName: any;
+  owner: number;
+  game_id: number;
+  name: any;
+  owner_id?: number;
+  state: any;
+}
 
 const Lobby: React.FC = () => {
-  const [lobbyName, setLobbyName] = useState<string>('');
-  const [Lobbies, setLobbies] = useState<LobbyType[]>([]);
+  const [LobbieName, setLobbieName] = useState<string>('');
+  const [Lobbies, setLobbies] = useState<Lobby[]>([]);
   const [error, setError] = useState<string>('');
   const [error2, setError2] = useState<string>('');
   const [selectedLobbyId, setSelectedLobbyId] = useState<number | null>(null);
   const [selectedLobbyName, setSelectedLobbyName] = useState<string | null>(null);
-  const [userInfo, setUserInfo] = useState<any>('');
-
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const [userInfo, setUserInfo] = useState<any>("");
 
   const fetchLobbies = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/lobbies`);
+      const response = await fetch(`http://localhost:8000/api/lobbies`);
       if (!response.ok) {
         throw new Error('Failed to fetch lobbies');
       }
-      const data: LobbyType[] = await response.json();
+      const data: Lobby[] = await response.json();
       setLobbies(data);
     } catch (error) {
       console.error('Error fetching lobbies:', error);
@@ -29,17 +37,22 @@ const Lobby: React.FC = () => {
 
   useEffect(() => {
     fetchLobbies();
-  }, [fetchLobbies]);
+  }, []);
 
   useEffect(() => {
     getSession().then((session) => {
-      // Extract user info and save the user id
-      setUserInfo(session?.user.pk);
+      const newGameState: any = {
+        message: "Test",
+        lobby: null,
+        playerName: session?.user.username || "Player",
+        playerId: session?.user.pk || 0,
+      };
+      setUserInfo(newGameState.playerId);
     });
   }, []);
 
   const handleCreateLobby = async () => {
-    if (!lobbyName) {
+    if (!LobbieName) {
       setError('Field is required.');
       return;
     }
@@ -50,10 +63,10 @@ const Lobby: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
+        body: JSON.stringify({ 
           owner: userInfo,
           game_type: 1,
-          name: lobbyName,
+          name: LobbieName
         }),
       });
 
@@ -63,7 +76,7 @@ const Lobby: React.FC = () => {
       }
 
       await fetchLobbies();
-      setLobbyName('');
+      setLobbieName("");
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -80,34 +93,42 @@ const Lobby: React.FC = () => {
 
   const handleJoinButton = () => {
     if (selectedLobbyId === null) {
-      setError2('Select a Lobby');
+      setError2("Select a Lobby");
     }
-  };
+  }
 
   return (
-    <div className="relative p-6">
-      <h2 className="text-2xl font-bold mb-4">Lobbies</h2>
-      <p className="mb-6">
-        Select an existing Lobby from the list below, or click &quot;Create Lobby&quot; to Open a Lobby.
+    <div className='relative p-6'>
+      <h2 className='text-2xl font-bold mb-4'>Lobbies</h2>
+      <p className='mb-6'>
+        Select an existing Lobby from the list below, or click "Create Lobby"
+        to Open a Lobby.
       </p>
 
-      <button className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded">Enter the name of your lobby</button>
+      <button
+        className='w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded'
+      >
+        Enter the name of your lobby
+      </button>
 
-      <div className="space-y-4">
+      <div className='space-y-4'>
         <input
-          type="text"
-          placeholder="Name"
-          value={lobbyName}
-          onChange={(e) => setLobbyName(e.target.value)}
-          className="w-full px-4 py-2 border rounded"
+          type='text'
+          placeholder='Name'
+          value={LobbieName}
+          onChange={(e) => setLobbieName(e.target.value)}
+          className='w-full px-4 py-2 border rounded'
         />
-        {error && <p className="text-red-600">{error}</p>}
-        <button onClick={handleCreateLobby} className="w-full px-4 py-2 bg-green-600 text-white rounded">
+        {error && <p className='text-red-600'>{error}</p>}
+        <button
+          onClick={handleCreateLobby}
+          className='w-full px-4 py-2 bg-green-600 text-white rounded'
+        >
           Create
         </button>
       </div>
-      <div className="my-4">
-        <ul className="list-disc pl-5">
+      <div className='my-4'>
+        <ul className='list-disc pl-5'>
           {Lobbies.map((lobby, index) => (
             <li
               key={index}
@@ -119,16 +140,22 @@ const Lobby: React.FC = () => {
           ))}
         </ul>
       </div>
-      {selectedLobbyId === null ? (
-        <button onClick={handleJoinButton} className="w-full px-4 py-2 bg-green-600 text-white rounded">
-          Join
-          {error2 && <p className="text-red-600">{error2}</p>}
-        </button>
-      ) : (
-        <Link href={`game/find-pair?game_id=${selectedLobbyId}&name=${selectedLobbyName}`} className="mt-4">
-          <button className="w-full px-4 py-2 bg-green-600 text-white rounded">Join</button>
-        </Link>
-      )}
+      {selectedLobbyId === null 
+        ? <button
+            onClick={handleJoinButton}
+            className='w-full px-4 py-2 bg-green-600 text-white rounded'
+          >
+            Join
+            {error2 && <p className='text-red-600'>{error2}</p>}
+          </button>
+        : <Link href={`/Join-Room?game_id=${selectedLobbyId}&name=${selectedLobbyName}`} className="mt-4">
+            <button
+              className='w-full px-4 py-2 bg-green-600 text-white rounded'
+            >
+              Join
+            </button>
+          </Link>
+      }
     </div>
   );
 };

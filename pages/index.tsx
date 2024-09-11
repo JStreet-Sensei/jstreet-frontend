@@ -26,7 +26,7 @@ const HomePage = () => {
         {" "}
         Play game!
       </Link>
-      <Link href={"/lobby"} className="mt-4">
+      <Link href={"/Lobby"} className="mt-4">
         {" "}
         Lobby
       </Link>

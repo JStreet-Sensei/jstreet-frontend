@@ -1,4 +1,6 @@
 interface learningContextType {
+  storeCorrectPhrases(id: any): unknown;
+  correctPhrases: never[];
   topic: string;
   phrase: phraseType;
   selectPhrase: React.Dispatch<React.SetStateAction<phraseType>>;
