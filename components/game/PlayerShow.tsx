@@ -3,6 +3,7 @@ import { Player } from '../../types/game';
 
 type PlayerListProps = {
   player: Player | undefined;
+  isPlayerTurn: boolean;
 };
 
 /**
@@ -10,12 +11,14 @@ type PlayerListProps = {
  * @param player - Player type of object
  * @returns void
  */
-export const PlayerShow = ({ player }: PlayerListProps) => {
+export const PlayerShow = ({ player, isPlayerTurn }: PlayerListProps) => {
   return (
     <>
-      <li>
-        {player?.username} - {player?.score}
-      </li>
+      <div
+        className={`border-dashed border-2 px-2 text-white font-bold ${+isPlayerTurn ? ' border-red-600 ' : ' border-sky-700 '}`}
+      >
+        {player?.username} - {player?.score} match {isPlayerTurn}
+      </div>
     </>
   );
 };

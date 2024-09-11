@@ -40,6 +40,20 @@ image:"https://lh3.googleusercontent.com/....."
 name:"Test User"}
 ```
 
+## Backend call
+
+When you need to fetch from the backend instead of the url replace with getFetchBackendURL(path).
+Where path is the path of the backend
+Like the example:
+
+```
+  const response = await axios({
+    method: 'get',
+    url: getFetchBackendURL('/api/auth/user/'),
+    headers: { Authorization: 'Bearer ' + session?.access_token },
+  });
+```
+
 ## Styling
 
 Use noraml css and tailwind css.

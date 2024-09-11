@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
-import { SelectedMaterial } from '../../../pages/game/flash-card';
-import { phraseType } from '../../../types/types';
-import styles from '../../../styles/FlashCard.module.css';
+import { SelectedMaterial } from '@/pages/game/flash-card';
+import { phraseType } from '@/types/types';
+import styles from '@/styles/Card.module.css';
+import { oneCardResult } from '@/types/game';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + '/';
 
@@ -16,9 +17,6 @@ export const FlashCard = () => {
     };
   }, [selectedMaterial]);
 
-  interface oneCardResult {
-    (): Promise<phraseType>;
-  }
   const getOneCard: oneCardResult = async () => {
     const fetched = await fetch(BACKEND_URL);
     const result: Promise<phraseType> = await fetched.json();
@@ -32,21 +30,21 @@ export const FlashCard = () => {
             hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
       >
         <div
-          className="flip-card"
+          className={styles.flip_card}
           onClick={() => {
             setIsback(!isBack);
           }}
         >
-          <div className={`flip-card-inner ${isBack ? styles['rotateY-card'] : ''}`}>
-            <div className={`flip-card-front`}>
-              <p className="title">
+          <div className={`${styles.flip_card_inner} ${isBack ? styles.flip : ''}`}>
+            <div className={styles.flip_card_front}>
+              <p className={styles.title}>
                 Flip card front
                 {selectedMaterial?.phrase !== undefined ? <>{selectedMaterial.phrase.english}</> : <>null</>}
                 <br></br>
               </p>
             </div>
-            <div className={`flip-card-back`}>
-              <p className="title">
+            <div className={styles.flip_card_back}>
+              <p className={styles.title}>
                 Flip card back
                 {selectedMaterial?.phrase !== undefined ? <>{selectedMaterial.phrase.japanese}</> : <>null</>}
                 <br></br>
