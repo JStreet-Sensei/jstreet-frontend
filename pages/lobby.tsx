@@ -91,7 +91,7 @@ const Lobby: React.FC = () => {
         Select an existing Lobby from the list below, or click &quot;Create Lobby&quot; to Open a Lobby.
       </p>
 
-      <button className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded">Enter the name of your lobby</button>
+      <button className="w-full mt-4 px-4 py-2 bg-[#43346dff] text-white rounded">Enter the name of your lobby</button>
 
       <div className="space-y-4">
         <input
@@ -102,7 +102,10 @@ const Lobby: React.FC = () => {
           className="w-full px-4 py-2 border rounded"
         />
         {error && <p className="text-red-600">{error}</p>}
-        <button onClick={handleCreateLobby} className="w-full px-4 py-2 bg-green-600 text-white rounded">
+        <button
+          onClick={handleCreateLobby}
+          className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]"
+        >
           Create
         </button>
       </div>
@@ -111,7 +114,7 @@ const Lobby: React.FC = () => {
           {Lobbies.map((lobby, index) => (
             <li
               key={index}
-              className={`py-2 cursor-pointer hover:text-blue-600 ${selectedLobbyId === lobby.game_id ? 'bg-blue-100' : ''}`}
+              className={`py-2 cursor-pointer hover:text-[#43346dff] ${selectedLobbyId === lobby.game_id ? 'bg-blue-100' : ''}`}
               onClick={() => handleLobbieClick(lobby.game_id, lobby.name)}
             >
               {lobby.name}
@@ -120,13 +123,13 @@ const Lobby: React.FC = () => {
         </ul>
       </div>
       {selectedLobbyId === null ? (
-        <button onClick={handleJoinButton} className="w-full px-4 py-2 bg-green-600 text-white rounded">
+        <button onClick={handleJoinButton} className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded ">
           Join
-          {error2 && <p className="text-red-600">{error2}</p>}
+          {error2 && <p className="text-[#f3308cff]">{error2}</p>}
         </button>
       ) : (
         <Link href={`game/find-pair?game_id=${selectedLobbyId}&name=${selectedLobbyName}`} className="mt-4">
-          <button className="w-full px-4 py-2 bg-green-600 text-white rounded">Join</button>
+          <button className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]">Join</button>
         </Link>
       )}
     </div>
