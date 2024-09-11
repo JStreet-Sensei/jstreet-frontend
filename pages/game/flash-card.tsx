@@ -38,6 +38,8 @@ const FlashCardPage = () => {
   const [correctPhrases, setCorrectPhrases] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [userInfo, setUserInfo] = useState<any>("");
+  
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   //get user info
   // useEffect(() => {
@@ -56,7 +58,7 @@ const FlashCardPage = () => {
   const fetchPhrases = async () => {
     setLoading(true); // Set loading to true
     try {
-      const response = await fetch(`http://localhost:8000/api/flash-card?limits=10&user-id=4`);
+      const response = await fetch(`${BACKEND_URL}/api/flash-card?limits=10&user-id=4`);
       const result = await response.json();
       console.log('API Response:', result);
       console.log(userInfo);
