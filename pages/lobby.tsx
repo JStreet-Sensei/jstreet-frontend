@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { LobbyType } from '@/types/game';
 import styles from '@/styles/Game.module.css';
+import { getFetchBackendURL } from '@/utils/utils-data';
 
 const Lobby: React.FC = () => {
   const [lobbyName, setLobbyName] = useState<string>('');
@@ -20,7 +21,7 @@ const Lobby: React.FC = () => {
 
   const fetchLobbies = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/lobbies`);
+      const response = await fetch(getFetchBackendURL('/api/lobbies'));
       if (!response.ok) {
         throw new Error('Failed to fetch lobbies');
       }
@@ -49,7 +50,7 @@ const Lobby: React.FC = () => {
     }
 
     try {
-      const response = await fetch(BACKEND_URL + '/api/lobbies/create', {
+      const response = await fetch(getFetchBackendURL('/api/lobbies/create'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
