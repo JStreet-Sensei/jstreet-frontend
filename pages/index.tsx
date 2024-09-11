@@ -22,14 +22,20 @@ const HomePage = () => {
 
   return (
     <>
-      <Link href={'/selectGame'} className="mt-4">
-        {' '}
-        Play game!
-      </Link>
-      <Link href={'/lobby'} className="mt-4">
-        {' '}
-        Go to Lobby
-      </Link>
+      <div className="flex items-center justify-center m-5">
+        <Link
+          href="/selectGame"
+          className="bg-[var(--magenta)] text-[var(--white)] font-semibold py-3 px-10 rounded-lg shadow-md hover:bg-[var(--turquoise)] hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 m-4"
+        >
+          Play game!
+        </Link>
+        <Link
+          href="/lobby"
+          className="bg-[var(--turquoise)] text-[var(--blue-dark)] font-semibold py-3 px-10 rounded-lg shadow-md hover:bg-[var(--magenta)] hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 m-4"
+        >
+          Go to Lobby
+        </Link>
+      </div>
       <div className={styles.graffiti}>
         <div className="relative flex flex-col items-center justify-center min-h-screen bg-[url('/LandingPage/wave_top_draw.svg')] bg-no-repeat bg-top bg-contain">
           <div className="absolute inset-0 bg-[url('/LandingPage/wave_bottom_draw.svg')] bg-no-repeat bg-bottom bg-contain z-0" />

@@ -123,7 +123,10 @@ const Lobby: React.FC = () => {
         </ul>
       </div>
       {selectedLobbyId === null ? (
-        <button onClick={handleJoinButton} className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded ">
+        <button
+          onClick={handleJoinButton}
+          className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]"
+        >
           Join
           {error2 && <p className="text-[#f3308cff]">{error2}</p>}
         </button>

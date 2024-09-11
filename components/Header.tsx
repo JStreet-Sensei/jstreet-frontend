@@ -18,7 +18,6 @@ export const Header: React.FC = () => {
   return (
     <>
       <Head>
-        {/* Import a Google Font */}
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
       </Head>
 
@@ -53,7 +52,7 @@ export const Header: React.FC = () => {
           <div className="ml-auto flex space-x-6">
             {!isGamePage && (
               <div
-                className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-red-500 rounded-md transition-all duration-300 border-b-2 border-transparent"
+                className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent"
                 onClick={() => {
                   signOut();
                 }}
@@ -62,14 +61,14 @@ export const Header: React.FC = () => {
               </div>
             )}
             {!isGamePage && !isMyPage && (
-              <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
+              <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent">
                 <Link href={'/mypage'}>My page</Link>
               </div>
             )}
           </div>
         ) : (
           <div
-            className="ml-auto cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#28a09a] rounded-md transition-all duration-300 border-b-2 border-transparent"
+            className="ml-auto cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent"
             onClick={() => router.push('/login')}
           >
             Log in
