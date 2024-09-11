@@ -31,8 +31,10 @@ const FlashCard = ({ loading }: FlashCardProps) => {
   };
 
   const goToNextCard = () => {
+
     if (currentIndex < (selectedMaterial?.phrases.length || 0) - 1) {
-      setCurrentIndex((prev) => prev + 1);
+      setTimeout(() => {
+      setCurrentIndex((prev) => prev + 1)}, 300);
     } else {
       setCurrentIndex(0);
     }
