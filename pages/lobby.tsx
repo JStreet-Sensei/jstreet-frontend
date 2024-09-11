@@ -20,21 +20,26 @@ const Lobby: React.FC = () => {
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const fetchLobbies = async () => {
-    try {
-      const response = await fetch(getFetchBackendURL('/api/lobbies'));
-      if (!response.ok) {
-        throw new Error('Failed to fetch lobbies');
+    return new Promise((resolve) => {
+      setTimeout(resolve, 1000);
+    }).then(async () => {
+      try {
+        const response = await fetch(getFetchBackendURL('/api/lobbies'));
+        if (!response.ok) {
+          throw new Error('Failed to fetch lobbies');
+        }
+        const data: LobbyType[] = await response.json();
+        setLobbies(data);
+        fetchLobbies();
+      } catch (error) {
+        console.error('Error fetching lobbies:', error);
       }
-      const data: LobbyType[] = await response.json();
-      setLobbies(data);
-    } catch (error) {
-      console.error('Error fetching lobbies:', error);
-    }
+    });
   };
 
   useEffect(() => {
     fetchLobbies();
-  }, [fetchLobbies]);
+  }, []);
 
   useEffect(() => {
     getSession().then((session) => {
