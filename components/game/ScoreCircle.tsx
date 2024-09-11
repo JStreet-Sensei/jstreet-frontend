@@ -37,7 +37,6 @@ const ScorCircle = ({ player }: ScorCircleProps) => {
           </span>
         </div>
       </div>
-      ;
     </>
   );
 };

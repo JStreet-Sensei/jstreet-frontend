@@ -1,4 +1,4 @@
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { LobbyType } from '@/types/game';
@@ -11,6 +11,9 @@ const Lobby: React.FC = () => {
   const [selectedLobbyId, setSelectedLobbyId] = useState<number | null>(null);
   const [selectedLobbyName, setSelectedLobbyName] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<any>('');
+
+  // Session and router
+  const { data: session, status } = useSession({ required: true });
 
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 

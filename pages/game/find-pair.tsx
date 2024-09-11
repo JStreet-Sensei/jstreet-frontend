@@ -38,6 +38,12 @@ const FindPair = () => {
   const router = useRouter();
   const { game_id, name } = router.query;
 
+  // If no game id or name redirect to lobby
+  if (game_id === undefined || name === undefined) {
+    router.push({ pathname: '../lobby' });
+    return;
+  }
+
   // Initialize game state
   useEffect(() => {
     console.log('Initilialize gameState');
