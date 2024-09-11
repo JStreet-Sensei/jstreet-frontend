@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
 import { SelectedMaterial } from '../../../pages/game/flash-card';
-import styles from '../../../styles/FlashCard.module.css';
 
 interface FlashCardProps {
   loading: boolean; // Add loading prop
