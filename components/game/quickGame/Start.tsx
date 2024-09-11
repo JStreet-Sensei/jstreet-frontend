@@ -11,7 +11,7 @@ import Link from 'next/link';
 const StartQuickAnswerGame: React.FC = () => {
   return (
     <>
-      <Link href={'/game/quick-answer'}>
+      <Link href={'/lobby'}>
         <div className="grid grid-cols-2 gap-4 h-full items-center cursor-pointer">
           <div className="flex justify-center items-center">
             <div>

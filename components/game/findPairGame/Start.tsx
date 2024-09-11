@@ -11,7 +11,7 @@ import Link from 'next/link';
 const StartPairGame: React.FC = () => {
   return (
     <>
-      <Link href={'/game/find-pair'}>
+      <Link href={'/lobby'}>
         <div className="grid grid-cols-2 gap-4 h-full items-center cursor-pointer">
           <div className="flex justify-center items-center">
             <div>
