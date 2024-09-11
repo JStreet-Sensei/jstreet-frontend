@@ -30,6 +30,15 @@ export const getSelectedCards = (data: CardData[]) => {
   }, [] as number[]);
 };
 
+export const isUngussedCardsAvaible = (cardDeck: CardData[]) => {
+  const count = cardDeck.reduce((counter: number, actualCard: CardData) => {
+    if (actualCard.guessedFrom === 0) return counter + 1;
+    return counter;
+  }, 0);
+  console.log('Remaning cards: ', count);
+  return count < 2;
+};
+
 // Check if the card match
 /**
  * Check if the selected card matches
