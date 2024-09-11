@@ -54,7 +54,7 @@ const FlashCard = ({ loading }: FlashCardProps) => {
     return (
       <div className="text-center">
         <h1 className="text-2xl font-semibold text-green-600">Congratulations!</h1>
-        <p className="mt-2 text-lg text-gray-700">You've completed all flashcards.</p>
+        <p className="mt-2 text-lg text-gray-700">You&apos;ve completed all flashcards</p>
         <button
           className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
           onClick={handleRestart}
