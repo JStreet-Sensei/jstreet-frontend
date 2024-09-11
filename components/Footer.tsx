@@ -1,7 +1,7 @@
 export const Footer: React.FC = () => {
   return (
     <>
-      <div>Detective.</div>
+      <div>Footer here</div>
     </>
   );
 };

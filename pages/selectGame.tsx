@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import StartExpression from '../components/game/newWords/Start';
-import StartFlashCard from '../components/game/flashCard/Start';
-import StartPairGame from '../components/game/findPairGame/Start';
-import StartQuickGame from '../components/game/quickGame/Start';
+import StartExpression from '@/components/game/newWords/Start';
+import StartFlashCard from '@/components/game/flashCard/Start';
+import StartPairGame from '@/components/game/findPairGame/Start';
+import StartQuickGame from '@/components/game/quickGame/Start';
 
 const gameFileNames = ['newWords', 'flashCard', 'findPairGame', 'quickGame'];
 
