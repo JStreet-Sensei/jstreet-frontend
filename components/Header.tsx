@@ -1,44 +1,78 @@
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 export const Header: React.FC = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
+  const isGamePage = router.pathname.includes('/game');
+  const isMyPage = router.pathname === '/mypage';
+  const isSelectGamePage = router.pathname === '/selectGame';
+  const isExpressionPage = router.pathname === '/game/expression';
+  const isLearningPage = router.pathname === '/game/learning';
+  const isGameFindPair = router.pathname === '/game/find-pair';
+  const isGameQuickAnswer = router.pathname === '/game/quick-answer';
+
   return (
     <>
-      <div className="flex flex-row">
-        <div className="basis-1/6">
-          <Link href={'/'}>To Homepage</Link>
+      <Head>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+      </Head>
+
+      <div className="flex items-center p-4 bg-gradient-to-r from-[#12dcd8] to-[#0bbfb7] shadow-lg">
+        <div className="flex space-x-6">
+          <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
+            <Link href={'/'}>Home</Link>
+          </div>
+          {!isExpressionPage && !isSelectGamePage && (
+            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
+              <Link href={'/game/expression'}>Expression</Link>
+            </div>
+          )}
+          {!isLearningPage && !isSelectGamePage && (
+            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
+              <Link href={'/game/learning'}>Learning</Link>
+            </div>
+          )}
+          {!isGameFindPair && !isSelectGamePage && (
+            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
+              <Link href={'/game/find-pair'}>Pairing Game</Link>
+            </div>
+          )}
+          {!isGameQuickAnswer && !isSelectGamePage && (
+            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
+              <Link href={'/game/quick-answer'}>Quick Answer Game</Link>
+            </div>
+          )}
         </div>
-        <div className="basis-3/6">This is empty space</div>
+
         {session ? (
-          <>
-            <div
-              className="basis-1/6 cursor-pointer"
-              onClick={() => {
-                signOut();
-              }}
-            >
-              Log out
-            </div>
-            <div className="basis-1/6 cursor-pointer">
-              <Link href={'/mypage'}>My page</Link>
-            </div>
-          </>
+          <div className="ml-auto flex space-x-6">
+            {!isGamePage && (
+              <div
+                className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent"
+                onClick={() => {
+                  signOut();
+                }}
+              >
+                Log out
+              </div>
+            )}
+            {!isGamePage && !isMyPage && (
+              <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent">
+                <Link href={'/mypage'}>My page</Link>
+              </div>
+            )}
+          </div>
         ) : (
-          <>
-            <div className="basis-1/6"></div>
-            <div
-              className="basis-1/6 cursor-pointer"
-              onClick={() => {
-                router.push('/login');
-              }}
-            >
-              Log in
-            </div>
-          </>
+          <div
+            className="ml-auto cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent"
+            onClick={() => router.push('/login')}
+          >
+            Log in
+          </div>
         )}
       </div>
     </>
