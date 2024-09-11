@@ -35,7 +35,7 @@ const SelectGame: React.FC = () => {
     <div className="relative min-h-screen flex items-center justify-center bg-white">
       <button
         onClick={goLeftGame}
-        className="absolute left-10 bg-blue-500 text-white px-8 py-2 rounded-full transform -translate-y-1/2 top-1/2 hover:bg-blue-700 transition"
+        className="absolute left-10 bg-[#43346dff] text-white px-8 py-2 rounded-full transform -translate-y-1/2 top-1/2 hover:bg-[#5361caff] transition"
       >
         {'<'} Left
       </button>
@@ -47,7 +47,7 @@ const SelectGame: React.FC = () => {
 
       <button
         onClick={goRightGame}
-        className="absolute right-10 bg-blue-500 text-white px-8 py-2 rounded-full transform -translate-y-1/2 top-1/2 hover:bg-blue-700 transition"
+        className="absolute right-10 bg-[#43346dff] text-white px-8 py-2 rounded-full transform -translate-y-1/2 top-1/2 hover:bg-[#5361caff] transition"
       >
         Right {'>'}
       </button>

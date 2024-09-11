@@ -16,7 +16,7 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <div className="flex items-center p-4 bg-gray-200">
+      <div className="flex items-center p-4 bg-[#12dcd8]">
         <div className="flex space-x-4">
           <div className="cursor-pointer">
             <Link href={'/'}>Home</Link>
