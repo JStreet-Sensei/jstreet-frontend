@@ -4,6 +4,7 @@ import { Matrix } from '@/components/game/findPairGame/Matrix';
 import PlayerList from '@/components/game/PlayerList';
 import { isObjectEmpty } from '@/utils/utils-data';
 import { CardData, ClientGameState, Player } from '@/types/game';
+import styles from '@/styles/Game.module.css';
 
 type Props = {
   handleUpdateDeck: (cardDeck: CardData[]) => void;
@@ -32,11 +33,15 @@ export default function GamePair({ gameState, handleUpdateDeck, players }: Props
 
   return (
     <>
-      <Matrix handleUpdateDeck={handleUpdateDeck} gameState={useGameState}></Matrix>
-      <div className="m-5">
-        <p>User_id turn: {useGameState.turn}</p>
-        <p>Players</p>
-        <PlayerList currentPlayerUsername={useGameState.username} players={usePlayerList}></PlayerList>
+      <div className={`${styles.pattern_bg}`}>
+        <div className={`m-5`}>
+          <PlayerList
+            currentPlayerUsername={useGameState.username}
+            players={usePlayerList}
+            actualTurn={useGameState.turn}
+          ></PlayerList>
+        </div>
+        <Matrix handleUpdateDeck={handleUpdateDeck} gameState={useGameState}></Matrix>
       </div>
     </>
   );

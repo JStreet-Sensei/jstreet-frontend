@@ -5,7 +5,7 @@ import GamePair from '@/components/GamePair';
 
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { CardData, ClientGameState, ServerLobby } from '@/types/game';
+import { CardData, ClientGameState, GameResultType, ServerLobby } from '@/types/game';
 import { getSession } from 'next-auth/react';
 import Message from '@/components/game/findPairGame/Message';
 import { useRouter } from 'next/router';
@@ -120,6 +120,15 @@ const FindPair = () => {
             cardDeck: receivedLobby.gameState.cardDeck,
           });
         });
+      });
+
+      newSocket.on('end-game', async (result: GameResultType) => {
+        const stringResult = JSON.stringify(result);
+        router.push({
+          pathname: './game-result',
+          query: { result: stringResult },
+        });
+        return;
       });
 
       newSocket.on('disconnect', () => {

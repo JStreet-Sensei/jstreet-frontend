@@ -3,12 +3,15 @@ import { NextApiRequest } from 'next';
 import { NextApiResponseServerIO } from '@/types/next';
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { Server as IOServer } from 'socket.io';
-import { CardData, Player, ServerGameState, ServerLobby } from '@/types/game';
+import { CardData, GameResultType, Player, ServerGameState, ServerLobby } from '@/types/game';
 import { extractDataFromQuery, serializeServerObject } from '@/utils/utils-socket';
-import { checkCardMatch, checkDataSelectable, getBackendURL, getSelectedCards } from '@/utils/utils-data';
-
-import path from 'path';
-import { promises as fs } from 'fs';
+import {
+  checkCardMatch,
+  checkDataSelectable,
+  getBackendURL,
+  getSelectedCards,
+  isUngussedCardsAvaible,
+} from '@/utils/utils-data';
 
 export const config = {
   api: {
@@ -51,6 +54,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
           owner: player.user_id,
           players: new Set<Player>(),
           gameState: gameState,
+          startTime: new Date(),
         };
 
         // Save the actual lobby
@@ -74,6 +78,8 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
       // // When a user press Start to start the game the status will propagate to everyone
       socket.on('start', () => {
         console.log('Game start!');
+        // Set the start timer
+        if (lobby) lobby.startTime = new Date();
         io.to(lobbyRoom).emit('start');
       });
 
@@ -107,7 +113,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
             console.log('Card gueesed!');
             if (player) {
               responseMessage = `${player.username} gueesed 2 cards!`;
-              player.score = player.score + 10;
+              player.score = player.score + 1;
             }
           } else if (selectedCards.length === 2) {
             // Extract index of the selected cards
@@ -134,6 +140,19 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
           console.log('New server lobby with change turn is ', lobby);
           if (lobby) io.to(lobbyRoom).emit('change-turn', serializeServerObject(lobby));
           io.to(lobbyRoom).emit('message', responseMessage);
+
+          // Check the end of the game
+          if (isUngussedCardsAvaible(cardDeck)) {
+            if (lobby) {
+              const duration = new Date().getTime() - lobby.startTime.getTime();
+              const result: GameResultType = {
+                players: Array.from(lobby.players),
+                time: duration,
+              };
+              // Send to everyone the game ends
+              io.to(lobbyRoom).emit('end-game', result);
+            }
+          }
         } else {
           console.log('Emit an update no change turn');
           console.log('New card deck');
