@@ -1,62 +1,116 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { SelectedMaterial } from '../../../pages/game/flash-card';
-import { phraseType } from '../../../types/types';
 import styles from '../../../styles/FlashCard.module.css';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + '/';
+interface FlashCardProps {
+  loading: boolean; // Add loading prop
+}
 
-export const FlashCard = () => {
+const FlashCard = ({ loading }: FlashCardProps) => {
+  //data used in this component
   const selectedMaterial = useContext(SelectedMaterial);
-  const [isBack, setIsback] = useState(false);
+  //the current card index
+  const [currentIndex, setCurrentIndex] = useState(0);
+  //boolean to card, if its flip or not
+  const [isBack, setIsBack] = useState(false);
+  //count the corrects cards
+  const [correctCount, setCorrectCount] = useState(0);
 
-  useEffect(() => {
-    async () => {
-      const phrase = await getOneCard();
-      selectedMaterial?.selectPhrase(phrase);
-    };
-  }, [selectedMaterial]);
+  const currentPhrase = selectedMaterial?.phrases[currentIndex];
 
-  interface oneCardResult {
-    (): Promise<phraseType>;
-  }
-  const getOneCard: oneCardResult = async () => {
-    const fetched = await fetch(BACKEND_URL);
-    const result: Promise<phraseType> = await fetched.json();
-    return result;
+  const handleCorrect = () => {
+    if (currentPhrase) {
+      selectedMaterial?.storeCorrectPhrases(currentPhrase.id);
+      setCorrectCount((prev) => prev + 1);
+      goToNextCard();
+    }
   };
 
-  return (
-    <>
-      <div
-        className="block max-w-full p-6 m-10 bg-white border border-gray-200 rounded-lg shadow 
-            hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-      >
-        <div
-          className="flip-card"
-          onClick={() => {
-            setIsback(!isBack);
-          }}
+  const handleWrong = () => {
+    goToNextCard();
+  };
+
+  const goToNextCard = () => {
+    if (currentIndex < (selectedMaterial?.phrases.length || 0) - 1) {
+      setCurrentIndex((prev) => prev + 1);
+    } else {
+      setCurrentIndex(0);
+    }
+    setIsBack(false);
+  };
+
+  const handleRestart = () => {
+    setCurrentIndex(0);
+    setIsBack(false);
+    setCorrectCount(0);
+    selectedMaterial?.resetGame(); // Call the reset function from flash-card
+  };
+
+  if (loading) {
+    return <div>Loading...</div>; // Show a loading message or spinner
+  }
+
+  if (selectedMaterial?.correctPhrases.length === selectedMaterial?.phrases.length) {
+    return (
+      <div className="text-center">
+        <h1 className="text-2xl font-semibold text-green-600">Congratulations!</h1>
+        <p className="mt-2 text-lg text-gray-700">You've completed all flashcards.</p>
+        <button
+          className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          onClick={handleRestart}
         >
-          <div className={`flip-card-inner ${isBack ? styles['rotateY-card'] : ''}`}>
-            <div className={`flip-card-front`}>
-              <p className="title">
-                Flip card front
-                {selectedMaterial?.phrase !== undefined ? <>{selectedMaterial.phrase.english}</> : <>null</>}
-                <br></br>
-              </p>
-            </div>
-            <div className={`flip-card-back`}>
-              <p className="title">
-                Flip card back
-                {selectedMaterial?.phrase !== undefined ? <>{selectedMaterial.phrase.japanese}</> : <>null</>}
-                <br></br>
-                {selectedMaterial?.phrase !== undefined ? <>{selectedMaterial.phrase.description}</> : <>null</>}
-                <br></br>
-              </p>
-            </div>
+          Restart
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative flex flex-col items-center bg-white border border-gray-300 rounded-lg shadow-lg p-6">
+      <div
+        className={`flip-card ${styles['flip-card']} transition-transform duration-500`}
+        onClick={() => setIsBack(!isBack)}
+        style={{ width: '400px', height: '300px', cursor: 'pointer' }}
+      >
+        <div className={`flip-card-inner ${isBack ? styles['rotateY-card'] : ''}`}>
+          <div className="flip-card-front flex items-center justify-center bg-gray-50 rounded-lg p-4">
+            <p className="text-2xl font-bold text-gray-800">
+              {currentPhrase?.english || 'Loading...'}
+            </p>
+          </div>
+          <div className="flip-card-back flex items-center justify-center bg-gray-800 text-white rounded-lg p-4">
+            <p className="text-xl font-semibold">
+              {currentPhrase?.japanese || 'Loading...'}
+              <br />
+              <span className="text-sm text-gray-400">{currentPhrase?.description || ''}</span>
+            </p>
           </div>
         </div>
       </div>
-    </>
+
+      {isBack && (
+        <div className="mt-4 flex space-x-4">
+          <button
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+            onClick={handleCorrect}
+          >
+            Correct
+          </button>
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+            onClick={handleWrong}
+          >
+            Wrong
+          </button>
+        </div>
+      )}
+
+      <div className="mt-4 text-lg font-semibold">
+        Correct Count: {correctCount}
+      </div>
+    </div>
   );
 };
+
+export default FlashCard;
+
