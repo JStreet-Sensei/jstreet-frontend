@@ -22,7 +22,6 @@ export const SignupPage = () => {
                 passwordagain: passwordAgain
             })
         })
-        const result = await fetched.json()
         if (fetched.status === 200) {
             router.push("/")
         }
