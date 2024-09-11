@@ -89,7 +89,7 @@ const Lobby: React.FC = () => {
   };
 
   return (
-    <div className={`${styles.pattern_bg}`}>
+    <>
       <div className="relative p-6">
         <h2 className="text-2xl font-bold mb-4 text-white ">Lobbies</h2>
         <p className="mb-6 text-white ">
@@ -97,30 +97,33 @@ const Lobby: React.FC = () => {
         </p>
         <div className="flex items-center">
           <p className="mt-4 py-2 mx-auto text-white rounded">Enter the name of your lobby</p>
+        </div>
+        <button className="w-full mt-4 px-4 py-2 bg-[#43346dff] text-white rounded">
+          Enter the name of your lobby
+        </button>
 
-          <div className="space-y-4 mt-4 mx-auto">
-            <input
-              type="text"
-              placeholder="Name"
-              value={lobbyName}
-              onChange={(e) => setLobbyName(e.target.value)}
-              className="w-auto px-4 py-2 border rounded"
-            />
-            {error && <p className="text-red-600">{error}</p>}
-            <button
-              onClick={handleCreateLobby}
-              className="w-full px-4 py-2 text-black font-semibold rounded background-main"
-            >
-              Create
-            </button>
-          </div>
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="Name"
+            value={lobbyName}
+            onChange={(e) => setLobbyName(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
+          />
+          {error && <p className="text-red-600">{error}</p>}
+          <button
+            onClick={handleCreateLobby}
+            className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]"
+          >
+            Create
+          </button>
         </div>
         <div className="my-4">
-          <ul className="list-disc pl-5 text-white border-solid border-2 border-white p-2 ">
+          <ul className="list-disc pl-5">
             {Lobbies.map((lobby, index) => (
               <li
                 key={index}
-                className={`py-2 cursor-pointer hover:secondary-color ${selectedLobbyId === lobby.game_id ? 'underline font-bold' : ''}`}
+                className={`py-2 cursor-pointer hover:text-[#43346dff] ${selectedLobbyId === lobby.game_id ? 'bg-blue-100' : ''}`}
                 onClick={() => handleLobbieClick(lobby.game_id, lobby.name)}
               >
                 {lobby.name}
@@ -129,17 +132,20 @@ const Lobby: React.FC = () => {
           </ul>
         </div>
         {selectedLobbyId === null ? (
-          <button onClick={handleJoinButton} className="w-full px-4 py-2 background-main text-black rounded">
+          <button
+            onClick={handleJoinButton}
+            className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]"
+          >
             Join
-            {error2 && <p className="text-red-600">{error2}</p>}
+            {error2 && <p className="text-[#f3308cff]">{error2}</p>}
           </button>
         ) : (
           <Link href={`game/find-pair?game_id=${selectedLobbyId}&name=${selectedLobbyName}`} className="mt-4">
-            <button className="w-full px-4 py-2 background-main text-black font-semibold rounded">Join</button>
+            <button className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]">Join</button>
           </Link>
         )}
       </div>
-    </div>
+    </>
   );
 };
 
