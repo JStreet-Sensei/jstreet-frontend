@@ -18,3 +18,19 @@
   --deep-sky-blue: #38c4faff;
   --savoy-blue: #5361caff;
 }
+
+.background-main {
+  background-color: var(--turquoise);
+}
+
+.secondary-color {
+  color: var(--magenta);
+}
+
+.secondary-inverse {
+  color: var(--tekhelet);
+}
+
+body {
+  @apply h-full;
+}
