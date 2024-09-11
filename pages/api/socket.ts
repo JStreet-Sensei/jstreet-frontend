@@ -3,12 +3,15 @@ import { NextApiRequest } from 'next';
 import { NextApiResponseServerIO } from '@/types/next';
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { Server as IOServer } from 'socket.io';
-import { CardData, Player, ServerGameState, ServerLobby } from '@/types/game';
+import { CardData, GameResultType, Player, ServerGameState, ServerLobby } from '@/types/game';
 import { extractDataFromQuery, serializeServerObject } from '@/utils/utils-socket';
-import { checkCardMatch, checkDataSelectable, getSelectedCards } from '@/utils/utils-data';
-
-import path from 'path';
-import { promises as fs } from 'fs';
+import {
+  checkCardMatch,
+  checkDataSelectable,
+  getBackendURL,
+  getSelectedCards,
+  isUngussedCardsAvaible,
+} from '@/utils/utils-data';
 
 export const config = {
   api: {
@@ -33,9 +36,10 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
       const { player, lobby_id } = extractDataFromQuery(socket.handshake.query);
       let lobby: ServerLobby | undefined;
       let gameState: ServerGameState;
+      const lobbyRoom = lobby_id.toString();
 
       //Socket join the room;
-      socket.join(lobby_id.toString());
+      socket.join(lobbyRoom);
 
       if (lobbies[lobby_id] === undefined) {
         // Create the game state
@@ -50,6 +54,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
           owner: player.user_id,
           players: new Set<Player>(),
           gameState: gameState,
+          startTime: new Date(),
         };
 
         // Save the actual lobby
@@ -60,20 +65,22 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
 
         console.log('New client connected ', player.username);
         console.log('New lobby created ', lobby);
-        io.emit('join', serializeServerObject(lobby));
+        io.to(lobbyRoom).emit('join', serializeServerObject(lobby));
       } else {
         lobby = lobbies[lobby_id];
         lobby.players.add(player);
         console.log('New client connected ', player.username);
         console.log('Change lobby ', lobby);
         // Send the new lobby to everyone
-        io.emit('join', serializeServerObject(lobby));
+        io.to(lobbyRoom).emit('join', serializeServerObject(lobby));
       }
 
       // // When a user press Start to start the game the status will propagate to everyone
       socket.on('start', () => {
         console.log('Game start!');
-        io.emit('start');
+        // Set the start timer
+        if (lobby) lobby.startTime = new Date();
+        io.to(lobbyRoom).emit('start');
       });
 
       socket.on('send-game-update', (cardDeck: CardData[]) => {
@@ -87,7 +94,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
           // First send the deck update and after check if match
           console.log('Emit an update and check the match');
           console.log('New card deck');
-          io.emit('receive-game-update', cardDeck, lobby?.gameState.turn);
+          io.to(lobbyRoom).emit('receive-game-update', cardDeck, lobby?.gameState.turn);
 
           const selectedCards = getSelectedCards(cardDeck);
           // Check if the card match
@@ -106,7 +113,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
             console.log('Card gueesed!');
             if (player) {
               responseMessage = `${player.username} gueesed 2 cards!`;
-              player.score = player.score + 10;
+              player.score = player.score + 1;
             }
           } else if (selectedCards.length === 2) {
             // Extract index of the selected cards
@@ -131,25 +138,38 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
           // Update the card deck
           if (lobby) lobby.gameState.cardDeck = cardDeck;
           console.log('New server lobby with change turn is ', lobby);
-          if (lobby) io.emit('change-turn', serializeServerObject(lobby));
-          io.emit('message', responseMessage);
+          if (lobby) io.to(lobbyRoom).emit('change-turn', serializeServerObject(lobby));
+          io.to(lobbyRoom).emit('message', responseMessage);
+
+          // Check the end of the game
+          if (isUngussedCardsAvaible(cardDeck)) {
+            if (lobby) {
+              const duration = new Date().getTime() - lobby.startTime.getTime();
+              const result: GameResultType = {
+                players: Array.from(lobby.players),
+                time: duration,
+              };
+              // Send to everyone the game ends
+              io.to(lobbyRoom).emit('end-game', result);
+            }
+          }
         } else {
           console.log('Emit an update no change turn');
           console.log('New card deck');
-          io.emit('receive-game-update', cardDeck, lobby?.gameState.turn);
+          io.to(lobbyRoom).emit('receive-game-update', cardDeck, lobby?.gameState.turn);
         }
       });
 
       socket.on('disconnect', () => {
         // Send the new lobby to everyone
-        io.emit('left', lobbies[lobby_id]);
+        io.to(lobbyRoom).emit('left', lobbies[lobby_id]);
         // Remove player from lobby
         if (player && lobby) {
           // Remove from the array
           lobby.players.delete(player);
 
           // Update all the user is disconnected
-          io.emit('left', lobby);
+          io.to(lobbyRoom).emit('left', lobby);
           console.log('Client left and emit and update to everyone. ');
           // Delete the lobby if empty
           if (lobby.players.size === 0) {
@@ -177,22 +197,24 @@ export default SocketHandler;
  */
 const prepareCardDeckFromServer = async (): Promise<CardData[]> => {
   try {
-    // Trova il percorso assoluto della directory "data"
-    const jsonDirectory = path.join(process.cwd(), 'data');
+    const cardDeck = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/memo-game/game-contents`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => data.data);
 
-    // Leggi il file "data.json"
-    const fileContents = await fs.readFile(path.join(jsonDirectory, 'data.json'), 'utf8');
+    // const jsonDirectory = path.join(process.cwd(), 'data');
+    // const fileContents = await fs.readFile(path.join(jsonDirectory, 'data.json'), 'utf8');
+    // const cardDeck = JSON.parse(fileContents);
 
-    // Converte il contenuto del file in JSON
-    const cardDeck = JSON.parse(fileContents);
-
-    // Verifica che il file abbia il formato corretto (es. che contenga una proprietà "data" con un array)
-    if (!Array.isArray(cardDeck.data)) {
+    if (!Array.isArray(cardDeck)) {
       throw new Error("Invalid data format: expected 'data' to be an array.");
     }
 
-    // Espande ogni card aggiungendo le proprietà "guessedFrom" e "selected"
-    const expandedDeck: CardData[] = cardDeck.data.map((card: CardData) => {
+    const expandedDeck: CardData[] = cardDeck.map((card: CardData) => {
       return {
         ...card,
         guessedFrom: 0,

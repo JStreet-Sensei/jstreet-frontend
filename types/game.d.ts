@@ -32,6 +32,7 @@ export type ServerLobby = {
   owner: number; // User_id
   players: Set<Player>;
   gameState: ServerGameState;
+  startTime: Date;
 };
 
 export interface ClientGameState extends ServerGameState {
@@ -46,4 +47,13 @@ export interface LobbyType {
   name: any;
   owner_id?: number;
   state: any;
+}
+
+export interface oneCardResult {
+  (): Promise<phraseType>;
+}
+
+export interface GameResultType {
+  players: Player[];
+  time: number;
 }
