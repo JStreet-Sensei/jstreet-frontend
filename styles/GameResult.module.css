@@ -1,0 +1,3 @@
+.expand_until_footer {
+  height: calc(100vh - 120px);
+}
