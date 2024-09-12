@@ -45,9 +45,15 @@ const HomePage = () => {
               onClick={() => {
                 signIn(undefined, { callbackUrl: '/mypage' });
               }}
-              className="bg-red-700 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:bg-red-600  focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out ml-96"
+              className="m-10 bg-red-700 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:bg-red-600  focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out ml-96"
             >
               Sign In
+            </button>
+
+            <button className="m-10 bg-red-700 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:bg-red-600  focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out ml-96">
+              <Link href={"/signup"}>
+                Sign Up
+              </Link>
             </button>
           </div>
         </div>
