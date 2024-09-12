@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StartExpression from '@/components/game/newWords/Start';
 import StartFlashCard from '@/components/game/flashCard/Start';
 import StartPairGame from '@/components/game/findPairGame/Start';
 import StartQuickGame from '@/components/game/quickGame/Start';
+import { useRouter } from 'next/router';
 
 const gameFileNames = ['newWords', 'flashCard', 'findPairGame', 'quickGame'];
 
 const SelectGame: React.FC = () => {
   const [gameName, setGameName] = useState(gameFileNames[0]);
+  const router = useRouter()
 
   const goRightGame = () => {
     setGameName(gameFileNames[(gameFileNames.indexOf(gameName) + 1) % gameFileNames.length]);
@@ -15,6 +17,18 @@ const SelectGame: React.FC = () => {
   const goLeftGame = () => {
     setGameName(gameFileNames[(gameFileNames.indexOf(gameName) + gameFileNames.length - 1) % gameFileNames.length]);
   };
+
+  useEffect(() => {
+    console.log(router.asPath)
+    console.log(router.asPath.split("game-name=")[1])
+    if (router.asPath.split("game-name=")[1]) {
+      console.log("called")
+      const fromHeader = router.asPath.split("game-name=")[1]
+      if (gameFileNames.includes(fromHeader)) {
+        setGameName(fromHeader)
+      }
+    }
+  }, [])
 
   const showGameTitle = (gameFileName: string) => {
     switch (gameFileName) {
