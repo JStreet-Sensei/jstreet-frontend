@@ -70,43 +70,45 @@ const MyPage = () => {
           )}
         </div>
 
-        {/* Game Score History Section */}
-        <div className="mt-6">
-          <h2 className="text-xl font-bold mb-4">Game Score History</h2>
-          <div className="flex flex-col max-h-80 overflow-y-auto">
-            {gameScores.map((score, index) => (
-              <div key={index} className="border border-gray-300 p-4 mb-4 bg-white rounded">
-                <p>
-                  <strong>Game:</strong> {score.game}
-                </p>
-                <p>
-                  <strong>Score:</strong> {score.score}
-                </p>
-                <p>
-                  <strong>Players:</strong> {score.player1} : {score.player2}
-                </p>
-                <p>
-                  <strong>Date:</strong> {new Date(score.date).toLocaleDateString()}
-                </p>
-              </div>
-            ))}
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Game Score History Section */}
+          <div className="flex-1">
+            <h2 className="text-xl font-bold mb-4">Game Score History</h2>
+            <div className="flex flex-col max-h-80 overflow-y-auto custom-scrollbar">
+              {gameScores.map((score, index) => (
+                <div key={index} className="border border-gray-300 p-4 mb-4 bg-white rounded">
+                  <p>
+                    <strong>Game:</strong> {score.game}
+                  </p>
+                  <p>
+                    <strong>Score:</strong> {score.score}
+                  </p>
+                  <p>
+                    <strong>Players:</strong> {score.player1} : {score.player2}
+                  </p>
+                  <p>
+                    <strong>Date:</strong> {new Date(score.date).toLocaleDateString()}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Learning History Section */}
-        <div className="mt-6">
-          <h2 className="text-xl font-bold mb-4">Learning History</h2>
-          <div className="flex flex-col max-h-80 overflow-y-auto">
-            {learningHistory.map((history, index) => (
-              <div key={index} className="border border-gray-300 p-4 mb-4 bg-white rounded">
-                <p>
-                  <strong>Card:</strong> {history.card}
-                </p>
-                <p>
-                  <strong>Learned on:</strong> {new Date(history.date).toLocaleDateString()}
-                </p>
-              </div>
-            ))}
+          {/* Learning History Section */}
+          <div className="flex-1">
+            <h2 className="text-xl font-bold mb-4">Learning History</h2>
+            <div className="flex flex-col max-h-80 overflow-y-auto custom-scrollbar">
+              {learningHistory.map((history, index) => (
+                <div key={index} className="border border-gray-300 p-4 mb-4 bg-white rounded">
+                  <p>
+                    <strong>Card:</strong> {history.card}
+                  </p>
+                  <p>
+                    <strong>Learned on:</strong> {new Date(history.date).toLocaleDateString()}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
