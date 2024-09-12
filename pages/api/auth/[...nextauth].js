@@ -3,6 +3,8 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import axios from 'axios';
+// import { pages } from 'next/dist/build/templates/app-page';
+// import { signIn } from 'next-auth/react';
 
 // These two values should be a bit less than actual token lifetimes
 const BACKEND_ACCESS_TOKEN_LIFETIME = 45 * 60; // 45 minutes
@@ -21,6 +23,9 @@ const SIGN_IN_HANDLERS = {
 const SIGN_IN_PROVIDERS = Object.keys(SIGN_IN_HANDLERS);
 
 export const authOptions = {
+  pages: {
+    signIn: '/auth/credentials-signin',
+  },
   secret: process.env.AUTH_SECRET,
   session: {
     strategy: 'jwt',
