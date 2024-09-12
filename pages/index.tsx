@@ -22,7 +22,6 @@ const HomePage = () => {
 
   return (
     <>
-<<<<<<< HEAD
     <div className={styles.graffiti}>
   <div
     className="relative flex flex-col items-start justify-center min-h-screen bg-[url('/LandingPage/landpage.svg')] bg-no-repeat bg-cover bg-center"
@@ -34,12 +33,6 @@ const HomePage = () => {
             signIn(undefined, { callbackUrl: '/mypage' });
           }}
           className="bg-red-700 ml-96 mt-96 text-white font-bold py-4 px-8 rounded-md shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
-=======
-      <div className="flex items-center justify-center m-5">
-        <Link
-          href="/select-game"
-          className="bg-[var(--magenta)] text-[var(--white)] font-semibold py-3 px-10 rounded-lg shadow-md hover:bg-[var(--turquoise)] hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 m-4"
->>>>>>> 52265d4124135d3c73749b4beee79936304d9409
         >
           Sign In
         </button>
