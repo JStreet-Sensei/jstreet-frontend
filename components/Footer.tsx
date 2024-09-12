@@ -1,7 +1,7 @@
 export const Footer: React.FC = () => {
   return (
     <>
-      <div>Footer here</div>
+      <div>This is footer! Our repo is here!</div>
     </>
   );
 };
