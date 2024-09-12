@@ -24,7 +24,7 @@ const HomePage = () => {
     <>
       <div className="flex items-center justify-center m-5">
         <Link
-          href="/selectGame"
+          href="/select-game"
           className="bg-[var(--magenta)] text-[var(--white)] font-semibold py-3 px-10 rounded-lg shadow-md hover:bg-[var(--turquoise)] hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 m-4"
         >
           Play game!

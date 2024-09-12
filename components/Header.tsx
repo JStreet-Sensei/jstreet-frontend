@@ -9,7 +9,7 @@ export const Header: React.FC = () => {
 
   const isGamePage = router.pathname.includes('/game');
   const isMyPage = router.pathname === '/mypage';
-  const isSelectGamePage = router.pathname === '/selectGame';
+  const isSelectGamePage = router.pathname === '/select-game';
   const isExpressionPage = router.pathname === '/game/expression';
   const isLearningPage = router.pathname === '/game/learning';
   const isGameFindPair = router.pathname === '/game/find-pair';
