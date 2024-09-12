@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import styles from '@/styles/mypage.module.css';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + '/';
 
@@ -8,18 +9,16 @@ const MyPage = () => {
   const { data: session, status } = useSession({ required: true });
   const [userData, setUserData] = useState<any>(null);
   const [showDetails, setShowDetails] = useState(false);
-
-  // Mock data for game scores and learning history
-  const [gameScores] = useState<any[]>([
-    { game: 'Quick Answer Game', score: 95, date: '2024-09-12', player1: 'username1', player2: 'username2' },
-    { game: 'Pairing Game', score: 88, date: '2024-09-11', player1: 'username1', player2: 'username3' },
-    { game: 'Pairing Game', score: 75, date: '2024-09-10', player1: 'username1', player2: 'username4' },
-  ]);
+  const [gameScores, setGameScores] = useState<any[]>([]);
+  // const [learningHistory, setLearningHistory] = useState<any[]>([]);
+  useEffect(() => {
+    getGameScores();
+  }, []);
 
   const [learningHistory] = useState<any[]>([
-    { card: 'Card 1', date: '2024-09-09' },
-    { card: 'Card 2', date: '2024-09-08' },
-    { card: 'Card 3', date: '2024-09-07' },
+    { topic: 'topic 1', date: '2024-09-09' },
+    { topic: 'topic 2', date: '2024-09-08' },
+    { topic: 'topic 3', date: '2024-09-07' },
   ]);
 
   const getUserDetails = async (useToken: boolean) => {
@@ -34,6 +33,21 @@ const MyPage = () => {
       console.error(error.message);
     }
     setShowDetails(true);
+  };
+
+  const getGameScores = async () => {
+    if (!session) {
+      console.error('Session is null');
+      return;
+    }
+    try {
+      const response = await axios.get(`${BACKEND_URL}scores/${session.user.pk}/`, {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      setGameScores(response.data);
+    } catch (error: any) {
+      console.error(error.message);
+    }
   };
 
   if (status == 'loading') {
@@ -74,18 +88,17 @@ const MyPage = () => {
           {/* Game Score History Section */}
           <div className="flex-1">
             <h2 className="text-xl font-bold mb-4">Game Score History</h2>
-            <div className="flex flex-col max-h-80 overflow-y-auto custom-scrollbar">
+            <div className="custom-scrollbar flex flex-col max-h-80 overflow-y-auto">
               {gameScores.map((score, index) => (
                 <div key={index} className="border border-gray-300 p-4 mb-4 bg-white rounded">
                   <p>
-                    <strong>Game:</strong> {score.game}
+                    {/* <strong>Game:</strong> {score.game_id || 'Not provided'} */}
+                    <strong>Game: Pairing Game</strong>
                   </p>
                   <p>
-                    <strong>Score:</strong> {score.score}
+                    <strong>Score:</strong> {score.score || 'Not provided'}
                   </p>
-                  <p>
-                    <strong>Players:</strong> {score.player1} : {score.player2}
-                  </p>
+                  <p>{/* <strong>Players:</strong> {score.user} : {score.player2} */}</p>
                   <p>
                     <strong>Date:</strong> {new Date(score.date).toLocaleDateString()}
                   </p>
@@ -97,11 +110,11 @@ const MyPage = () => {
           {/* Learning History Section */}
           <div className="flex-1">
             <h2 className="text-xl font-bold mb-4">Learning History</h2>
-            <div className="flex flex-col max-h-80 overflow-y-auto custom-scrollbar">
+            <div className="custom-scrollbar flex flex-col max-h-80 overflow-y-auto">
               {learningHistory.map((history, index) => (
                 <div key={index} className="border border-gray-300 p-4 mb-4 bg-white rounded">
                   <p>
-                    <strong>Card:</strong> {history.card}
+                    <strong>Topic:</strong> {history.topic}
                   </p>
                   <p>
                     <strong>Learned on:</strong> {new Date(history.date).toLocaleDateString()}
