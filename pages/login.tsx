@@ -53,7 +53,7 @@ const Login = () => {
   ) : (
     <>
       Alredy logged in.
-      <Link href={"/selectGame"}>Play games!</Link>
+      <Link href={"/select-game"}>Play games!</Link>
     </>
   );
 };

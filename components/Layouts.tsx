@@ -7,7 +7,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const router = useRouter();
 
   const isHomePage = router.pathname === '/';
-  const isSelectGamePage = router.pathname === '/selectGame';
+  const isSelectGamePage = router.pathname === '/select-game';
 
   return (
     <>
