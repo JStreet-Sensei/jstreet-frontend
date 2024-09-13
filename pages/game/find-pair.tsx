@@ -47,7 +47,7 @@ const FindPair = () => {
    const [ModalOpen, setModalOpen] = useState<boolean>(false);
    const [modalMessage, setModalMessage] = useState<string>('');
    const openModal = (message: string) => {
-    setModalMessage(message);
+    setModalMessage(''); 
     setModalOpen(true);
   };
    const closeModal = () => setModalOpen(false);
