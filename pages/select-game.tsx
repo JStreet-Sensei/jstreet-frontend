@@ -19,10 +19,7 @@ const SelectGame: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log(router.asPath)
-    console.log(router.asPath.split("game-name=")[1])
     if (router.asPath.split("game-name=")[1]) {
-      console.log("called")
       const fromHeader = router.asPath.split("game-name=")[1]
       if (gameFileNames.includes(fromHeader)) {
         setGameName(fromHeader)

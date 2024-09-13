@@ -81,7 +81,7 @@ const FlashCardPage = () => {
         // console.log(userInfo);
 
         const data: ContentType[] = result.data || [];
-        
+
         // Transform data 
         const transformedPhrases: phraseType[] = data.map(phrase => ({
           id: phrase.content_id,

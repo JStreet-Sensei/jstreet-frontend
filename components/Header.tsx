@@ -17,7 +17,7 @@ export const Header: React.FC = () => {
 
   const handleSelectGame = (path: string) => {
     if (!session) {
-      signIn(undefined, { callbackUrl: '/select-game' })
+      signIn(undefined, { callbackUrl: path })
     }
     router.push(path)
   }

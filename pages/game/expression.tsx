@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getFetchBackendURL } from '@/utils/utils-data';
 import { getSession } from 'next-auth/react';
-import Link from 'next/link'; 
+import Link from 'next/link';
 
 interface ContentItem {
   content_id: number;
@@ -17,17 +17,17 @@ const ExpressionPage: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [userInfo, setUserInfo] = useState<any>("");
 
-   // get user info
-   useEffect(() => {
+  // get user info
+  useEffect(() => {
     getSession().then((session) => {
       const newGameState: any = {
         message: "Test",
         FlashCardPage: null,
         playerName: session?.user.username || "Player",
         playerId: session?.user.pk || 0,
-    };
+      };
       setUserInfo(newGameState.playerId);
-   });
+    });
   }, []);
 
   // Fetch data from the API when the component mounts
@@ -53,25 +53,25 @@ const ExpressionPage: React.FC = () => {
     setIsLearning(true);
   };
 
-    const handleNextContent = async () => {
+  const handleNextContent = async () => {
     if (content.length > 0) {
       // Prepare data to be sent
       const currentContentId = content[currentIndex].content_id;
 
       // Send POST request to record learned word
       try {
-        const response = await fetch(getFetchBackendURL('/api/words-learned/create'), 
-        // const response = await fetch('http://localhost:8000/api/words-learned/create', 
+        const response = await fetch(getFetchBackendURL('/api/words-learned/create'),
+          // const response = await fetch('http://localhost:8000/api/words-learned/create',
           {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user: userInfo,
-            content: currentContentId,
-          }),
-        });
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              user: userInfo,
+              content: currentContentId,
+            }),
+          });
 
         if (!response.ok) {
           throw new Error('Failed to record learned word');
