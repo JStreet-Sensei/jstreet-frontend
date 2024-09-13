@@ -1,12 +1,14 @@
 import { useContext, useState } from 'react';
 import { SelectedMaterial } from '../../../pages/game/flash-card';
 import styles from '@/styles/Card.module.css';
+import Link from 'next/link';
 
 interface FlashCardProps {
   loading: boolean; // Add loading prop
+  noLearnedWords: boolean;
 }
 
-const FlashCard = ({ loading }: FlashCardProps) => {
+const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
   // data used in this component
   const selectedMaterial = useContext(SelectedMaterial);
 
@@ -57,6 +59,14 @@ const FlashCard = ({ loading }: FlashCardProps) => {
   if (loading) {
     return <div>Loading...</div>; // Show a loading message or spinner
   }
+  if (noLearnedWords) {
+    return (
+      <div>
+        <div>You should learn more expression!</div>
+        <Link href={'./expression'}>Go to expression</Link>
+      </div>
+    ); // Show a warn message
+  }
 
   if (selectedMaterial && selectedMaterial.correctPhrases.length === selectedMaterial.phrases.length) {
     return (
@@ -81,9 +91,7 @@ const FlashCard = ({ loading }: FlashCardProps) => {
         style={{ width: '400px', height: '300px', cursor: 'pointer' }}
       >
         <div className={`${styles.flip_card_front} flex items-center justify-center`}>
-          <p className="text-2xl font-bold text-gray-800">
-            {currentPhrase?.english || 'Loading...'}
-          </p>
+          <p className="text-2xl font-bold text-gray-800">{currentPhrase?.english || 'Loading...'}</p>
         </div>
         <div className={`${styles.flip_card_back} flex items-center justify-center`}>
           <p className="text-xl font-semibold">
@@ -102,18 +110,13 @@ const FlashCard = ({ loading }: FlashCardProps) => {
           >
             Correct
           </button>
-          <button
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-            onClick={handleWrong}
-          >
+          <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" onClick={handleWrong}>
             Wrong
           </button>
         </div>
       )}
 
-      <div className="mt-4 text-lg font-semibold">
-        Correct Count: {correctCount}
-      </div>
+      <div className="mt-4 text-lg font-semibold">Correct Count: {correctCount}</div>
     </div>
   );
 };
