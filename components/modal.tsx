@@ -4,9 +4,12 @@ interface ModalProps {
   children?: React.ReactNode;
   closeModal: () => void;
   title?: string;
+  isOpen: boolean;
 }
 
-const FlexModal: React.FC<ModalProps> = ({ children, closeModal, title }) => {
+const FlexModal: React.FC<ModalProps> = ({ children, closeModal, title, isOpen }) => {
+  if (!isOpen) return null;
+
   return (
     <div className='fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center'>
       <div className='bg-white p-8 rounded relative'>
