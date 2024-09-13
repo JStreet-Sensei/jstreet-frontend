@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Poppins } from 'next/font/google';
+import { useState } from 'react';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -12,14 +13,10 @@ const poppins = Poppins({
 export const Header: React.FC = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const isInGamePage = router.pathname.includes('/find-pair');
   const isMyPage = router.pathname === '/mypage';
-  const isSelectGamePage = router.pathname === '/select-game';
-  const isExpressionPage = router.pathname === '/game/expression';
-  const isLearningPage = router.pathname === '/game/learning';
-  const isGameFindPair = router.pathname === '/game/find-pair';
-  const isGameQuickAnswer = router.pathname === '/game/quick-answer';
 
   const handleSelectGame = (path: string) => {
     if (!session) {
@@ -31,93 +28,139 @@ export const Header: React.FC = () => {
   return (
     <>
       <div
-        className={`flex items-center p-4 bg-gradient-to-r from-[#12dcd8] to-[#0bbfb7] shadow-lg ${poppins.className}`}
+        className={`flex items-center justify-between p-4 bg-gradient-to-r from-[#12dcd8] to-[#0bbfb7] shadow-lg ${poppins.className}`}
       >
-        <div className="flex space-x-6">
-          {session ? (
-            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-              <Link href={'/select-game'}>Home</Link>
+        <div className="text-white text-lg font-medium">
+          <Link href={session ? '/select-game' : '/'}>Home</Link>
+        </div>
+
+        <div className="md:hidden">
+          <button onClick={() => setMenuOpen(!menuOpen)} className="text-white text-2xl focus:outline-none">
+            <div className="space-y-1">
+              <span className="block w-6 h-0.5 bg-white"></span>
+              <span className="block w-6 h-0.5 bg-white"></span>
+              <span className="block w-6 h-0.5 bg-white"></span>
             </div>
-          ) : (
-            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-              <Link href={'/'}>Home</Link>
-            </div>
-          )}
+          </button>
+        </div>
+
+        <div className="hidden md:flex space-x-6">
           {!isInGamePage && (
-            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
+            <>
               <button
-                onClick={() => {
-                  handleSelectGame('/game/expression');
-                }}
+                onClick={() => handleSelectGame('/game/expression')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
               >
                 Expression
               </button>
-            </div>
-          )}
-          {!isInGamePage && (
-            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
               <button
-                onClick={() => {
-                  handleSelectGame('/game/flash-card');
-                }}
+                onClick={() => handleSelectGame('/game/flash-card')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
               >
                 Learning
               </button>
-            </div>
-          )}
-          {!isInGamePage && (
-            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
               <button
-                onClick={() => {
-                  handleSelectGame('/lobby');
-                }}
+                onClick={() => handleSelectGame('/lobby')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
               >
                 Pairing Game
               </button>
-            </div>
-          )}
-          {!isInGamePage && (
-            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
               <button
-                onClick={() => {
-                  handleSelectGame('/lobby');
-                }}
+                onClick={() => handleSelectGame('/lobby')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
               >
                 Quick Answer Game
               </button>
-            </div>
+            </>
           )}
-        </div>
 
-        {session ? (
-          <div className="ml-auto flex space-x-6">
-            {
-              <div
-                className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent"
-                onClick={() => {
-                  signOut();
-                }}
+          {session ? (
+            <>
+              <button
+                onClick={() => signOut()}
+                className="text-white text-lg font-medium hover:bg-[var(--magenta)] px-3 py-1 rounded-md"
               >
                 Log out
-              </div>
-            }
-            {!isMyPage && (
-              <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent">
-                <Link href={'/mypage'}>My page</Link>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div
-            className="ml-auto cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent"
-            onClick={() => {
-              signIn(undefined, { callbackUrl: '/mypage' });
-            }}
-          >
-            Log in
-          </div>
-        )}
+              </button>
+              {!isMyPage && (
+                <Link
+                  href={'/mypage'}
+                  className="text-white text-lg font-medium hover:bg-[var(--magenta)] px-3 py-1 rounded-md"
+                >
+                  My Page
+                </Link>
+              )}
+            </>
+          ) : (
+            <button
+              onClick={() => signIn(undefined, { callbackUrl: '/mypage' })}
+              className="text-white text-lg font-medium hover:bg-[var(--magenta)] px-3 py-1 rounded-md"
+            >
+              Log in
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* Mobile*/}
+      {menuOpen && (
+        <div className="md:hidden bg-gradient-to-r from-[#12dcd8] to-[#0bbfb7] shadow-lg flex flex-col space-y-4 p-4">
+          {!isInGamePage && (
+            <>
+              <button
+                onClick={() => handleSelectGame('/game/expression')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
+              >
+                Expression
+              </button>
+              <button
+                onClick={() => handleSelectGame('/game/flash-card')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
+              >
+                Learning
+              </button>
+              <button
+                onClick={() => handleSelectGame('/lobby')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
+              >
+                Pairing Game
+              </button>
+              <button
+                onClick={() => handleSelectGame('/lobby')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
+              >
+                Quick Answer Game
+              </button>
+            </>
+          )}
+
+          {session ? (
+            <>
+              <button
+                onClick={() => signOut()}
+                className="text-white text-lg font-medium hover:bg-[var(--magenta)] px-3 py-1 rounded-md"
+              >
+                Log out
+              </button>
+              {!isMyPage && (
+                <Link
+                  href={'/mypage'}
+                  className="text-white text-lg font-medium hover:bg-[var(--magenta)] px-3 py-1 rounded-md"
+                >
+                  My Page
+                </Link>
+              )}
+            </>
+          ) : (
+            <button
+              onClick={() => signIn(undefined, { callbackUrl: '/mypage' })}
+              className="text-white text-lg font-medium hover:bg-[var(--magenta)] px-3 py-1 rounded-md"
+            >
+              Log in
+            </button>
+          )}
+        </div>
+      )}
     </>
   );
 };
