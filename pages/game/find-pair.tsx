@@ -241,17 +241,18 @@ const FindPair = () => {
         <SocketProvider parentSocket={useSocket}>
           <GameStateProvider parentGameState={useClientGameState}>
             <Message message={useMessage} />
+            <button
+             onClick={() => openModal('')} // Open the modal on click
+              className=" bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600"
+            >
+              X
+            </button>
             <GamePair
               players={useServerLobby.players}
               gameState={useClientGameState}
               handleUpdateDeck={handleUpdateDeck}
             />
-             <button
-             onClick={() => openModal('')} // Open the modal on click
-              className="absolute top-24 left-12 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600"
-            >
-              X
-            </button>
+            
             {ModalOpen && (
              <FlexModal closeModal={closeModal}>
                 <div className="p-6">
