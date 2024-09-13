@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getFetchBackendURL } from '@/utils/utils-data';
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 interface ContentItem {
@@ -15,39 +15,36 @@ const ExpressionPage: React.FC = () => {
   const [content, setContent] = useState<ContentItem[]>([]);
   const [isLearning, setIsLearning] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [userInfo, setUserInfo] = useState<any>("");
+  const [userInfo, setUserInfo] = useState<number>();
+
+  const { data: session, status } = useSession({ required: true });
 
   // get user info
   useEffect(() => {
     getSession().then((session) => {
-      const newGameState: any = {
-        message: "Test",
-        FlashCardPage: null,
-        playerName: session?.user.username || "Player",
-        playerId: session?.user.pk || 0,
-      };
-      setUserInfo(newGameState.playerId);
+      setUserInfo(session?.user.pk);
     });
   }, []);
 
   // Fetch data from the API when the component mounts
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // const response = await fetch('http://localhost:8000/api/content');
-        const response = await fetch(getFetchBackendURL('/api/content'));
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    if (status === 'authenticated') {
+      const fetchData = async () => {
+        try {
+          // const response = await fetch('http://localhost:8000/api/content');
+          const response = await fetch(getFetchBackendURL(`/api/content-unlearned/${session?.user.pk}/`));
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data: ContentItem[] = await response.json();
+          setContent(data);
+        } catch (error) {
+          console.error('Error fetching content:', error);
         }
-        const data: ContentItem[] = await response.json();
-        setContent(data);
-      } catch (error) {
-        console.error('Error fetching content:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+      };
+      fetchData();
+    }
+  }, [status]);
 
   const handleStartLearning = () => {
     setIsLearning(true);
@@ -60,31 +57,28 @@ const ExpressionPage: React.FC = () => {
 
       // Send POST request to record learned word
       try {
-        const response = await fetch(getFetchBackendURL('/api/words-learned/create'),
-          // const response = await fetch('http://localhost:8000/api/words-learned/create',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              user: userInfo,
-              content: currentContentId,
-            }),
-          });
+        const response = await fetch(getFetchBackendURL('/api/words-learned/create'), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: userInfo,
+            content: currentContentId,
+          }),
+        });
 
         if (!response.ok) {
           throw new Error('Failed to record learned word');
         }
 
-        // go to the next content 
+        // go to the next content
         setCurrentIndex((prevIndex) => (prevIndex + 1) % content.length);
       } catch (error) {
         console.error('Error posting learned word:', error);
       }
     }
   };
-
 
   const handlePreviousContent = () => {
     if (content.length > 0) {
@@ -109,9 +103,15 @@ const ExpressionPage: React.FC = () => {
           {content.length > 0 ? (
             <>
               <h2 className="text-2xl font-bold mb-4">{content[currentIndex].japanese_slang}</h2>
-              <p className="mb-2"><strong>English Slang:</strong> {content[currentIndex].english_slang}</p>
-              <p className="mb-2"><strong>Formal Version:</strong> {content[currentIndex].formal_version}</p>
-              <p className="mb-4"><strong>Description:</strong> {content[currentIndex].description}</p>
+              <p className="mb-2">
+                <strong>English Slang:</strong> {content[currentIndex].english_slang}
+              </p>
+              <p className="mb-2">
+                <strong>Formal Version:</strong> {content[currentIndex].formal_version}
+              </p>
+              <p className="mb-4">
+                <strong>Description:</strong> {content[currentIndex].description}
+              </p>
               <div className="flex justify-center">
                 {!isFirstCard && (
                   <button
@@ -131,7 +131,9 @@ const ExpressionPage: React.FC = () => {
                 )}
               </div>
               {isLastCard && (
-                <p className="mt-4 text-xl font-semibold text-red-600">You have reached the end of the content! All the material is available in the flash cards to practice.</p>
+                <p className="mt-4 text-xl font-semibold text-red-600">
+                  You have reached the end of the content! All the material is available in the flash cards to practice.
+                </p>
               )}
             </>
           ) : (
@@ -147,7 +149,7 @@ const ExpressionPage: React.FC = () => {
         </Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default ExpressionPage;

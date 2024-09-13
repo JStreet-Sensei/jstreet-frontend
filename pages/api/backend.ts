@@ -13,9 +13,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const body = req.body;
   const method = req.method;
   const authorization = req.headers.authorization;
+  let finalQuery = '';
+
+  // Extract the query params to forward on backend
+  Object.keys(req.query).forEach((key: string) => {
+    if (key !== 'path') {
+      finalQuery += `${key}=${req.query[key]}&`;
+    }
+  });
+
+  // Remove the last if no more
+  if (finalQuery.endsWith('&')) {
+    finalQuery = finalQuery.slice(0, -1);
+  }
+
   return new Promise<void>((resolve, reject) => {
     axios({
-      url: `${getBackendURL()}${path}`,
+      url: `${getBackendURL()}${path}?${finalQuery}`,
       method: method,
       headers: { Authorization: authorization },
       data: body,
