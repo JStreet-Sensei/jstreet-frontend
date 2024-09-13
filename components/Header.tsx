@@ -13,7 +13,7 @@ export const Header: React.FC = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const isGamePage = router.pathname.includes('/game');
+  const isInGamePage = router.pathname.includes('/find-pair');
   const isMyPage = router.pathname === '/mypage';
   const isSelectGamePage = router.pathname === '/select-game';
   const isExpressionPage = router.pathname === '/game/expression';
@@ -23,10 +23,10 @@ export const Header: React.FC = () => {
 
   const handleSelectGame = (path: string) => {
     if (!session) {
-      signIn(undefined, { callbackUrl: path })
+      signIn(undefined, { callbackUrl: path });
     }
-    router.push(path)
-  }
+    router.push(path);
+  };
 
   return (
     <>
@@ -34,42 +34,64 @@ export const Header: React.FC = () => {
         className={`flex items-center p-4 bg-gradient-to-r from-[#12dcd8] to-[#0bbfb7] shadow-lg ${poppins.className}`}
       >
         <div className="flex space-x-6">
-          <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-            <Link href={'/'}>Home</Link>
-          </div>
-          {!isExpressionPage && !isSelectGamePage && (
+          {session ? (
             <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-              <button onClick={() => {
-                handleSelectGame("/select-game?game-name=newWords")
-              }}>Expression</button>
+              <Link href={'/select-game'}>Home</Link>
+            </div>
+          ) : (
+            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
+              <Link href={'/'}>Home</Link>
             </div>
           )}
-          {!isLearningPage && !isSelectGamePage && (
+          {!isInGamePage && (
             <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-              <button onClick={() => {
-                handleSelectGame("/select-game?game-name=flashCard")
-              }}>Learning</button>
+              <button
+                onClick={() => {
+                  handleSelectGame('/select-game?game-name=newWords');
+                }}
+              >
+                Expression
+              </button>
             </div>
           )}
-          {!isGameFindPair && !isSelectGamePage && (
+          {!isInGamePage && (
             <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-              <button onClick={() => {
-                handleSelectGame("/select-game?game-name=findPairGame")
-              }}>Pairing Game</button>
+              <button
+                onClick={() => {
+                  handleSelectGame('/select-game?game-name=flashCard');
+                }}
+              >
+                Learning
+              </button>
             </div>
           )}
-          {!isGameQuickAnswer && !isSelectGamePage && (
+          {!isInGamePage && (
             <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-              <button onClick={() => {
-                handleSelectGame("/select-game?game-name=quickGame")
-              }}>Quick Answer Game</button>
+              <button
+                onClick={() => {
+                  handleSelectGame('/select-game?game-name=findPairGame');
+                }}
+              >
+                Pairing Game
+              </button>
+            </div>
+          )}
+          {!isInGamePage && (
+            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
+              <button
+                onClick={() => {
+                  handleSelectGame('/select-game?game-name=quickGame');
+                }}
+              >
+                Quick Answer Game
+              </button>
             </div>
           )}
         </div>
 
         {session ? (
           <div className="ml-auto flex space-x-6">
-            {!isGamePage && (
+            {
               <div
                 className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent"
                 onClick={() => {
@@ -78,8 +100,8 @@ export const Header: React.FC = () => {
               >
                 Log out
               </div>
-            )}
-            {!isGamePage && !isMyPage && (
+            }
+            {!isMyPage && (
               <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent">
                 <Link href={'/mypage'}>My page</Link>
               </div>
