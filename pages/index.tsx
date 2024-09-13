@@ -39,13 +39,17 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
   return (
     <>
       <div
-        className="relative flex flex-col items-start justify-center min-h-screen bg-[url('/LandingPage/landpage.svg')] bg-no-repeat bg-cover bg-center"
+        className="relative flex flex-col items-start justify-center min-h-screen
+        bg-no-repeat bg-center md:hidden bg-[#25dad1] " style={{ backgroundImage: "url('/LandingPage/landpage_md.jpeg')", backgroundSize: "80%" }}
       >
-        <div className="flex-1 max-w-xl flex items-start justify-center flex-col z-10 px-4"> {/* Adiciona padding para afastar do canto */}
-          <div className="relative z-20 flex flex-row gap-4">
+
+        <div className="flex-1 min-w-full flex items-start justify-center flex-col z-10"> {/* Adiciona padding para afastar do canto */}
+
+          <div className="fixed z-20 flex flex-row gap-4 bottom-72 left-4 items-center justify-center ">
             <button
               onClick={openSignInModal}
-              className="bg-red-700 ml-96 mt-96 text-white font-bold py-4 px-8 rounded-md shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
+              className="bg-red-700 h-10 text-white font-bold py-4 px-8 rounded-full left-2
+              bottom-1 shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
             >
               Sign In
             </button>
@@ -54,8 +58,9 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
                 <SignIn csrfToken={csrfToken} />
               </FlexModal>
             )}
-
-            <button onClick={openSignUpModal} className="bg-red-700 ml-11 mt-96 text-white font-bold py-4 px-8 rounded-md shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out">
+            <span className=" h-10  text-white font-bold py-4 px-8 text-2xl">OR</span>
+            <button onClick={openSignUpModal} className="bg-red-700 h-10 rounded-full  left-80
+              bottom-1  text-white font-bold py-4 px-8  shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out">
               Sign Up
             </button>
             {signUpModalOpen && (
