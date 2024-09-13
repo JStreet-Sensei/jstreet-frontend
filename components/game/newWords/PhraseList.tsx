@@ -1,9 +1,9 @@
-import { useContext } from "react";
-import { SelectedMaterial } from "../../../pages/game/learning";
+import { useContext } from 'react';
+import { SelectedMaterial } from '@/pages/game/learning';
 
 //get all phrase based on topic
 const getAllPhrase = async (id: number) => {
-  const result = "test string";
+  const result = 'test string';
   // const fetched = await fetch("endopinturl")
   // const result: phraseType = fetched.json()
   return result;
@@ -18,7 +18,7 @@ const PhraseList = () => {
         className="block max-w-full p-6 m-10 bg-white border border-gray-200 rounded-lg shadow 
             hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
         onClick={() => {
-          selectedMaterial?.selectPhrase({ id: 2, japanese: "よっす" });
+          selectedMaterial?.selectPhrase({ id: 2, japanese: 'よっす' });
         }}
       >
         topic is :{selectedMaterial?.topic}
@@ -31,9 +31,9 @@ const PhraseList = () => {
         onClick={() => {
           selectedMaterial?.selectPhrase({
             id: 3,
-            japanese: "おっす",
-            english: "hi",
-            description: "short version of おはようございます",
+            japanese: 'おっす',
+            english: 'hi',
+            description: 'short version of おはようございます',
           });
         }}
       >

@@ -109,6 +109,8 @@ export const getBackendURL = () => {
  * @param path of the backend endpoint
  * @returns void
  */
-export const getFetchBackendURL = (path: string) => {
-  return `api/backend?path=${path}`;
+export const getFetchBackendURL = (path: string, query: string = '') => {
+  let url = `/api/backend?path=${path}`;
+  if (query) url = url + `&${query}`;
+  return url;
 };
