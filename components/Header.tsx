@@ -2,6 +2,12 @@ import { useSession, signOut, signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { Poppins } from 'next/font/google';
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: '400',
+});
 
 export const Header: React.FC = () => {
   const { data: session } = useSession();
@@ -24,11 +30,9 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <Head>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
-      </Head>
-
-      <div className="flex items-center p-4 bg-gradient-to-r from-[#12dcd8] to-[#0bbfb7] shadow-lg">
+      <div
+        className={`flex items-center p-4 bg-gradient-to-r from-[#12dcd8] to-[#0bbfb7] shadow-lg ${poppins.className}`}
+      >
         <div className="flex space-x-6">
           <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
             <Link href={'/'}>Home</Link>

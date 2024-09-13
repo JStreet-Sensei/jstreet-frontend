@@ -16,7 +16,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         <main>{children}</main>
       ) : (
         <main className={styles.mainContent}>
-          <div className="content-container">{children}</div>
+          <div className="content_container">{children}</div>
         </main>
       )}
       <Footer />

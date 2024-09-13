@@ -8,7 +8,7 @@
   font-size: 20px;
 }
 
-.content-container {
+.content_container {
   width: 100%;
   margin: 10px auto;
   padding: 10px;
@@ -20,7 +20,7 @@
     padding: 10px;
   }
 
-  .content-container {
+  .content_container {
     padding: 10px;
     width: 90%;
   }
