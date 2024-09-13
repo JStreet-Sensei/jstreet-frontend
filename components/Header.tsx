@@ -47,7 +47,7 @@ export const Header: React.FC = () => {
             <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
               <button
                 onClick={() => {
-                  handleSelectGame('/select-game?game-name=newWords');
+                  handleSelectGame('/game/expression');
                 }}
               >
                 Expression
@@ -58,7 +58,7 @@ export const Header: React.FC = () => {
             <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
               <button
                 onClick={() => {
-                  handleSelectGame('/select-game?game-name=flashCard');
+                  handleSelectGame('/game/flash-card');
                 }}
               >
                 Learning
@@ -69,7 +69,7 @@ export const Header: React.FC = () => {
             <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
               <button
                 onClick={() => {
-                  handleSelectGame('/select-game?game-name=findPairGame');
+                  handleSelectGame('/lobby');
                 }}
               >
                 Pairing Game
@@ -80,7 +80,7 @@ export const Header: React.FC = () => {
             <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
               <button
                 onClick={() => {
-                  handleSelectGame('/select-game?game-name=quickGame');
+                  handleSelectGame('/lobby');
                 }}
               >
                 Quick Answer Game
