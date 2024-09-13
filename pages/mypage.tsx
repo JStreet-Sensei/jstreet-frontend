@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/mypage.module.css';
+import { getFetchBackendURL } from '@/utils/utils-data';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + '/';
 
@@ -10,22 +11,23 @@ const MyPage = () => {
   const [userData, setUserData] = useState<any>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [gameScores, setGameScores] = useState<any[]>([]);
-  // const [learningHistory, setLearningHistory] = useState<any[]>([]);
+  const [learningHistory, setLearningHistory] = useState<any[]>([]);
   useEffect(() => {
-    getGameScores();
-  }, []);
-
-  const [learningHistory] = useState<any[]>([
-    { topic: 'topic 1', date: '2024-09-09' },
-    { topic: 'topic 2', date: '2024-09-08' },
-    { topic: 'topic 3', date: '2024-09-07' },
-  ]);
+    if (session) {
+      getGameScores();
+    }
+  }, [session]);
+  useEffect(() => {
+    if (session) {
+      getLearningHistory();
+    }
+  }, [session]);
 
   const getUserDetails = async (useToken: boolean) => {
     try {
       const response = await axios({
         method: 'get',
-        url: BACKEND_URL + 'api/auth/user/',
+        url: getFetchBackendURL('/api/auth/user/'),
         headers: useToken ? { Authorization: 'Bearer ' + session?.access_token } : {},
       });
       setUserData(response.data);
@@ -41,10 +43,25 @@ const MyPage = () => {
       return;
     }
     try {
-      const response = await axios.get(`${BACKEND_URL}scores/${session.user.pk}/`, {
+      const response = await axios.get(getFetchBackendURL(`/api/scores/${session.user.pk}/`), {
         headers: { Authorization: `Bearer ${session.access_token}` },
       });
       setGameScores(response.data);
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
+  const getLearningHistory = async () => {
+    if (!session) {
+      console.error('Session is null');
+      return;
+    }
+    try {
+      const response = await axios.get(getFetchBackendURL(`/api/words-learned/${session.user.pk}/`), {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      setLearningHistory(response.data);
     } catch (error: any) {
       console.error(error.message);
     }
@@ -88,7 +105,7 @@ const MyPage = () => {
           {/* Game Score History Section */}
           <div className="flex-1">
             <h2 className="text-xl font-bold mb-4">Game Score History</h2>
-            <div className="custom-scrollbar flex flex-col max-h-80 overflow-y-auto">
+            <div className={styles.custom_scrollbar + 'flex flex-col max-h-80 overflow-y-auto'}>
               {gameScores.map((score, index) => (
                 <div key={index} className="border border-gray-300 p-4 mb-4 bg-white rounded">
                   <p>
@@ -98,7 +115,9 @@ const MyPage = () => {
                   <p>
                     <strong>Score:</strong> {score.score || 'Not provided'}
                   </p>
-                  <p>{/* <strong>Players:</strong> {score.user} : {score.player2} */}</p>
+                  <p>
+                    <strong>Players:</strong> {score.player1} vs {score.player2}
+                  </p>
                   <p>
                     <strong>Date:</strong> {new Date(score.date).toLocaleDateString()}
                   </p>
@@ -110,14 +129,11 @@ const MyPage = () => {
           {/* Learning History Section */}
           <div className="flex-1">
             <h2 className="text-xl font-bold mb-4">Learning History</h2>
-            <div className="custom-scrollbar flex flex-col max-h-80 overflow-y-auto">
+            <div className={styles.custom_scrollbar + 'flex flex-col max-h-80 overflow-y-auto'}>
               {learningHistory.map((history, index) => (
                 <div key={index} className="border border-gray-300 p-4 mb-4 bg-white rounded">
                   <p>
-                    <strong>Topic:</strong> {history.topic}
-                  </p>
-                  <p>
-                    <strong>Learned on:</strong> {new Date(history.date).toLocaleDateString()}
+                    <strong>Expression:</strong> {history.content.japanese_slang}
                   </p>
                 </div>
               ))}
