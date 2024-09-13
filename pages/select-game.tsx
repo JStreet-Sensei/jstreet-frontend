@@ -43,28 +43,35 @@ const SelectGame: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-white">
-      <button
-        onClick={goLeftGame}
-        className="absolute left-10 bg-[var(--savoy-blue)] text-white px-8 py-2 rounded-full transform -translate-y-1/2 top-1/2 hover:bg-[var(--tekhelet)] transition"
-      >
-        {'<'} Left
-      </button>
-
-      <div className="text-center bg-white">
-        <h1 className="text-5xl mb-4">Select Game</h1>
-        <div className="p-4 bg-white">{showGameTitle(gameName)}</div>
+    <>
+      <div className='mb-10 mt-10'>
+        <h1 className="text-5xl my-6 flex justify-center items-center">Select Game</h1>
       </div>
+      <div className="flex flex-wrap justify-around bg-white px-80">
+        <div className="p-4 bg-white h-1/4 basis-full flex justify-center items-center">{showGameTitle(gameName)}</div>
+        <div className="text-center bg-white basis-full h-1/2 flex justify-center items-center gap-5 mt-8">
+          <button
+            onClick={goLeftGame}
+            className="ml-20 left-52 bg-[var(--savoy-blue)] text-white py-2 
+            rounded-full transform -translate-y-1/2 top-1/2 hover:bg-[var(--tekhelet)] transition
+            px-8
+             "
+          >
+            {'<'} Left
+          </button>
 
-      <button
-        onClick={goRightGame}
-        className="absolute right-10 bg-[var(--savoy-blue)] text-white px-8 py-2 rounded-full transform -translate-y-1/2 top-1/2 hover:bg-[var(--tekhelet)] transition"
-      >
-        Right {'>'}
-      </button>
-
-      <footer className="absolute bottom-0 w-full bg-blue-900 text-white text-center py-4"></footer>
-    </div>
+          <button
+            onClick={goRightGame}
+            className="mr-20 right-52 bg-[var(--savoy-blue)] text-white 
+         py-2 rounded-full transform -translate-y-1/2 top-1/2 hover:bg-[var(--tekhelet)] transition
+         px-8
+        "
+          >
+            Right {'>'}
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
 
