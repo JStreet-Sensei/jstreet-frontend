@@ -1,3 +1,3 @@
 export { default } from "next-auth/middleware"
 
-export const config = { matcher: ["/mypage", "/selectGame", "/game(.*)"] }
+export const config = { matcher: ["/mypage", "/select-game", "/game(.*)"] }
