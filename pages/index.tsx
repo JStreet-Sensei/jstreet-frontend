@@ -1,8 +1,5 @@
-import Link from 'next/link';
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
-import styles from '../styles/homepage.module.css';
 import FlexModal from '@/components/modal';
 import React, { useState } from 'react';
 import SignIn from '@/pages/auth/credentials-signin';
