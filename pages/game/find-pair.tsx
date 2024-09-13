@@ -46,7 +46,7 @@ const FindPair = () => {
    //modal state
    const [ModalOpen, setModalOpen] = useState<boolean>(false);
    const [modalMessage, setModalMessage] = useState<string>('');
-   const openModal = (message: any) => {
+   const openModal = (message: string) => {
     setModalMessage(''); 
     setModalOpen(true);
   };
@@ -201,63 +201,81 @@ const FindPair = () => {
   };
 
   return (
-  <div>
-    {start === false ? (
-      <div className="bg-gray-200 min-h-screen flex flex-col items-center p-6">
-        <div className="bg-white rounded-lg shadow-md p-6 max-w-4xl w-full border border-[#A4161A]">
-          {/* Your other content */}
-          <div className="text-center mb-6">
-            <button
-              onClick={handleStartButton}
-              disabled={!isReadyToStart}
-              className={`py-3 px-6 rounded-md shadow-md ${
-                isReadyToStart ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400'
-              }`}
-            >
-              Start Game
-            </button>
+    <div>
+      {start === false ? (
+        <div className="bg-gray-200 min-h-screen flex flex-col items-center p-6">
+          <div className="bg-white rounded-lg shadow-md p-6 max-w-4xl w-full border border-[#A4161A]">
+            <div className="text-center mb-6">
+              <h1 className="text-2xl font-bold text-[#A4161A] mb-4">Game ID: {game_id_ref.current}</h1>
+              <h2 className="text-xl font-semibold mb-4">Room: {name_ref.current}</h2>
+            </div>
+
+            <div className="mb-6">
+              <h2 className="text-3xl font-bold mb-4 text-[#A4161A]">Players in Room</h2>
+              <ul>
+                {players.map((player, index) => (
+                  <li key={index} className="text-[#A4161A] mb-2">
+                    {player.username}
+                  </li>
+                ))}
+              </ul>
+              {players.length < 2 && (
+                <p className="text-red-600 mt-4">Need at least one more player to start the game.</p>
+              )}
+            </div>
+
+            <div className="text-center mb-6">
+              <button
+                onClick={() => handleStartButton()}
+                disabled={!isReadyToStart}
+                className={`py-3 px-6 rounded-md shadow-md ${
+                  isReadyToStart ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400'
+                }`}
+              >
+                Start Game
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    ) : (
-      <SocketProvider parentSocket={useSocket}>
-        <GameStateProvider parentGameState={useClientGameState}>
-          <Message message={useMessage} />
-          <GamePair
-            players={useServerLobby.players}
-            gameState={useClientGameState}
-            handleUpdateDeck={handleUpdateDeck}
-          />
-          <button
-            onClick={openModal} // Open the modal on click
-            className="absolute top-24 left-12 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600"
-          >
-            X
-          </button>
-          {ModalOpen && (
-            <FlexModal isOpen={ModalOpen} closeModal={closeModal}>
-              <div className="p-6">
-                <h2 className="text-2xl font-semibold mb-4">Are you sure you want to quit?</h2>
-                <p className="mb-4">Exiting the game will result in losing your progress.</p>
-                <div className="flex justify-end">
-                  <button
-                    onClick={closeModal}
-                    className="bg-gray-400 text-white py-2 px-4 rounded mr-2"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleQuit}
-                    className="bg-red-500 text-white py-2 px-4 rounded"
-                  >
-                    Quit Game
-                  </button>
+      ) : (
+        <SocketProvider parentSocket={useSocket}>
+          <GameStateProvider parentGameState={useClientGameState}>
+            <Message message={useMessage} />
+            <GamePair
+              players={useServerLobby.players}
+              gameState={useClientGameState}
+              handleUpdateDeck={handleUpdateDeck}
+            />
+             <button
+             onClick={() => openModal('')} // Open the modal on click
+              className="absolute top-24 left-12 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600"
+            >
+              X
+            </button>
+            {ModalOpen && (
+             <FlexModal closeModal={closeModal}>
+                <div className="p-6">
+                  <h2 className="text-2xl font-semibold mb-4">Are you sure you want to quit?</h2>
+                  <p className="mb-4">Exiting the game will result in losing your progress.</p>
+                  <div className="flex justify-end">
+                    <button
+                      onClick={closeModal}
+                      className="bg-gray-400 text-white py-2 px-4 rounded mr-2"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleQuit}
+                      className="bg-red-500 text-white py-2 px-4 rounded"
+                    >
+                      Quit Game
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </FlexModal>
+              </FlexModal>
           )}
-          {disconnectModalOpen && (
-            <FlexModal isOpen={disconnectModalOpen} closeModal={closeModal}>
+           {disconnectModalOpen && (
+            <FlexModal closeModal={closeModal}>
               <div className="p-6">
                 <h2 className="text-2xl font-semibold mb-4">{disconnectModalMessage}</h2>
                 <div className="flex justify-end">
@@ -271,11 +289,11 @@ const FindPair = () => {
               </div>
             </FlexModal>
           )}
-        </GameStateProvider>
-      </SocketProvider>
-    )}
-  </div>
-);
+          </GameStateProvider>
+        </SocketProvider>
+      )}
+    </div>
+  );
 };
 
 export default dynamic(() => Promise.resolve(FindPair), {
