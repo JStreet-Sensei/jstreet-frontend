@@ -9,6 +9,7 @@ import { CardData, ClientGameState, GameResultType, ServerLobby } from '@/types/
 import { getSession } from 'next-auth/react';
 import Message from '@/components/game/findPairGame/Message';
 import { useRouter } from 'next/router';
+import FlexModal from '@/components/modal'
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -41,6 +42,17 @@ const FindPair = () => {
   const game_id_ref = useRef(game_id);
   const name_ref = useRef(name);
   const router_ref = useRef(router);
+
+   //modal state
+   const [ModalOpen, setModalOpen] = useState<boolean>(false);
+   const [modalMessage, setModalMessage] = useState<string>('');
+   const openModal = (message: string) => {
+    setModalMessage(message);
+    setModalOpen(true);
+  };
+   const closeModal = () => setModalOpen(false);
+   const [disconnectModalOpen, setDisconnectModalOpen] = useState<boolean>(false);
+   const [disconnectModalMessage, setDisconnectModalMessage] = useState<string>('');
 
   // Initialize game state
   useEffect(() => {
@@ -101,6 +113,11 @@ const FindPair = () => {
       newSocket.on('left', (receivedLobby: ServerLobby) => {
         console.log('A player left the lobby');
         setServerLobby(receivedLobby);
+        setDisconnectModalMessage('A player has disconnected. You will be redirected to the lobby.');
+        setDisconnectModalOpen(true);
+        setTimeout(() => {
+          router.push('/lobby');
+        }, 2000);
       });
 
       // Get the update of the deck
@@ -142,8 +159,12 @@ const FindPair = () => {
 
       newSocket.on('disconnect', () => {
         console.log('Disconnected from server');
+        setDisconnectModalMessage('A player has disconnected. You will be redirected to the lobby.');
+        setDisconnectModalOpen(true);
+        setTimeout(() => {
+          router.push('/lobby');
+        }, 2000);
       });
-
       setSocket(newSocket);
       setSocketReady(true);
 
@@ -172,6 +193,11 @@ const FindPair = () => {
   //handle start button send to server the event start
   const handleStartButton = () => {
     useSocket.emit('start');
+  };
+
+  //handle quit button inside modal
+  const handleQuit = () => {
+    router.push('/lobby');
   };
 
   return (
@@ -220,6 +246,49 @@ const FindPair = () => {
               gameState={useClientGameState}
               handleUpdateDeck={handleUpdateDeck}
             />
+             <button
+              onClick={openModal} // Open the modal on click
+              className="absolute top-24 left-12 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600"
+            >
+              X
+            </button>
+            {ModalOpen && (
+              <FlexModal isOpen={ModalOpen} closeModal={closeModal}>
+                <div className="p-6">
+                  <h2 className="text-2xl font-semibold mb-4">Are you sure you want to quit?</h2>
+                  <p className="mb-4">Exiting the game will result in losing your progress.</p>
+                  <div className="flex justify-end">
+                    <button
+                      onClick={closeModal}
+                      className="bg-gray-400 text-white py-2 px-4 rounded mr-2"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleQuit}
+                      className="bg-red-500 text-white py-2 px-4 rounded"
+                    >
+                      Quit Game
+                    </button>
+                  </div>
+                </div>
+              </FlexModal>
+          )}
+           {disconnectModalOpen && (
+            <FlexModal isOpen={disconnectModalOpen} closeModal={closeModal}>
+              <div className="p-6">
+                <h2 className="text-2xl font-semibold mb-4">{disconnectModalMessage}</h2>
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setDisconnectModalOpen(false)}
+                    className="bg-gray-400 text-white py-2 px-4 rounded mr-2"
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </FlexModal>
+          )}
           </GameStateProvider>
         </SocketProvider>
       )}
