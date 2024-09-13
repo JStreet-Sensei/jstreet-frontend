@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {}
+
 :root {
   --turquoise-light: #12dcd8;
   --blue-desaturated: #4e92b2;
@@ -33,4 +41,6 @@
 
 body {
   @apply h-full;
+  margin: 0;
+  padding: 0;
 }

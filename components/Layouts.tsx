@@ -11,7 +11,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
   return (
     <>
-      <Header />
+      {!isHomePage && <Header />}
       {isHomePage || isSelectGamePage ? (
         <main>{children}</main>
       ) : (
