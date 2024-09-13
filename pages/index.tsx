@@ -42,9 +42,7 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
         className="relative flex flex-col items-start justify-center min-h-screen
         bg-no-repeat bg-center md:hidden bg-[#25dad1] " style={{ backgroundImage: "url('/LandingPage/landpage_md.jpeg')", backgroundSize: "80%" }}
       >
-
         <div className="flex-1 min-w-full flex items-start justify-center flex-col z-10"> {/* Adiciona padding para afastar do canto */}
-
           <div className="fixed z-20 flex flex-row gap-4 bottom-72 left-4 items-center justify-center ">
             <button
               onClick={openSignInModal}
