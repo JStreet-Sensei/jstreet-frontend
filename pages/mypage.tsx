@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
-import styles from '@/styles/mypage.module.css';
 import { getFetchBackendURL } from '@/utils/utils-data';
+import styles from '@/styles/mypage.module.css';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + '/';
 
