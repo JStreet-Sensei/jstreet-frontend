@@ -149,7 +149,6 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
 
       // Get the update of the deck
       newSocket.on('receive-game-update', (cardDeck: CardData[], turn: number) => {
-        console.log('Received an update, turn: ', turn);
         // setMessage(`Received a deck update...`);
         setClientGameState({ ...useClientGameState, cardDeck, turn });
       });
@@ -160,7 +159,6 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
 
       newSocket.on('change-turn', (receivedLobby: ServerLobby) => {
         receivedLobby.players = new Set(receivedLobby.players);
-        console.log('Time to change turn! Now is ', receivedLobby.gameState.turn);
         // Wait 1 seconds before change turn!
         new Promise((resolve) => setTimeout(resolve, TIMER_BEFORE_CHANGE_TURN_AND_FLIP_CARD)).then(() => {
           setMessage(`Now is ${getPlayerFromSet(receivedLobby.players, receivedLobby.gameState.turn).username}'s turn`);
@@ -219,7 +217,6 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
   // Get the update from the child and emit to every client!
   const handleUpdateDeck = (cardDeck: CardData[]) => {
     setClientGameState({ ...useClientGameState, cardDeck });
-    console.log('Send update to server');
     useSocket.emit('send-game-update', cardDeck, useClientGameState.user_id);
   };
 

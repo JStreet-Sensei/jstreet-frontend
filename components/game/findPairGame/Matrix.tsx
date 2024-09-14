@@ -22,7 +22,6 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) =
   //Is clickable logic
   useEffect(() => {
     setCardDeck([...gameState.cardDeck]);
-    console.log('Turn state: ', gameState.user_id, gameState.turn);
     if (gameState.user_id === gameState.turn) {
       if (getSelectedCards(gameState.cardDeck).length < 2) setCardClickable(true);
       else setCardClickable(false);
