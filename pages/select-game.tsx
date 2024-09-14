@@ -46,12 +46,12 @@ const SelectGame: React.FC = () => {
     <>
       <div className='flex justify-evenly items-center mt-11'>
 
-        <div className='flex flex-col ml-5 w-72'>
+        <div className='flex flex-col ml-5'>
           <h2 className='text-3xl mb-3'>Solo Learning</h2>
           <StartExpression />
           <StartFlashCard />
         </div>
-        <div className='flex flex-col mr-5 w-72'>
+        <div className='flex flex-col mr-5'>
           <h2 className='text-3xl mb-3'>Multi Play</h2>
           <StartPairGame />
           <StartQuickGame />

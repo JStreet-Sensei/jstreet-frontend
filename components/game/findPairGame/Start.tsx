@@ -4,18 +4,25 @@ import Link from 'next/link';
 const StartPairGame: React.FC = () => {
   return (
     <>
-      <Link href={'/lobby'}>
-        <div className="flex md:flex-row flex-col h-full items-center cursor-pointer">
-          <div className="flex flex-col">
-            <h3 className="text-3xl text-center">Find Pair Game</h3>
-            <h4>Compete with the others.</h4>
-            <h5>You play with the other player.<br></br>Choose right pair of formal Japanese and slang Japanese.</h5>
-          </div>
-          <Image width={300} height={300} src="/pair-game-fox.png" alt="Find Pair Fox Picture" />
+      <div className="flex md:flex-row flex-col h-full items-center ">
+        <div className="flex flex-col">
+          <h3 className="text-3xl text-start ">Find Pair Game</h3>
+          <h5>You play with the other player.<br></br>Choose right pair of formal Japanese<br></br> and slang Japanese.</h5>
         </div>
+        <Image width={150} height={150} src="/pair-game-fox.png" alt="Find Pair Fox Picture" />
+      </div>
+      <Link href={'/lobby'}>
+        <button
+          className="ml-20 left-52 bg-[var(--savoy-blue)] text-white py-2 
+            rounded-full transform -translate-y-1/2 top-1/2 hover:bg-[var(--tekhelet)] transition
+            px-8 cursor-pointer
+             "
+        >
+          Start!
+        </button>
       </Link>
     </>
-  );
-};
+  )
+}
 
 export default StartPairGame;
