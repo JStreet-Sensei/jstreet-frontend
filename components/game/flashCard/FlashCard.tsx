@@ -94,7 +94,7 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
           <p className="text-2xl font-bold text-gray-800">{currentPhrase?.english || 'Loading...'}</p>
         </div>
         <div className={`${styles.flip_card_back} flex items-center justify-center`}>
-          <p className="text-xl font-semibold px-2">
+          <p className="text-xl px-5">
             {currentPhrase?.japanese || 'Loading...'}
             <br />
             <span className="text-md">{currentPhrase?.description || ''}</span>
