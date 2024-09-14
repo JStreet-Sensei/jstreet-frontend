@@ -11,16 +11,18 @@ const StartFlashCard: React.FC = () => {
         </div>
         <Image width={150} height={150} src="/practice-nife.png" alt="Cross nife picture" />
       </div>
-      <Link href={'/game/flash-card'}>
-        <button
-          className="ml-20 left-52 bg-[var(--savoy-blue)] text-white py-2 
-            rounded-full transform -translate-y-1/2 top-1/2 hover:bg-[var(--tekhelet)] transition
-            px-8
-             cursor-pointer"
-        >
-          Start!
-        </button>
-      </Link>
+      <div className='ml-20'>
+        <Link href={'/game/flash-card'}>
+          <button
+            className="bg-[var(--savoy-blue)] text-white py-2 
+          rounded-full transform -translate-y-1/2 top-1/2 hover:bg-[var(--tekhelet)] transition
+          px-8
+          cursor-pointer"
+          >
+            Start!
+          </button>
+        </Link>
+      </div>
     </>
   );
 };
