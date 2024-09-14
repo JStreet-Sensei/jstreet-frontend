@@ -10,7 +10,6 @@ import { getSession } from 'next-auth/react';
 import Message from '@/components/game/findPairGame/Message';
 import { useRouter } from 'next/router';
 import FlexModal from '@/components/modal';
-import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import { GetServerSideProps } from 'next';
 
 interface Props {
@@ -58,7 +57,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
   const name_ref = useRef(name);
   const router_ref = useRef(router);
 
-  //modal state
+  // Modal state
   const [ModalOpen, setModalOpen] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>('');
   const openModal = (message: string) => {
@@ -68,6 +67,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
   const closeModal = () => setModalOpen(false);
   const [disconnectModalOpen, setDisconnectModalOpen] = useState<boolean>(false);
   const [disconnectModalMessage, setDisconnectModalMessage] = useState<string>('');
+  const errorMessage = useRef<string | null>(null);
 
   // Initialize game state
   useEffect(() => {
@@ -174,6 +174,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
 
       newSocket.on('end-game', async (result: GameResultType) => {
         const stringResult = JSON.stringify(result);
+        errorMessage.current = 'SKIP';
         router_ref.current.push({
           pathname: './game-result',
           query: { result: stringResult },
@@ -181,13 +182,27 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
         return;
       });
 
+      newSocket.on('lobby-full', () => {
+        console.log('Lobby is full!');
+        errorMessage.current = 'Lobby is full';
+        // router.push({ pathname: '/lobby', query: { error: 'lobby-full' } });
+      });
+
       newSocket.on('disconnect', () => {
         console.log('Disconnected from server');
-        setDisconnectModalMessage('A player has disconnected. You will be redirected to the lobby.');
-        setDisconnectModalOpen(true);
-        setTimeout(() => {
-          router.push('/lobby');
-        }, 2000);
+        if (errorMessage.current) {
+          setDisconnectModalMessage(errorMessage.current);
+          setDisconnectModalOpen(true);
+        } else if (errorMessage.current === 'SKIP') {
+          // If SKIP means that redirect is not required
+          return;
+        } else {
+          setDisconnectModalMessage('A player has disconnected. You will be redirected to the lobby.');
+          setDisconnectModalOpen(true);
+          setTimeout(() => {
+            router.push({ pathname: '/lobby' });
+          }, 2000);
+        }
       });
       setSocket(newSocket);
       setSocketReady(true);
@@ -208,6 +223,21 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
   if (!isGameStateReady || !isSocketReady || useClientGameState.cardDeck.length === 0) {
     return (
       <div>
+        {disconnectModalOpen && (
+          <FlexModal closeModal={closeModal}>
+            <div className="p-6">
+              <h2 className="text-2xl font-semibold mb-4">{disconnectModalMessage}</h2>
+              <div className="flex items-center justify-center">
+                <button
+                  onClick={() => router.push({ pathname: '/lobby' })}
+                  className="bg-[#4e92b2] text-white py-2 px-4 rounded mr-2"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </FlexModal>
+        )}
         <h1>Please wait...</h1>
         <p>The game is still loading...</p>
       </div>

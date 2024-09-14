@@ -57,3 +57,9 @@ export interface GameResultType {
   players: Player[];
   time: number;
 }
+
+export interface GameScoreResult {
+  winner: number;
+  loser: number;
+  score;
+}
