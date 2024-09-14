@@ -29,7 +29,7 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
   const [signUpModalOpen, setSignUpModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!session && router.asPath.includes('CredentialsSignin')) {
+    if (session === null && router.asPath.includes('CredentialsSignin')) {
       toast.error('Incorrect username or password', {
         position: 'top-center',
         autoClose: 5000,
@@ -45,7 +45,7 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
       router.push('/select-game');
     }
     return;
-  }, [session, router]);
+  }, [session]);
 
   if (status === 'loading') {
     return <p>Loading...</p>;
@@ -93,18 +93,6 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
             )}
           </div>
         </div>
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
       </div>
 
       <div
@@ -144,19 +132,19 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
             </FlexModal>
           )}
         </div>
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 };

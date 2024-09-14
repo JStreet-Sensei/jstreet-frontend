@@ -50,7 +50,7 @@ export const authOptions = {
           const data = response.data;
           if (data) return data;
         } catch (error) {
-          console.error(error);
+          console.log('An error during login, can be wrong credential');
         }
         return null;
       },
