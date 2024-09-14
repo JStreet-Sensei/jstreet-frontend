@@ -49,24 +49,11 @@
 }
 
 .flip_card_front {
-  background: linear-gradient(
-    120deg,
-    var(--purple-dark) 30%,
-    var(--turquoise-light) 88%,
-    var(--deep-sky-blue) 40%,
-    rgba(128, 16, 124, 0.694) 48%
-  );
-  color: var(--magenta);
+  background: linear-gradient(120deg, #c0fcf9 80%, var(--turquoise-light) 30%, #00a4a1 50%);
+  color: #12dcd8;
 }
 
 .flip_card_back {
-  background: linear-gradient(
-    120deg,
-    var(--turquoise-light) 30%,
-    var(--deep-sky-blue) 88%,
-    var(--purple-dark) 40%,
-    rgb(104, 10, 112) 78%
-  );
-  color: white;
+  background: linear-gradient(120deg, #c0fcf9 80%, var(--turquoise-light) 30%, #00a4a1 50%);
   transform: rotateY(180deg);
 }
