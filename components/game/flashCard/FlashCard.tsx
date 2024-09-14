@@ -71,7 +71,7 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
   if (selectedMaterial && selectedMaterial.correctPhrases.length === selectedMaterial.phrases.length) {
     return (
       <div className="text-center">
-        <h1 className="text-2xl font-semibold text-red-700">Congratulations!</h1>
+        <h1 className="text-2xl px-2 font-semibold text-red-700">Congratulations!</h1>
         <p className="mt-2 text-lg text-cyan-700">You&apos;ve completed all flashcards</p>
         <button
           className="mt-4 bg-[var(--savoy-blue)] hover:bg-blue-600 text-white font-bold shadow-md py-2 px-4 rounded"
@@ -94,7 +94,7 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
           <p className="text-2xl font-bold text-gray-800">{currentPhrase?.english || 'Loading...'}</p>
         </div>
         <div className={`${styles.flip_card_back} flex items-center justify-center`}>
-          <p className="text-xl font-semibold">
+          <p className="text-xl font-semibold px-2">
             {currentPhrase?.japanese || 'Loading...'}
             <br />
             <span className="text-md">{currentPhrase?.description || ''}</span>
