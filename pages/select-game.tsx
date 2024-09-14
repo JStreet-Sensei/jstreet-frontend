@@ -44,7 +44,20 @@ const SelectGame: React.FC = () => {
 
   return (
     <>
-      <div className='mb-10 mt-10'>
+      <div className='flex justify-evenly items-center mt-11'>
+
+        <div className='flex flex-col ml-5 w-72'>
+          <h2 className='text-3xl mb-3'>Solo Learning</h2>
+          <StartExpression />
+          <StartFlashCard />
+        </div>
+        <div className='flex flex-col mr-5 w-72'>
+          <h2 className='text-3xl mb-3'>Multi Play</h2>
+          <StartPairGame />
+          <StartQuickGame />
+        </div>
+      </div>
+      {/* <div className='mb-10 mt-10'>
         <h1 className="text-5xl my-6 flex justify-center items-center">Select Game</h1>
       </div>
       <div className="flex flex-col justify-around bg-white md:min-h-[50vh] min-h-[80svh]">
@@ -70,7 +83,8 @@ const SelectGame: React.FC = () => {
             Right {'>'}
           </button>
         </div>
-      </div>
+      </div> */}
+
     </>
   );
 };
