@@ -90,14 +90,17 @@ const ExpressionPage: React.FC = () => {
   const isLastCard = content.length > 0 && currentIndex === content.length - 1;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-1 flex-col justify-center min-h-screen">
       {!isLearning ? (
-        <button
-          className="w-2/3 mx-auto mb-10 px-9 py-4 text-center text-white bg-cyan-700 rounded-full shadow-lg hover:bg-cyan-900 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105"
-          onClick={handleStartLearning}
-        >
-          Start Learning
-        </button>
+        <div className="flex items-center justify-center mb-10 space-x-4">
+          <button
+            className="w-2/3 px-9 py-4 text-center text-white bg-cyan-700 rounded-lg shadow-lg hover:bg-cyan-900 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105"
+            onClick={handleStartLearning}
+          >
+            Start Learning
+          </button>
+          <img src="/new-expression-fox.png" alt="Expression Fox" className="w-16 h-16" />
+        </div>
       ) : (
         <div className="max-w-xl p-8 bg-white rounded-lg shadow-xl">
           {content.length > 0 ? (
@@ -144,12 +147,13 @@ const ExpressionPage: React.FC = () => {
           )}
         </div>
       )}
-      <div className="mt-5">
+      <div className="mt-5 flex items-center justify-center space-x-4">
         <Link href={{ pathname: '/game/flash-card', query: { userInfo } }} passHref>
-          <button className="mt-5 w-2/3 mx-auto px-9 py-4 text-center text-white bg-[var(--savoy-blue)] rounded-full shadow-lg hover:bg-[#4152b3] focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105">
+          <button className="w-2/3 px-9 py-4 text-center text-white bg-[var(--savoy-blue)] rounded-lg shadow-lg hover:bg-[#4152b3] focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105">
             Go to Flashcards
           </button>
         </Link>
+        <img src="/practice-nife.png" alt="Practice Nife" className="w-16 h-16" />
       </div>
     </div>
   );
