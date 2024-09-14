@@ -71,10 +71,10 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
   if (selectedMaterial && selectedMaterial.correctPhrases.length === selectedMaterial.phrases.length) {
     return (
       <div className="text-center">
-        <h1 className="text-2xl font-semibold text-green-600">Congratulations!</h1>
-        <p className="mt-2 text-lg text-gray-700">You&apos;ve completed all flashcards</p>
+        <h1 className="text-2xl font-semibold text-red-700">Congratulations!</h1>
+        <p className="mt-2 text-lg text-cyan-700">You&apos;ve completed all flashcards</p>
         <button
-          className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          className="mt-4 bg-[var(--savoy-blue)] hover:bg-blue-600 text-white font-bold shadow-md py-2 px-4 rounded"
           onClick={handleRestart}
         >
           Restart
@@ -84,7 +84,7 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
   }
 
   return (
-    <div className="relative flex flex-col items-center bg-white border border-gray-300 rounded-lg shadow-lg p-6">
+    <div className="relative flex flex-col items-center bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-lg h-lg overflow-auto">
       <div
         className={`${styles.flip_card} ${styles.flip_card_inner} ${isBack ? styles.flip : ''}`}
         onClick={() => setIsBack(!isBack)}
@@ -97,7 +97,7 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
           <p className="text-xl font-semibold">
             {currentPhrase?.japanese || 'Loading...'}
             <br />
-            <span className="text-sm text-gray-400">{currentPhrase?.description || ''}</span>
+            <span className="text-md">{currentPhrase?.description || ''}</span>
           </p>
         </div>
       </div>
@@ -105,12 +105,15 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
       {isBack && (
         <div className="mt-4 flex space-x-4">
           <button
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+            className="bg-cyan-700 hover:bg-cyan-900 text-white font-bold shadow-md py-2 px-4 rounded"
             onClick={handleCorrect}
           >
             Correct
           </button>
-          <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" onClick={handleWrong}>
+          <button
+            className="bg-red-700 hover:bg-red-800 text-white font-bold shadow-md py-2 px-4 rounded"
+            onClick={handleWrong}
+          >
             Wrong
           </button>
         </div>
