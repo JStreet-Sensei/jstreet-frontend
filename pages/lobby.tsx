@@ -117,7 +117,7 @@ const Lobby: React.FC = () => {
             </button>
             <button
               onClick={fetchLobbies}
-              className="w-3/6 px-4 py-2 bg-[#71b24e] text-white rounded hover:bg-[#11dfd9ff]"
+              className="w-3/6 px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]"
             >
               Refresh
             </button>
@@ -139,7 +139,7 @@ const Lobby: React.FC = () => {
         {selectedLobbyId === null ? (
           <button
             onClick={handleJoinButton}
-            className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]"
+            className="w-full px-4 py-2 bg-[#11dfd9ff] text-white rounded hover:bg-[var(--magenta)]"
           >
             Join
             {error2 && <p className="text-[#f3308cff]">{error2}</p>}

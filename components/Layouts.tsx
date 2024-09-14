@@ -13,10 +13,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     <>
       {!isHomePage && <Header />}
       {isHomePage || isSelectGamePage ? (
-        <main>{children}</main>
+        <main>
+          <div className="content_container min-h-screen pb-20">{children}</div>
+        </main>
       ) : (
         <main className={styles.mainContent}>
-          <div className="content_container">{children}</div>
+          <div className="content_container min-h-screen pb-20">{children}</div>
         </main>
       )}
       <Footer />
