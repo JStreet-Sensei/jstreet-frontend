@@ -3,7 +3,7 @@ export const Draw = () => {
         <>
             <div className="mx-auto flex items-center justify-center">
                 <p className="text-4xl font-extrabold leading-tight secondary-inverse mt-10">
-                    Draw!!! No winner...
+                    Draw! Ready for rematch?
                 </p>
             </div>
         </>
