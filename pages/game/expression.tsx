@@ -90,16 +90,16 @@ const ExpressionPage: React.FC = () => {
   const isLastCard = content.length > 0 && currentIndex === content.length - 1;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen">
       {!isLearning ? (
         <button
-          className="px-9 py-4 text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600"
+          className="w-2/3 mx-auto mb-10 px-9 py-4 text-center text-white bg-cyan-700 rounded-full shadow-lg hover:bg-cyan-900 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105"
           onClick={handleStartLearning}
         >
           Start Learning
         </button>
       ) : (
-        <div className="max-w-lg p-6 bg-white rounded-lg shadow-lg">
+        <div className="max-w-xl p-8 bg-white rounded-lg shadow-xl">
           {content.length > 0 ? (
             <>
               <h2 className="text-2xl font-bold mb-4">{content[currentIndex].japanese_slang}</h2>
@@ -115,7 +115,7 @@ const ExpressionPage: React.FC = () => {
               <div className="flex justify-center">
                 {!isFirstCard && (
                   <button
-                    className="px-4 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600"
+                    className="px-4 py-2 text-white bg-red-700 rounded-lg shadow-md hover:bg-red-800"
                     onClick={handlePreviousContent}
                   >
                     Back
@@ -123,7 +123,7 @@ const ExpressionPage: React.FC = () => {
                 )}
                 {!isLastCard && (
                   <button
-                    className={`px-4 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 ${isFirstCard ? '' : 'ml-24'}`}
+                    className={`px-4 py-2 text-white bg-cyan-700 rounded-lg shadow-md hover:bg-cyan-900 ${isFirstCard ? '' : 'ml-24'}`}
                     onClick={handleNextContent}
                   >
                     Next
@@ -131,9 +131,12 @@ const ExpressionPage: React.FC = () => {
                 )}
               </div>
               {isLastCard && (
-                <p className="mt-4 text-xl font-semibold text-red-600">
-                  You have reached the end of the content! All the material is available in the flash cards to practice.
-                </p>
+                <div className="text-center mt-6">
+                  <p className="mt-4 text-xl font-semibold text-red-700">
+                    You have reached the end of the content! All the material is available in the flashcards to
+                    practice. ↓
+                  </p>
+                </div>
               )}
             </>
           ) : (
@@ -141,11 +144,11 @@ const ExpressionPage: React.FC = () => {
           )}
         </div>
       )}
-      <div className="mb-4">
+      <div className="mt-10">
         <Link href={{ pathname: '/game/flash-card', query: { userInfo } }} passHref>
-          <div className="mt-4 px-4 py-3 text-white bg-purple-500 rounded-lg shadow-md hover:bg-purple-600 cursor-pointer">
+          <button className="mt-5 w-2/3 mx-auto px-9 py-4 text-center text-white bg-rose-900 rounded-full shadow-lg hover:bg-rose-950 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105">
             Go to Flashcards
-          </div>
+          </button>
         </Link>
       </div>
     </div>
