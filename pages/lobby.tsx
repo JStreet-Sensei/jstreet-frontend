@@ -87,22 +87,22 @@ const Lobby: React.FC = () => {
 
   return (
     <>
-      <div className="relative p-6">
+      <div className="relative p-6 w-webkit-fill-available">
         <h2 className="text-2xl font-bold mb-4 ">Lobbies</h2>
-        <p className="mb-6 mb-10">
+        <p className="mb-10">
           Select an existing Lobby from the list below, or click &quot;Create Lobby&quot; to Open a Lobby.
         </p>
-        <div className="w-full mt-4 px-4 py-2 bg-[#43346dff] text-white rounded text-center">
+        <div className="w-90% mt-4 px-4 py-2 mb-2 bg-[#43346dff] text-white rounded text-center">
           Enter the name of your lobby
         </div>
 
         <div className="space-y-4">
           <input
             type="text"
-            placeholder="Name"
+            placeholder="  Add Name"
             value={lobbyName}
             onChange={(e) => setLobbyName(e.target.value)}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full py-2 border rounded "
           />
           {error && <p className="text-red-600">{error}</p>}
           <div className="flex gap-6">
@@ -125,7 +125,7 @@ const Lobby: React.FC = () => {
             {Lobbies.map((lobby, index) => (
               <li
                 key={index}
-                className={`py-2 cursor-pointer hover:bg-blue-100 ${selectedLobbyId === lobby.game_id ? 'bg-blue-200' : ''}`}
+                className={`py-2 cursor-pointer hover:bg-blue-100 ${selectedLobbyId === lobby.game_id ? 'bg-blue-00' : ''}`}
                 onClick={() => handleLobbieClick(lobby.game_id, lobby.name)}
               >
                 {lobby.name}
@@ -136,16 +136,14 @@ const Lobby: React.FC = () => {
         {selectedLobbyId === null ? (
           <button
             onClick={handleJoinButton}
-            className="w-full px-4 py-2 bg-[#11dfd9ff] text-white rounded hover:bg-[var(--magenta)]"
+            className="w-full py-2 bg-[#11dfd9ff] text-white rounded hover:bg-[var(--magenta)]"
           >
             Join
             {error2 && <p className="text-[#f3308cff]">{error2}</p>}
           </button>
         ) : (
           <Link href={`game/find-pair?game_id=${selectedLobbyId}&name=${selectedLobbyName}`} className="mt-4">
-            <button className="w-full px-4 py-2 bg-[#11dfd9ff] text-white rounded hover:bg-[var(--magenta)]">
-              Join
-            </button>
+            <button className="w-full py-2 bg-[#11dfd9ff] text-white rounded hover:bg-[var(--magenta)]">Join</button>
           </Link>
         )}
       </div>
