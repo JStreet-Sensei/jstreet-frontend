@@ -187,7 +187,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
         setDisconnectModalOpen(true);
         setTimeout(() => {
           router.push('/lobby');
-        }, 2000);
+        }, 5000);
       });
       setSocket(newSocket);
       setSocketReady(true);
@@ -252,9 +252,8 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
               <button
                 onClick={() => handleStartButton()}
                 disabled={!isReadyToStart}
-                className={`py-3 px-6 rounded-md shadow-md ${
-                  isReadyToStart ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400'
-                }`}
+                className={`py-3 px-6 rounded-md shadow-md ${isReadyToStart ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400'
+                  }`}
               >
                 Start Game
               </button>
