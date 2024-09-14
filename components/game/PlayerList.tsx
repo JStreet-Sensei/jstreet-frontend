@@ -16,17 +16,20 @@ export const PlayerList = ({ currentPlayerUsername, players, actualTurn, ...prop
   useEffect(() => {
     setPlayerName(currentPlayerUsername);
     if (players) {
+      const playersArray = Array.from(players); // Convert Set to Array
       const newPlayersComponets: ReactNode[] = [];
       let counterKey = 0;
-      players.forEach((player: Player) => {
+      playersArray.forEach((player: Player) => {
         const playerTurn = player.user_id === actualTurn;
         console.log(playerTurn);
-        newPlayersComponets.push(<PlayerShow player={player} key={counterKey} isPlayerTurn={playerTurn}></PlayerShow>);
+        newPlayersComponets.push(
+          <PlayerShow player={player} key={counterKey} isPlayerTurn={playerTurn} />
+        );
         counterKey += 1;
       });
       setPlayers(newPlayersComponets);
     }
-  }, [players, currentPlayerUsername]);
+  }, [players, currentPlayerUsername, actualTurn]);
 
   return (
     <>
