@@ -11,6 +11,7 @@ import Message from '@/components/game/findPairGame/Message';
 import { useRouter } from 'next/router';
 import FlexModal from '@/components/modal';
 import { GetServerSideProps } from 'next';
+import { getPlayerFromSet } from '@/utils/utils-socket';
 
 interface Props {
   gameId: string | string[] | undefined;
@@ -26,6 +27,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
+
+const TIMER_BEFORE_CHANGE_TURN_AND_FLIP_CARD = 1500; // ms
 
 const FindPair = ({ gameId, lobbyName }: Props) => {
   // Before show the cards you need to show the lobby Components and the players must be 2 and the owner should press start
@@ -147,7 +150,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
       // Get the update of the deck
       newSocket.on('receive-game-update', (cardDeck: CardData[], turn: number) => {
         console.log('Received an update, turn: ', turn);
-        setMessage(`Received a deck update...`);
+        // setMessage(`Received a deck update...`);
         setClientGameState({ ...useClientGameState, cardDeck, turn });
       });
 
@@ -159,8 +162,8 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
         receivedLobby.players = new Set(receivedLobby.players);
         console.log('Time to change turn! Now is ', receivedLobby.gameState.turn);
         // Wait 1 seconds before change turn!
-        new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
-          setMessage(`Change turn to ${receivedLobby.gameState.turn}`);
+        new Promise((resolve) => setTimeout(resolve, TIMER_BEFORE_CHANGE_TURN_AND_FLIP_CARD)).then(() => {
+          setMessage(`Now is ${getPlayerFromSet(receivedLobby.players, receivedLobby.gameState.turn).username}'s turn`);
           // This update the score
           setServerLobby(receivedLobby);
           // This update the deck and the turn
