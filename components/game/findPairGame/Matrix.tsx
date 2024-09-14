@@ -1,6 +1,6 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import Card from './Card';
-import { checkDataSelectable } from '@/utils/utils-data';
+import { checkDataSelectable, getSelectedCards } from '@/utils/utils-data';
 import { CardData, ClientGameState } from '@/types/game';
 import { clone } from 'lodash';
 import styles from '@/styles/Game.module.css';
@@ -22,9 +22,10 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) =
   //Is clickable logic
   useEffect(() => {
     setCardDeck([...gameState.cardDeck]);
-    console.log('Turn state: ', gameState.user_id, gameState.turn);
-    if (gameState.user_id === gameState.turn) setCardClickable(true);
-    else setCardClickable(false);
+    if (gameState.user_id === gameState.turn) {
+      if (getSelectedCards(gameState.cardDeck).length < 2) setCardClickable(true);
+      else setCardClickable(false);
+    } else setCardClickable(false);
     setRefresh(!useRefresh);
   }, [gameState]);
 

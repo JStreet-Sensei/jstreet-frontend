@@ -10,8 +10,8 @@ import { getSession } from 'next-auth/react';
 import Message from '@/components/game/findPairGame/Message';
 import { useRouter } from 'next/router';
 import FlexModal from '@/components/modal';
-import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import { GetServerSideProps } from 'next';
+import { getPlayerFromSet } from '@/utils/utils-socket';
 
 interface Props {
   gameId: string | string[] | undefined;
@@ -27,6 +27,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
+
+const TIMER_BEFORE_CHANGE_TURN_AND_FLIP_CARD = 1500; // ms
 
 const FindPair = ({ gameId, lobbyName }: Props) => {
   // Before show the cards you need to show the lobby Components and the players must be 2 and the owner should press start
@@ -58,7 +60,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
   const name_ref = useRef(name);
   const router_ref = useRef(router);
 
-  //modal state
+  // Modal state
   const [ModalOpen, setModalOpen] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>('');
   const openModal = (message: string) => {
@@ -68,6 +70,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
   const closeModal = () => setModalOpen(false);
   const [disconnectModalOpen, setDisconnectModalOpen] = useState<boolean>(false);
   const [disconnectModalMessage, setDisconnectModalMessage] = useState<string>('');
+  const errorMessage = useRef<string | null>(null);
 
   // Initialize game state
   useEffect(() => {
@@ -146,8 +149,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
 
       // Get the update of the deck
       newSocket.on('receive-game-update', (cardDeck: CardData[], turn: number) => {
-        console.log('Received an update, turn: ', turn);
-        setMessage(`Received a deck update...`);
+        // setMessage(`Received a deck update...`);
         setClientGameState({ ...useClientGameState, cardDeck, turn });
       });
 
@@ -157,10 +159,9 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
 
       newSocket.on('change-turn', (receivedLobby: ServerLobby) => {
         receivedLobby.players = new Set(receivedLobby.players);
-        console.log('Time to change turn! Now is ', receivedLobby.gameState.turn);
         // Wait 1 seconds before change turn!
-        new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
-          setMessage(`Change turn to ${receivedLobby.gameState.turn}`);
+        new Promise((resolve) => setTimeout(resolve, TIMER_BEFORE_CHANGE_TURN_AND_FLIP_CARD)).then(() => {
+          setMessage(`Now is ${getPlayerFromSet(receivedLobby.players, receivedLobby.gameState.turn).username}'s turn`);
           // This update the score
           setServerLobby(receivedLobby);
           // This update the deck and the turn
@@ -174,6 +175,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
 
       newSocket.on('end-game', async (result: GameResultType) => {
         const stringResult = JSON.stringify(result);
+        errorMessage.current = 'SKIP';
         router_ref.current.push({
           pathname: './game-result',
           query: { result: stringResult },
@@ -181,13 +183,27 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
         return;
       });
 
+      newSocket.on('lobby-full', () => {
+        console.log('Lobby is full!');
+        errorMessage.current = 'Lobby is full';
+        // router.push({ pathname: '/lobby', query: { error: 'lobby-full' } });
+      });
+
       newSocket.on('disconnect', () => {
         console.log('Disconnected from server');
-        setDisconnectModalMessage('A player has disconnected. You will be redirected to the lobby.');
-        setDisconnectModalOpen(true);
-        setTimeout(() => {
-          router.push('/lobby');
-        }, 5000);
+        if (errorMessage.current) {
+          setDisconnectModalMessage(errorMessage.current);
+          setDisconnectModalOpen(true);
+        } else if (errorMessage.current === 'SKIP') {
+          // If SKIP means that redirect is not required
+          return;
+        } else {
+          setDisconnectModalMessage('A player has disconnected. You will be redirected to the lobby.');
+          setDisconnectModalOpen(true);
+          setTimeout(() => {
+            router.push({ pathname: '/lobby' });
+          }, 5000);
+        }
       });
       setSocket(newSocket);
       setSocketReady(true);
@@ -201,13 +217,27 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
   // Get the update from the child and emit to every client!
   const handleUpdateDeck = (cardDeck: CardData[]) => {
     setClientGameState({ ...useClientGameState, cardDeck });
-    console.log('Send update to server');
     useSocket.emit('send-game-update', cardDeck, useClientGameState.user_id);
   };
 
   if (!isGameStateReady || !isSocketReady || useClientGameState.cardDeck.length === 0) {
     return (
       <div>
+        {disconnectModalOpen && (
+          <FlexModal closeModal={closeModal}>
+            <div className="p-6">
+              <h2 className="text-2xl font-semibold mb-4">{disconnectModalMessage}</h2>
+              <div className="flex items-center justify-center">
+                <button
+                  onClick={() => router.push({ pathname: '/lobby' })}
+                  className="bg-[#4e92b2] text-white py-2 px-4 rounded mr-2"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </FlexModal>
+        )}
         <h1>Please wait...</h1>
         <p>The game is still loading...</p>
       </div>
@@ -252,8 +282,9 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
               <button
                 onClick={() => handleStartButton()}
                 disabled={!isReadyToStart}
-                className={`py-3 px-6 rounded-md shadow-md ${isReadyToStart ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400'
-                  }`}
+                className={`py-3 px-6 rounded-md shadow-md ${
+                  isReadyToStart ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400'
+                }`}
               >
                 Start Game
               </button>
