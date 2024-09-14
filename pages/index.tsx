@@ -15,7 +15,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const csrfToken = await getCsrfToken(context);
   return {
     props: {
-      csrfToken: csrfToken || null, // Use null if csrfToken might be undefined
+      csrfToken: csrfToken || null,
     },
   };
 }
@@ -60,17 +60,17 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
   return (
     <>
       <div
-  className="relative flex flex-col items-start justify-center min-h-screen
-bg-no-repeat bg-center md:hidden bg-[#25dad1]"
-  style={{ backgroundImage: "url('/LandingPage/landpage_md.jpeg')", backgroundSize: '80%' }}
->
-  <div className="flex-1 min-w-full flex items-start justify-center flex-col z-10">
-    <div className="fixed z-20 flex flex-row gap-4 bottom-72 left-0 right-0 mx-auto items-center justify-center">
-      <button
-        onClick={openSignInModal}
-        className="bg-red-700 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 md:py-4 md:px-8 lg:py-3 lg:px-6 rounded-full shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
+        className="relative flex flex-col items-start justify-center min-h-screen
+        bg-no-repeat bg-center md:hidden bg-[#25dad1]"
+        style={{ backgroundImage: "url('/LandingPage/landpage_md.jpeg')", backgroundSize: '80%' }}
       >
-        Login
+        <div className="flex-1 min-w-full flex items-start justify-center flex-col z-10">
+          <div className="fixed z-20 flex flex-row gap-4 bottom-72 left-0 right-0 mx-auto items-center justify-center">
+        <button
+          onClick={openSignInModal}
+          className="bg-red-700 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 md:py-4 md:px-8 lg:py-3 lg:px-6 rounded-full shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
+        >
+          Login
       </button>
       {signInModalOpen && (
         <FlexModal closeModal={closeSignInModal} title="">
@@ -95,7 +95,7 @@ bg-no-repeat bg-center md:hidden bg-[#25dad1]"
 
 <div
   className="relative md:flex flex-col items-start justify-center min-h-screen
-bg-no-repeat bg-[#25dbd1] bg-center hidden md:visible bg-contain"
+  bg-no-repeat bg-[#25dbd1] bg-center hidden md:visible bg-contain"
   style={{ backgroundImage: "url('/LandingPage/landpage.svg')", backgroundSize: '100%' }}
 >
   <div className="fixed z-20 flex flex-row gap-4 bottom-72 left-40 items-center justify-center">
