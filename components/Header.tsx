@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Poppins } from 'next/font/google';
+import { useState } from 'react';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -12,90 +13,154 @@ const poppins = Poppins({
 export const Header: React.FC = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const isGamePage = router.pathname.includes('/game');
+  const isInGamePage = router.pathname.includes('/find-pair');
   const isMyPage = router.pathname === '/mypage';
-  const isSelectGamePage = router.pathname === '/select-game';
-  const isExpressionPage = router.pathname === '/game/expression';
-  const isLearningPage = router.pathname === '/game/learning';
-  const isGameFindPair = router.pathname === '/game/find-pair';
-  const isGameQuickAnswer = router.pathname === '/game/quick-answer';
 
   const handleSelectGame = (path: string) => {
     if (!session) {
-      signIn(undefined, { callbackUrl: path })
+      signIn(undefined, { callbackUrl: path });
     }
-    router.push(path)
-  }
+    router.push(path);
+  };
 
   return (
     <>
       <div
-        className={`flex items-center p-4 bg-gradient-to-r from-[#12dcd8] to-[#0bbfb7] shadow-lg ${poppins.className}`}
+        className={`flex items-center justify-between p-4 bg-gradient-to-r from-[#12dcd8] to-[#0bbfb7] shadow-lg ${poppins.className}`}
       >
-        <div className="flex space-x-6">
-          <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-            <Link href={'/'}>Home</Link>
-          </div>
-          {!isExpressionPage && !isSelectGamePage && (
-            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-              <button onClick={() => {
-                handleSelectGame("/select-game?game-name=newWords")
-              }}>Expression</button>
-            </div>
-          )}
-          {!isLearningPage && !isSelectGamePage && (
-            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-              <button onClick={() => {
-                handleSelectGame("/select-game?game-name=flashCard")
-              }}>Learning</button>
-            </div>
-          )}
-          {!isGameFindPair && !isSelectGamePage && (
-            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-              <button onClick={() => {
-                handleSelectGame("/select-game?game-name=findPairGame")
-              }}>Pairing Game</button>
-            </div>
-          )}
-          {!isGameQuickAnswer && !isSelectGamePage && (
-            <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[#0bbfb7] rounded-md transition-all duration-300 border-b-2 border-transparent">
-              <button onClick={() => {
-                handleSelectGame("/select-game?game-name=quickGame")
-              }}>Quick Answer Game</button>
-            </div>
-          )}
+        <div className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md">
+          <Link href={session ? '/select-game' : '/'}>Home</Link>
         </div>
 
-        {session ? (
-          <div className="ml-auto flex space-x-6">
-            {!isGamePage && (
-              <div
-                className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent"
-                onClick={() => {
-                  signOut();
-                }}
+        <div className="md:hidden">
+          <button onClick={() => setMenuOpen(!menuOpen)} className="text-white text-2xl focus:outline-none">
+            <div className="space-y-1">
+              <span className="block w-6 h-0.5 bg-white"></span>
+              <span className="block w-6 h-0.5 bg-white"></span>
+              <span className="block w-6 h-0.5 bg-white"></span>
+            </div>
+          </button>
+        </div>
+
+        <div className="hidden md:flex space-x-6">
+          {!isInGamePage && (
+            <>
+              <button
+                onClick={() => handleSelectGame('/game/expression')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
+              >
+                Expression
+              </button>
+              <button
+                onClick={() => handleSelectGame('/game/flash-card')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
+              >
+                Learning
+              </button>
+              <button
+                onClick={() => handleSelectGame('/lobby')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
+              >
+                Pairing Game
+              </button>
+              <button
+                onClick={() => handleSelectGame('/lobby')}
+                className="text-white text-lg font-medium hover:bg-[#0bbfb7] px-3 py-1 rounded-md"
+              >
+                Quick Answer Game
+              </button>
+            </>
+          )}
+
+          {session ? (
+            <>
+              {!isMyPage && (
+                <Link
+                  href={'/mypage'}
+                  className="text-white text-lg font-medium hover:bg-[var(--magenta)] px-3 py-1 rounded-md"
+                >
+                  My Page
+                </Link>
+              )}
+              <button
+                onClick={() => signOut()}
+                className="text-white text-lg font-medium hover:bg-[var(--magenta)] px-3 py-1 rounded-md"
               >
                 Log out
-              </div>
-            )}
-            {!isGamePage && !isMyPage && (
-              <div className="cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent">
-                <Link href={'/mypage'}>My page</Link>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div
-            className="ml-auto cursor-pointer text-white text-lg font-medium px-3 py-1 hover:bg-[var(--magenta)] rounded-md transition-all duration-300 border-b-2 border-transparent"
-            onClick={() => {
-              signIn(undefined, { callbackUrl: '/mypage' });
-            }}
-          >
-            Log in
-          </div>
-        )}
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => signIn(undefined, { callbackUrl: '/mypage' })}
+              className="text-white text-lg font-medium hover:bg-[var(--magenta)] px-3 py-1 rounded-md"
+            >
+              Log in
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden fixed right-0 bg-[#12dcd8] shadow-lg flex flex-col space-y-4 p-4 items-center justify-center w-1/2 transition-transform transform translate-x-0 z-50">
+          {!isInGamePage && (
+            <>
+              <button
+                onClick={() => handleSelectGame('/game/expression')}
+                className="text-white text-lg font-medium bg-transparent hover:bg-[#0bbfb7] w-full py-1 transition-all"
+              >
+                Expression
+              </button>
+              <button
+                onClick={() => handleSelectGame('/game/flash-card')}
+                className="text-white text-lg font-medium bg-transparent hover:bg-[#0bbfb7] w-full py-1 transition-all"
+              >
+                Learning
+              </button>
+              <button
+                onClick={() => handleSelectGame('/lobby')}
+                className="text-white text-lg font-medium bg-transparent hover:bg-[#0bbfb7] w-full py-1 transition-all"
+              >
+                Pairing Game
+              </button>
+              <button
+                onClick={() => handleSelectGame('/lobby')}
+                className="text-white text-lg font-medium bg-transparent hover:bg-[#0bbfb7] w-full py-1 transition-all"
+              >
+                Quick Answer Game
+              </button>
+            </>
+          )}
+
+          {session ? (
+            <>
+              {!isMyPage && (
+                <button
+                  onClick={() => handleSelectGame('/mypage')}
+                  className="text-white text-lg font-medium hover:bg-[var(--magenta)] w-full py-1 transition-all"
+                >
+                  My Page
+                </button>
+              )}
+              <button
+                onClick={() => signOut()}
+                className="text-white text-lg font-medium hover:bg-[var(--magenta)] w-full py-1 transition-all"
+              >
+                Log out
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => signIn(undefined, { callbackUrl: '/mypage' })}
+              className="text-white text-lg font-medium hover:bg-[var(--magenta)] px-6 py-2 transition-all"
+            >
+              Log in
+            </button>
+          )}
+        </div>
+      )}
     </>
   );
 };

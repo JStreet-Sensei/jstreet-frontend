@@ -20,21 +20,12 @@ const Lobby: React.FC = () => {
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const fetchLobbies = async () => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, 1000);
-    }).then(async () => {
-      try {
-        const response = await fetch(getFetchBackendURL('/api/lobbies'));
-        if (!response.ok) {
-          throw new Error('Failed to fetch lobbies');
-        }
-        const data: LobbyType[] = await response.json();
-        setLobbies(data);
-        fetchLobbies();
-      } catch (error) {
-        console.error('Error fetching lobbies:', error);
-      }
-    });
+    const response = await fetch(getFetchBackendURL('/api/lobbies'));
+    if (!response.ok) {
+      throw new Error('Failed to fetch lobbies');
+    }
+    const data: LobbyType[] = await response.json();
+    setLobbies(data);
   };
 
   useEffect(() => {
@@ -117,12 +108,20 @@ const Lobby: React.FC = () => {
             className="w-full px-4 py-2 border rounded"
           />
           {error && <p className="text-red-600">{error}</p>}
-          <button
-            onClick={handleCreateLobby}
-            className="w-full px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]"
-          >
-            Create
-          </button>
+          <div className="flex gap-6">
+            <button
+              onClick={handleCreateLobby}
+              className="w-3/6 px-4 py-2 bg-[#4e92b2] text-white rounded hover:bg-[#11dfd9ff]"
+            >
+              Create
+            </button>
+            <button
+              onClick={fetchLobbies}
+              className="w-3/6 px-4 py-2 bg-[#71b24e] text-white rounded hover:bg-[#11dfd9ff]"
+            >
+              Refresh
+            </button>
+          </div>
         </div>
         <div className="my-4">
           <ul className="list-disc pl-5">

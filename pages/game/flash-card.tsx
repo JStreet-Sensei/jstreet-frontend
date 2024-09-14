@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createContext } from 'react';
 import { phraseType, learningContextType } from '../../types/types';
 import FlashCard from '../../components/game/flashCard/FlashCard';
-import styles from "@/styles/Card.module.css";
+import styles from '@/styles/Card.module.css';
 import { getSession } from 'next-auth/react';
 import { getFetchBackendURL } from '@/utils/utils-data';
 import { useRouter } from 'next/router';
@@ -41,6 +41,7 @@ const FlashCardPage = () => {
   const [phrases, setPhrases] = useState<phraseType[]>([]);
   const [correctPhrases, setCorrectPhrases] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [noLearnedWords, setNoLearnedWords] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>(null);
 
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -50,9 +51,9 @@ const FlashCardPage = () => {
     if (!queryUserInfo) {
       getSession().then((session) => {
         const newGameState: any = {
-          message: "Test",
+          message: 'Test',
           FlashCardPage: null,
-          playerName: session?.user.username || "Player",
+          playerName: session?.user.username || 'Player',
           playerId: session?.user.pk || 0,
         };
         setUserInfo(newGameState.playerId);
@@ -62,32 +63,25 @@ const FlashCardPage = () => {
     }
   }, []);
 
-  // Log userInfo test
-  // useEffect(() => {
-  //   if (userInfo !== null) {
-  //     console.log('UserInfo:', userInfo);
-  //   }
-  // }, []);
-
   // Fetch cards
   const fetchPhrases = async () => {
     if (userInfo !== null) {
       setLoading(true); // Set loading to true
       try {
-        const response = await fetch(getFetchBackendURL(`/api/flash-card?limits=10&user-id=${userInfo}`));
-        // const response = await fetch(`http://localhost:8000/api/flash-card?limits=10&user-id=${userInfo}`);
+        const response = await fetch(getFetchBackendURL(`/api/flash-card`, `limits=10&user-id=${userInfo}`));
         const result = await response.json();
-        // console.log('API Response:', result);
-        // console.log(userInfo);
 
         const data: ContentType[] = result.data || [];
 
-        // Transform data 
-        const transformedPhrases: phraseType[] = data.map(phrase => ({
+        //The fetch return no data
+        if (data.length === 0) setNoLearnedWords(true);
+
+        // Transform data
+        const transformedPhrases: phraseType[] = data.map((phrase) => ({
           id: phrase.content_id,
           japanese: phrase.japanese_slang,
           english: phrase.english_slang,
-          description: phrase.description
+          description: phrase.description,
         }));
 
         setPhrases(shuffleArray(transformedPhrases));
@@ -121,11 +115,11 @@ const FlashCardPage = () => {
         phrases,
         correctPhrases,
         storeCorrectPhrases,
-        resetGame
+        resetGame,
       }}
     >
       <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-        <FlashCard loading={loading} />
+        <FlashCard loading={loading} noLearnedWords={noLearnedWords} />
       </div>
     </SelectedMaterial.Provider>
   );
