@@ -144,9 +144,9 @@ const ExpressionPage: React.FC = () => {
           )}
         </div>
       )}
-      <div className="mt-10">
+      <div className="mt-5">
         <Link href={{ pathname: '/game/flash-card', query: { userInfo } }} passHref>
-          <button className="mt-5 w-2/3 mx-auto px-9 py-4 text-center text-white bg-rose-900 rounded-full shadow-lg hover:bg-rose-950 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105">
+          <button className="mt-5 w-2/3 mx-auto px-9 py-4 text-center text-white bg-[var(--savoy-blue)] rounded-full shadow-lg hover:bg-[#4152b3] focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105">
             Go to Flashcards
           </button>
         </Link>
