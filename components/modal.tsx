@@ -3,7 +3,7 @@ import React from 'react';
 interface ModalProps {
   children?: React.ReactNode;
   closeModal: () => void;
-  title?: string;
+  title?: any;
 }
 
 const FlexModal: React.FC<ModalProps> = ({ children, closeModal, title }) => {

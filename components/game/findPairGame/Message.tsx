@@ -19,7 +19,7 @@ export const Message: React.FC<MessageProps> = ({ message }) => {
   }, [message]);
 
   return (
-    <div>
+    <div className="w-full">
       <p>Message: {useMessage}</p>
     </div>
   );
