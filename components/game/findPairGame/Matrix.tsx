@@ -98,7 +98,7 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) =
   return (
     <>
       <div
-        className={`${styles.pattern_bg} grid grid-cols 4 gap-4 grid-cols-4 place-items-center md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-8 align-middle justify-self-auto`}
+        className={`grid grid-cols 4 gap-4 grid-cols-4 place-items-center md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 align-middle justify-self-auto`}
       >
         {useCardElement}
       </div>

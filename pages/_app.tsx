@@ -1,6 +1,6 @@
 import { AppProps } from 'next/app';
-import '../styles/globals.css';
-import { Layout } from '../components/Layouts';
+import '@/styles/globals.css';
+import { Layout } from '@/components/Layouts';
 import { SessionProvider } from 'next-auth/react';
 import Seo from '@/components/Seo';
 
