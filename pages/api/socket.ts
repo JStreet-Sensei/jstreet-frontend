@@ -88,6 +88,10 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
         // Set the start timer
         if (lobby) lobby.startTime = new Date();
         io.to(lobbyRoom).emit('start');
+        // Delete the lobby from the DB
+        axios({ url: `${getBackendURL()}/api/lobbies/${lobby_id}/`, method: 'DELETE' })
+          .then(() => console.log('Lobby deleted succefully'))
+          .catch(() => console.log('Cannot delete the lobby'));
       });
 
       socket.on('send-game-update', (cardDeck: CardData[]) => {
