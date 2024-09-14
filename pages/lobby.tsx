@@ -97,13 +97,15 @@ const Lobby: React.FC = () => {
         </div>
 
         <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="  Add Name"
-            value={lobbyName}
-            onChange={(e) => setLobbyName(e.target.value)}
-            className="w-full py-2 border rounded "
-          />
+          <div className="w-webkit-fill-available">
+            <input
+              type="text"
+              placeholder="Add Name"
+              value={lobbyName}
+              onChange={(e) => setLobbyName(e.target.value)}
+              className="w-full py-2 border rounded text-center"
+            />
+          </div>
           {error && <p className="text-red-600">{error}</p>}
           <div className="flex gap-6">
             <button
