@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { getFetchBackendURL } from '@/utils/utils-data';
 import { getSession, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 interface ContentItem {
   content_id: number;
@@ -44,7 +47,13 @@ const ExpressionPage: React.FC = () => {
       };
       fetchData();
     }
-  }, [status]);
+  }, [status, session]);
+
+  useEffect(() => {
+    if (currentIndex === content.length - 1 || content.length === 0) {
+      notifyLastContent()
+    }
+  }, [currentIndex])
 
   const handleStartLearning = () => {
     setIsLearning(true);
@@ -73,7 +82,10 @@ const ExpressionPage: React.FC = () => {
         }
 
         // go to the next content
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % content.length);
+        setCurrentIndex(() => {
+          const nextIndex = currentIndex + 1 % content.length
+          return nextIndex
+        });
       } catch (error) {
         console.error('Error posting learned word:', error);
       }
@@ -82,73 +94,112 @@ const ExpressionPage: React.FC = () => {
 
   const handlePreviousContent = () => {
     if (content.length > 0) {
-      setCurrentIndex((prevIndex) => (prevIndex - 1 + content.length) % content.length);
+      setCurrentIndex(() => {
+        const previousIndex = (content.length + currentIndex) % content.length - 1
+        return previousIndex
+      });
     }
   };
 
-  const isFirstCard = currentIndex === 0;
-  const isLastCard = content.length > 0 && currentIndex === content.length - 1;
+  const notifyLastContent = () => {
+    toast.info('You have reached the end of the content! All the material is available in the flashcards to practice.', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      {!isLearning ? (
-        <button
-          className="px-9 py-4 text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600"
-          onClick={handleStartLearning}
-        >
-          Start Learning
-        </button>
-      ) : (
-        <div className="max-w-lg p-6 bg-white rounded-lg shadow-lg">
-          {content.length > 0 ? (
-            <>
-              <h2 className="text-2xl font-bold mb-4">{content[currentIndex].japanese_slang}</h2>
-              <p className="mb-2">
-                <strong>English Slang:</strong> {content[currentIndex].english_slang}
-              </p>
-              <p className="mb-2">
-                <strong>Formal Version:</strong> {content[currentIndex].formal_version}
-              </p>
-              <p className="mb-4">
-                <strong>Description:</strong> {content[currentIndex].description}
-              </p>
-              <div className="flex justify-center">
-                {!isFirstCard && (
-                  <button
-                    className="px-4 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600"
-                    onClick={handlePreviousContent}
-                  >
-                    Back
-                  </button>
-                )}
-                {!isLastCard && (
-                  <button
-                    className={`px-4 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 ${isFirstCard ? '' : 'ml-24'}`}
-                    onClick={handleNextContent}
-                  >
-                    Next
-                  </button>
-                )}
-              </div>
-              {isLastCard && (
-                <p className="mt-4 text-xl font-semibold text-red-600">
-                  You have reached the end of the content! All the material is available in the flash cards to practice.
-                </p>
-              )}
-            </>
-          ) : (
-            <p className="text-lg text-gray-700">No content available.</p>
-          )}
-        </div>
-      )}
-      <div className="mb-4">
-        <Link href={{ pathname: '/game/flash-card', query: { userInfo } }} passHref>
-          <div className="mt-4 px-4 py-3 text-white bg-purple-500 rounded-lg shadow-md hover:bg-purple-600 cursor-pointer">
-            Go to Flashcards
+    <>
+      <div className="flex flex-1 flex-col justify-center min-h-80 mt-12">
+        {!isLearning ? (
+          <div className="flex items-center justify-center mb-10 space-x-4">
+            <img src="/new-expression-fox.png" alt="Expression Fox" className="w-16 h-16" />
+
+            <button
+              className="w-2/3 px-9 py-4 text-center text-white bg-cyan-700 rounded-lg shadow-lg hover:bg-cyan-900 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105"
+              onClick={handleStartLearning}
+            >
+              Start Learning
+            </button>
           </div>
-        </Link>
+        ) : (
+          <div className="md:max-w-md p-8 bg-white rounded-lg shadow-xl h-96">
+            {content.length > 0 ? (
+              <>
+                <div className='h-80  overflow-y-auto'>
+                  <h2 className="text-2xl font-bold mb-4">{content[currentIndex].japanese_slang}</h2>
+                  <p className="mb-2">
+                    <strong>English Slang:</strong> {content[currentIndex].english_slang}
+                  </p>
+                  <p className="mb-2">
+                    <strong>Formal Version:</strong> {content[currentIndex].formal_version}
+                  </p>
+                  <p className="mb-4">
+                    <strong>Description:</strong> {content[currentIndex].description}
+                  </p>
+                  {/* {(currentIndex === content.length - 1) && (
+                    <div className="text-center mt-6">
+                      <p className="mt-4 text-xl font-semibold text-red-700">
+                        You have reached the end of the content! All the material is available in the flashcards to
+                        practice. ↓
+                      </p>
+                    </div>
+                  )} */}
+                </div>
+                <div className="flex justify-center mt-3">
+                  {(
+                    <button
+                      className={`px-4 py-2 text-white bg-red-700 rounded-lg shadow-md hover:bg-red-800 ml-20 ${currentIndex === 0 ? 'opacity-0 pointer-events-none' : ''}`}
+                      onClick={handlePreviousContent}
+                    >
+                      Back
+                    </button>
+                  )}
+                  {(
+                    <button
+                      className={`px-4 py-2 text-white bg-cyan-700 rounded-lg shadow-md hover:bg-cyan-900 ml-20 ${currentIndex === content.length - 1 ? 'opacity-0 pointer-events-none' : ''}`}
+                      onClick={handleNextContent}
+                    >
+                      Next
+                    </button>
+                  )}
+                </div>
+
+              </>
+            ) : (
+              <p className="text-lg text-gray-700">No content available.</p>
+            )}
+          </div>
+        )}
+        <div className="mt-5 flex items-center justify-center space-x-4">
+          <img src="/practice-nife.png" alt="Practice Nife" className="w-16 h-16" />
+          <Link href={{ pathname: '/game/flash-card', query: { userInfo } }} passHref>
+            <button className="w-2/3 px-9 py-4 text-center text-white bg-[var(--savoy-blue)] rounded-lg shadow-lg hover:bg-[#4152b3] focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105">
+              Go to Flashcards
+            </button>
+          </Link>
+        </div>
       </div>
-    </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        limit={1}
+      />
+    </>
   );
 };
 
