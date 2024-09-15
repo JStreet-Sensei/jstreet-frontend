@@ -90,7 +90,7 @@ const ExpressionPage: React.FC = () => {
   const isLastCard = content.length > 0 && currentIndex === content.length - 1;
 
   return (
-    <div className="flex flex-1 flex-col justify-center min-h-screen">
+    <div className="flex flex-1 flex-col justify-center min-h-80 mt-12">
       {!isLearning ? (
         <div className="flex items-center justify-center mb-10 space-x-4">
           <img src="/new-expression-fox.png" alt="Expression Fox" className="w-16 h-16" />
@@ -103,45 +103,51 @@ const ExpressionPage: React.FC = () => {
           </button>
         </div>
       ) : (
-        <div className="max-w-xl p-8 bg-white rounded-lg shadow-xl">
+        <div className="max-w-xl p-8 bg-white rounded-lg shadow-xl h-96">
           {content.length > 0 ? (
             <>
-              <h2 className="text-2xl font-bold mb-4">{content[currentIndex].japanese_slang}</h2>
-              <p className="mb-2">
-                <strong>English Slang:</strong> {content[currentIndex].english_slang}
-              </p>
-              <p className="mb-2">
-                <strong>Formal Version:</strong> {content[currentIndex].formal_version}
-              </p>
-              <p className="mb-4">
-                <strong>Description:</strong> {content[currentIndex].description}
-              </p>
-              <div className="flex justify-center">
-                {!isFirstCard && (
+              <div className='h-80  overflow-y-auto'>
+                <h2 className="text-2xl font-bold mb-4">{content[currentIndex].japanese_slang}</h2>
+                <p className="mb-2">
+                  <strong>English Slang:</strong> {content[currentIndex].english_slang}
+                </p>
+                <p className="mb-2">
+                  <strong>Formal Version:</strong> {content[currentIndex].formal_version}
+                </p>
+                <p className="mb-4">
+                  <strong>Description:</strong> {content[currentIndex].description}
+                </p>
+                {isLastCard && (
+                  <div className="text-center mt-6">
+                    <p className="mt-4 text-xl font-semibold text-red-700">
+                      You have reached the end of the content! All the material is available in the flashcards to
+                      practice. ↓
+                    </p>
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-center mt-3">
+                {(
+                  // {!isFirstCard && (
                   <button
-                    className="px-4 py-2 text-white bg-red-700 rounded-lg shadow-md hover:bg-red-800"
+                    className={`px-4 py-2 text-white bg-red-700 rounded-lg shadow-md hover:bg-red-800 ml-24 ${isFirstCard ? 'opacity-0 pointer-events-none' : ''}`}
                     onClick={handlePreviousContent}
                   >
                     Back
                   </button>
                 )}
-                {!isLastCard && (
+                {(
+                  // {!isLastCard && (
                   <button
-                    className={`px-4 py-2 text-white bg-cyan-700 rounded-lg shadow-md hover:bg-cyan-900 ${isFirstCard ? '' : 'ml-24'}`}
+                    className={`px-4 py-2 text-white bg-cyan-700 rounded-lg shadow-md hover:bg-cyan-900 ml-24 ${isLastCard ? 'opacity-0 pointer-events-none' : ''}`}
+                    // className={`px-4 py-2 text-white bg-cyan-700 rounded-lg shadow-md hover:bg-cyan-900 ${isFirstCard ? '' : 'ml-24'}`}
                     onClick={handleNextContent}
                   >
                     Next
                   </button>
                 )}
               </div>
-              {isLastCard && (
-                <div className="text-center mt-6">
-                  <p className="mt-4 text-xl font-semibold text-red-700">
-                    You have reached the end of the content! All the material is available in the flashcards to
-                    practice. ↓
-                  </p>
-                </div>
-              )}
+
             </>
           ) : (
             <p className="text-lg text-gray-700">No content available.</p>
