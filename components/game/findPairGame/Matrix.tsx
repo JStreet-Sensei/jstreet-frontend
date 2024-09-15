@@ -1,20 +1,21 @@
 import { ReactNode, useEffect, useState } from 'react';
 import Card from './Card';
 import { checkDataSelectable, getSelectedCards } from '@/utils/utils-data';
-import { CardData, ClientGameState } from '@/types/game';
+import { CardData, ClientGameState, Player } from '@/types/game';
 import { clone } from 'lodash';
 import styles from '@/styles/Game.module.css';
 
 type MatrixProps = {
   handleUpdateDeck: (cardDeck: CardData[]) => void;
   gameState: ClientGameState;
+  players: Set<Player>;
 };
-export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) => {
+export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState, players }) => {
   // Default value
   const GRID_SIZE = 4;
 
   // Card elements state
-  const [useCardElement, setCardElement] = useState<ReactNode>([]);
+  const [useCardElement, setCardElement] = useState<ReactNode[]>([]);
   const [useRefresh, setRefresh] = useState(false);
   const [useCardDeck, setCardDeck] = useState(gameState.cardDeck);
   const [isCardClickable, setCardClickable] = useState(false);
@@ -39,7 +40,7 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) =
           let actualCard = useCardDeck[counterKey];
           cardList.push(
             <Card
-              frontText={actualCard.front}
+              players={players}
               backText={actualCard.back}
               key={counterKey}
               selectCard={handleSelectACard}
@@ -98,9 +99,20 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) =
   return (
     <>
       <div
-        className={`${styles.pattern_bg} grid grid-cols 4 gap-4 grid-cols-4 place-items-center md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-8 align-middle justify-self-auto`}
+        className={`${styles.table_background} border-4 border-solid border-black grid grid-cols-2 gap-4 place-items-center md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 align-middle justify-self-auto py-2`}
       >
-        {useCardElement}
+        {useCardElement ? (
+          useCardElement.map((card, index) => (
+            <div
+              key={index}
+              className="transition-shadow duration-300 hover:shadow-[0_20px_35px_-15px_rgba(17,223,217,0.9)]"
+            >
+              {card}
+            </div>
+          ))
+        ) : (
+          <p>No cards available</p>
+        )}
       </div>
     </>
   );

@@ -298,7 +298,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
               <Message message={useMessage} />
               <button
                 onClick={() => openModal('')} // Open the modal on click
-                className=" bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600"
+                className=" bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 m-4"
               >
                 X
               </button>

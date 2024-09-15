@@ -21,9 +21,8 @@ export const PlayerList = ({ currentPlayerUsername, players, actualTurn, ...prop
       let counterKey = 0;
       playersArray.forEach((player: Player) => {
         const playerTurn = player.user_id === actualTurn;
-        console.log(playerTurn);
         newPlayersComponets.push(
-          <PlayerShow player={player} key={counterKey} isPlayerTurn={playerTurn} />
+          <PlayerShow player={player} key={counterKey} isPlayerTurn={playerTurn} playerIndex={counterKey} />
         );
         counterKey += 1;
       });
@@ -35,8 +34,10 @@ export const PlayerList = ({ currentPlayerUsername, players, actualTurn, ...prop
     <>
       <div className="mt-2">
         <div className="mt-2 pt-5">
-          <div className="float-left">{usePlayers ? usePlayers[0] : <></>}</div>
-          <div className="float-right">{usePlayers ? usePlayers[1] : <></>}</div>
+          <div className="float-left bg-white text-lg font-medium rounded-md">{usePlayers ? usePlayers[0] : <></>}</div>
+          <div className="float-right bg-white text-lg font-medium rounded-md">
+            {usePlayers ? usePlayers[1] : <></>}
+          </div>
         </div>
         <div className="clear-both"></div>
       </div>
