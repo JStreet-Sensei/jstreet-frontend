@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import gameStyles from '@/styles/Game.module.css';
 
 type MessageProps = {
   message: string;
@@ -10,17 +11,29 @@ type MessageProps = {
  * @returns
  */
 export const Message: React.FC<MessageProps> = ({ message }) => {
-  // Flip true means that show the back of the cards
-  const [useMessage, setMessage] = useState(message);
+  const [messagesQueue, setMessagesQueue] = useState<string[]>([]);
+  const [currentMessage, setCurrentMessage] = useState<string>('');
 
   useEffect(() => {
-    setMessage(message);
-    new Promise((resolve) => setTimeout(resolve, 2000)).then(() => setMessage(''));
+    setMessagesQueue((prevQueue) => [...prevQueue, message]);
   }, [message]);
 
+  useEffect(() => {
+    if (messagesQueue.length === 0) return;
+
+    setCurrentMessage(messagesQueue[0]);
+
+    const timer = setTimeout(() => {
+      setCurrentMessage('');
+      setMessagesQueue((prevQueue) => prevQueue.slice(1));
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [messagesQueue]);
+
   return (
-    <div className="w-full">
-      <p>Message: {useMessage}</p>
+    <div className="w-full flex justify-center items-center">
+      <p className="text-white text-4xl font-bold h-5">{currentMessage}</p>
     </div>
   );
 };
