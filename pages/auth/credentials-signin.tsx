@@ -1,4 +1,3 @@
-import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getCsrfToken, useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
@@ -59,12 +58,4 @@ export default function SignIn() {
       </form>
     </>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  };
 }
