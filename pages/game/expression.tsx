@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { getFetchBackendURL } from '@/utils/utils-data';
 import { getSession, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ContentItem {
   content_id: number;
@@ -44,7 +46,13 @@ const ExpressionPage: React.FC = () => {
       };
       fetchData();
     }
-  }, [status]);
+  }, [status, session]);
+
+  useEffect(() => {
+    if (currentIndex === content.length - 1 || content.length === 0) {
+      notifyLastContent()
+    }
+  }, [currentIndex])
 
   const handleStartLearning = () => {
     setIsLearning(true);
@@ -92,6 +100,19 @@ const ExpressionPage: React.FC = () => {
     }
   };
 
+  const notifyLastContent = () => {
+    toast.info('You have reached the end of the content! All the material is available in the flashcards to practice.', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  }
+
   return (
     <>
       <div className="flex flex-1 flex-col justify-center min-h-80 mt-12">
@@ -123,14 +144,6 @@ const ExpressionPage: React.FC = () => {
                   <p className="mb-4">
                     <strong>Description:</strong> {content[currentIndex].description}
                   </p>
-                  {(currentIndex === content.length - 1) && (
-                    <div className="text-center mt-6">
-                      <p className="mt-4 text-xl font-semibold text-red-700">
-                        You have reached the end of the content! All the material is available in the flashcards to
-                        practice. ↓
-                      </p>
-                    </div>
-                  )}
                 </div>
                 <div className="flex justify-center mt-3">
                   {(
@@ -166,6 +179,19 @@ const ExpressionPage: React.FC = () => {
           </Link>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        limit={1}
+      />
     </>
   );
 };
