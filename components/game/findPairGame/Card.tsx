@@ -58,7 +58,7 @@ export const Card: React.FC<CardProps> = ({
   };
 
   return (
-    <div className={styles.flip_card} onClick={handleFlip}>
+    <div className={styles.flip_card + ` cursor-grab`} onClick={handleFlip}>
       <div className={`${styles.flip_card_inner} ${useFlip ? styles.flip : ''}`}>
         <div className={styles.flip_card_front}>
           <Image src={NinjaLogo} alt="NinjaLogo" width={100} height={100} className="bg-white rounded-full p-0.5" />

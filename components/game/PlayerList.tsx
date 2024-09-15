@@ -34,8 +34,10 @@ export const PlayerList = ({ currentPlayerUsername, players, actualTurn, ...prop
     <>
       <div className="mt-2">
         <div className="mt-2 pt-5">
-          <div className="float-left bg-white rounded-md">{usePlayers ? usePlayers[0] : <></>}</div>
-          <div className="float-right bg-white rounded-md">{usePlayers ? usePlayers[1] : <></>}</div>
+          <div className="float-left bg-white text-lg font-medium rounded-md">{usePlayers ? usePlayers[0] : <></>}</div>
+          <div className="float-right bg-white text-lg font-medium rounded-md">
+            {usePlayers ? usePlayers[1] : <></>}
+          </div>
         </div>
         <div className="clear-both"></div>
       </div>

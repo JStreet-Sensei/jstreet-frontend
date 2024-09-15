@@ -44,17 +44,27 @@
     rgba(128, 16, 124, 1) 48%
   );
   color: var(--magenta);
-  border-radius: 1rem;
 }
 
-.flip_card_back {
-  background: #07182e;
+.flip_card_back,
+.flip_card_back0,
+.flip_card_back1 {
   color: white;
   transform: rotateY(180deg);
   position: relative;
   overflow: hidden;
-  z-index: 2;
-  border-radius: 1rem;
+}
+
+.flip_card_back {
+  background: #07182e;
+}
+
+.flip_card_back0 {
+  background: var(--deep-sky-blue);
+}
+
+.flip_card_back1 {
+  background: var(--magenta);
 }
 
 .flip_card_back::before {
@@ -70,49 +80,13 @@
   border-radius: 1rem;
 }
 
-.flip_card_back::after {
-  content: '';
-  position: absolute;
-  background: #07182e;
-  inset: 5px;
-  border-radius: 15px;
-  z-index: 2;
-}
-
-.flip_card_back0 {
-  background: var(--deep-sky-blue);
-  color: white;
-  transform: rotateY(180deg);
-  position: relative;
-  overflow: hidden;
-  z-index: 2;
-  border-radius: 1rem;
-}
-
-.flip_card_back0::after {
-  content: '';
-  position: absolute;
-  background: #07182e;
-  inset: 5px;
-  border-radius: 15px;
-  z-index: 2;
-}
-
-.flip_card_back1 {
-  background: var(--magenta);
-  color: white;
-  transform: rotateY(180deg);
-  position: relative;
-  overflow: hidden;
-  z-index: 2;
-  border-radius: 1rem;
-}
-
+.flip_card_back::after,
+.flip_card_back0::after,
 .flip_card_back1::after {
   content: '';
   position: absolute;
   background: #07182e;
-  inset: 5px;
+  inset: 10px;
   border-radius: 15px;
   z-index: 2;
 }
