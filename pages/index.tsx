@@ -11,6 +11,10 @@ import 'react-toastify/ReactToastify.css';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+interface SignInProps {
+  csrfToken?: string;
+}
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const csrfToken = await getCsrfToken(context);
   return {

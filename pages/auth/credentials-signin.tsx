@@ -1,7 +1,12 @@
 import { getCsrfToken, useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
-export default function SignIn() {
+
+interface SignInProps {
+  csrfToken?: string;
+}
+
+const SignIn: React.FC<SignInProps> = ({ csrfToken: initialCsrfToken }) => {
   const session = useSession();
   const [csrfToken, setCsrfToken] = useState('');
 
@@ -59,3 +64,5 @@ export default function SignIn() {
     </>
   );
 }
+
+export default SignIn;
