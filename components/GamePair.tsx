@@ -40,7 +40,7 @@ export default function GamePair({ gameState, handleUpdateDeck, players }: Props
             actualTurn={useGameState.turn}
           ></PlayerList>
         </div>
-        <Matrix handleUpdateDeck={handleUpdateDeck} gameState={useGameState}></Matrix>
+        <Matrix handleUpdateDeck={handleUpdateDeck} gameState={useGameState} players={players}></Matrix>
       </div>
     </>
   );

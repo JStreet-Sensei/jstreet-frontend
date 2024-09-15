@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Player } from '../../types/game';
+import { Player } from '@/types/game';
+import gameStyles from '@/styles/Game.module.css';
 
 type PlayerListProps = {
   player: Player | undefined;
   isPlayerTurn: boolean;
+  playerIndex: number;
 };
 
 /**
@@ -11,15 +12,18 @@ type PlayerListProps = {
  * @param player - Player type of object
  * @returns void
  */
-export const PlayerShow = ({ player, isPlayerTurn }: PlayerListProps) => {
+export const PlayerShow = ({ player, isPlayerTurn, playerIndex }: PlayerListProps) => {
+  const animationClass =
+    playerIndex === 0
+      ? gameStyles.animate_shadowRotate_player0
+      : playerIndex === 1
+        ? gameStyles.animate_shadowRotate_player1
+        : '';
+
   return (
-    <>
-      <div
-        className={`border-dashed border-2 px-2 text-white font-bold ${+isPlayerTurn ? ' border-red-600 ' : ' border-sky-700 '}`}
-      >
-        {player?.username} - {player?.score} match {isPlayerTurn}
-      </div>
-    </>
+    <div className={`px-2 font-bold ${isPlayerTurn ? animationClass : ''}`}>
+      {player?.username} - {player?.score} match {isPlayerTurn ? '' : ''}
+    </div>
   );
 };
 
