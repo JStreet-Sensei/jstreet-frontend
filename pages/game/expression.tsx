@@ -159,13 +159,11 @@ const ExpressionPage: React.FC = () => {
         )}
         <div className="mt-5 flex items-center justify-center space-x-4">
           <img src="/practice-nife.png" alt="Practice Nife" className="w-16 h-16" />
-          <div className="mt-5 flex items-center justify-center space-x-4">
-            <Link href={{ pathname: '/game/flash-card', query: { userInfo } }} passHref>
-              <button className="w-2/3 px-9 py-4 text-center text-white bg-[var(--savoy-blue)] rounded-lg shadow-lg hover:bg-[#4152b3] focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105">
-                Go to Flashcards
-              </button>
-            </Link>
-          </div>
+          <Link href={{ pathname: '/game/flash-card', query: { userInfo } }} passHref>
+            <button className="w-2/3 px-9 py-4 text-center text-white bg-[var(--savoy-blue)] rounded-lg shadow-lg hover:bg-[#4152b3] focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105">
+              Go to Flashcards
+            </button>
+          </Link>
         </div>
       </div>
     </>
