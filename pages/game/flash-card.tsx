@@ -118,7 +118,7 @@ const FlashCardPage = () => {
         resetGame,
       }}
     >
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4">
         <FlashCard loading={loading} noLearnedWords={noLearnedWords} />
       </div>
     </SelectedMaterial.Provider>

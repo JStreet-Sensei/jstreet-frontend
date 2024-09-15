@@ -75,7 +75,7 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
             </button>
             {signInModalOpen && (
               <FlexModal closeModal={closeSignInModal} title="">
-                <SignIn csrfToken={csrfToken} />
+                <SignIn />
               </FlexModal>
             )}
             <span className=" h-10  text-white font-bold py-4 px-8 text-2xl">OR</span>
@@ -110,7 +110,7 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
           </button>
           {signInModalOpen && (
             <FlexModal closeModal={closeSignInModal} title="">
-              <SignIn csrfToken={csrfToken} />
+              <SignIn />
             </FlexModal>
           )}
           <span
