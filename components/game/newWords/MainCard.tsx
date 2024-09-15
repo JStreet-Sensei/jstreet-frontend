@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { SelectedMaterial } from '@/pages/game/learning';
+import { SelectedMaterial } from '@/components/game/newWords/learning';
 
 //
 const getPhrase = async (id: number) => {

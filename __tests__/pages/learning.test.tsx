@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import { mockNextUseSession } from '@/utils/mocks';
 import userEvent from '@testing-library/user-event';
 import underTopicPhraseContextRender from '@/utils/mocks-tsx';
-import Learning from '@/pages/game/learning';
+import Learning from '@/components/game/newWords/learning';
 
 jest.mock('next-auth/react');
 
