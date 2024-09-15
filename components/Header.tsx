@@ -23,6 +23,7 @@ export const Header: React.FC = () => {
       signIn(undefined, { callbackUrl: path });
     }
     router.push(path);
+    if (menuOpen) setMenuOpen(false); // Close menu on selection
   };
 
   return (
@@ -145,7 +146,7 @@ export const Header: React.FC = () => {
                 </button>
               )}
               <button
-                onClick={() => signOut()}
+                onClick={() => { signOut(); if (menuOpen) setMenuOpen(false); }}
                 className="text-white text-lg font-medium hover:bg-[var(--magenta)] w-full py-1 transition-all"
               >
                 Log out
@@ -153,7 +154,7 @@ export const Header: React.FC = () => {
             </>
           ) : (
             <button
-              onClick={() => signIn(undefined, { callbackUrl: '/mypage' })}
+              onClick={() => { signIn(undefined, { callbackUrl: '/mypage' }); if (menuOpen) setMenuOpen(false); }}
               className="text-white text-lg font-medium hover:bg-[var(--magenta)] px-6 py-2 transition-all"
             >
               Log in
