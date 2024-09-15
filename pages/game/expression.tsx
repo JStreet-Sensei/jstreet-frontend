@@ -47,10 +47,10 @@ const ExpressionPage: React.FC = () => {
       };
       fetchData();
     }
-  }, [status]);
+  }, [status, session]);
 
   useEffect(() => {
-    if (currentIndex === content.length - 1) {
+    if (currentIndex === content.length - 1 || content.length === 0) {
       notifyLastContent()
     }
   }, [currentIndex])
@@ -86,7 +86,6 @@ const ExpressionPage: React.FC = () => {
           const nextIndex = currentIndex + 1 % content.length
           return nextIndex
         });
-        console.log(currentIndex)
       } catch (error) {
         console.error('Error posting learned word:', error);
       }
@@ -103,7 +102,7 @@ const ExpressionPage: React.FC = () => {
   };
 
   const notifyLastContent = () => {
-    toast.info('🦄 Wow so easy!', {
+    toast.info('You have reached the end of the content! All the material is available in the flashcards to practice.', {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: true,
