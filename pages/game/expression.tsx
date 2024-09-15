@@ -143,14 +143,6 @@ const ExpressionPage: React.FC = () => {
                   <p className="mb-4">
                     <strong>Description:</strong> {content[currentIndex].description}
                   </p>
-                  {/* {(currentIndex === content.length - 1) && (
-                    <div className="text-center mt-6">
-                      <p className="mt-4 text-xl font-semibold text-red-700">
-                        You have reached the end of the content! All the material is available in the flashcards to
-                        practice. ↓
-                      </p>
-                    </div>
-                  )} */}
                 </div>
                 <div className="flex justify-center mt-3">
                   {(
