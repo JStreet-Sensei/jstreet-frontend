@@ -73,7 +73,10 @@ const ExpressionPage: React.FC = () => {
         }
 
         // go to the next content
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % content.length);
+        setCurrentIndex(() => {
+          const nextIndex = currentIndex + 1 % content.length
+          return nextIndex
+        });
       } catch (error) {
         console.error('Error posting learned word:', error);
       }
@@ -82,12 +85,12 @@ const ExpressionPage: React.FC = () => {
 
   const handlePreviousContent = () => {
     if (content.length > 0) {
-      setCurrentIndex((prevIndex) => (prevIndex - 1 + content.length) % content.length);
+      setCurrentIndex(() => {
+        const previousIndex = (content.length + currentIndex) % content.length - 1
+        return previousIndex
+      });
     }
   };
-
-  const isFirstCard = currentIndex === 0;
-  const isLastCard = content.length > 0 && currentIndex === content.length - 1;
 
   return (
     <div className="flex flex-1 flex-col justify-center min-h-80 mt-12">
@@ -103,7 +106,7 @@ const ExpressionPage: React.FC = () => {
           </button>
         </div>
       ) : (
-        <div className="max-w-xl p-8 bg-white rounded-lg shadow-xl h-96">
+        <div className="md:max-w-md p-8 bg-white rounded-lg shadow-xl h-96">
           {content.length > 0 ? (
             <>
               <div className='h-80  overflow-y-auto'>
@@ -117,7 +120,7 @@ const ExpressionPage: React.FC = () => {
                 <p className="mb-4">
                   <strong>Description:</strong> {content[currentIndex].description}
                 </p>
-                {isLastCard && (
+                {(currentIndex === content.length - 1) && (
                   <div className="text-center mt-6">
                     <p className="mt-4 text-xl font-semibold text-red-700">
                       You have reached the end of the content! All the material is available in the flashcards to
@@ -128,19 +131,16 @@ const ExpressionPage: React.FC = () => {
               </div>
               <div className="flex justify-center mt-3">
                 {(
-                  // {!isFirstCard && (
                   <button
-                    className={`px-4 py-2 text-white bg-red-700 rounded-lg shadow-md hover:bg-red-800 ml-24 ${isFirstCard ? 'opacity-0 pointer-events-none' : ''}`}
+                    className={`px-4 py-2 text-white bg-red-700 rounded-lg shadow-md hover:bg-red-800 ml-20 ${currentIndex === 0 ? 'opacity-0 pointer-events-none' : ''}`}
                     onClick={handlePreviousContent}
                   >
                     Back
                   </button>
                 )}
                 {(
-                  // {!isLastCard && (
                   <button
-                    className={`px-4 py-2 text-white bg-cyan-700 rounded-lg shadow-md hover:bg-cyan-900 ml-24 ${isLastCard ? 'opacity-0 pointer-events-none' : ''}`}
-                    // className={`px-4 py-2 text-white bg-cyan-700 rounded-lg shadow-md hover:bg-cyan-900 ${isFirstCard ? '' : 'ml-24'}`}
+                    className={`px-4 py-2 text-white bg-cyan-700 rounded-lg shadow-md hover:bg-cyan-900 ml-20 ${currentIndex === content.length - 1 ? 'opacity-0 pointer-events-none' : ''}`}
                     onClick={handleNextContent}
                   >
                     Next
