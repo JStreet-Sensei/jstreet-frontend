@@ -1,7 +1,23 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { getCsrfToken } from 'next-auth/react';
+import { getCsrfToken, useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 
-export default function SignIn({ csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function SignIn() {
+  const session = useSession();
+  const [csrfToken, setCsrfToken] = useState('');
+
+  useEffect(() => {
+    async function fetchCsrfToken() {
+      const result = await getCsrfToken();
+      if (!result) {
+        throw new Error('Can not sign in without CSRF token');
+      }
+      setCsrfToken(result);
+    }
+    if (session.status !== 'loading') {
+      fetchCsrfToken();
+    }
+  }, [session.status]);
   return (
     <>
       <h2 className="text-center text-2xl font-bold">Login</h2>
