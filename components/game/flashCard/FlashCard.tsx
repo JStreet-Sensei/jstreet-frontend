@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { SelectedMaterial } from '../../../pages/game/flash-card';
-import styles from '@/styles/Card.module.css';
+import styles from '@/styles/FlashCard.module.css';
 import Link from 'next/link';
 
 interface FlashCardProps {
@@ -84,26 +84,31 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
   }
 
   return (
-    <div className="relative flex flex-col items-center bg-white border border-gray-300 rounded-lg shadow-lg p-6 w-lg h-lg overflow-auto">
+    <div
+      className="relative flex flex-col items-center bg-white border-2 border-gray-300 rounded-lg shadow-lg p-6 w-lg h-auto overflow-hidden"
+      style={{ minHeight: '420px', minWidth: '420px' }}
+    >
+      <div className="text-lg font-semibold mb-4">💡Correct Count: {correctCount}</div>
+
       <div
         className={`${styles.flip_card} ${styles.flip_card_inner} ${isBack ? styles.flip : ''}`}
         onClick={() => setIsBack(!isBack)}
-        style={{ width: '400px', height: '300px', cursor: 'pointer' }}
+        style={{ width: '400px', minHeight: '300px', cursor: 'pointer' }}
       >
         <div className={`${styles.flip_card_front} flex items-center justify-center`}>
           <p className="text-2xl font-bold text-gray-800">{currentPhrase?.english || 'Loading...'}</p>
         </div>
-        <div className={`${styles.flip_card_back} flex items-center justify-center`}>
-          <p className="text-xl px-5">
+        <div className={`${styles.flip_card_back} flex items-center justify-center font-semibold`}>
+          <p className="text-lg px-5 font-semibold">
             {currentPhrase?.japanese || 'Loading...'}
             <br />
-            <span className="text-md">{currentPhrase?.description || ''}</span>
+            <span className="text-md font-semibold">{currentPhrase?.description || ''}</span>
           </p>
         </div>
       </div>
 
       {isBack && (
-        <div className="mt-4 flex space-x-4">
+        <div className="mt-6 flex space-x-12">
           <button
             className="bg-cyan-700 hover:bg-cyan-900 text-white font-bold shadow-md py-2 px-4 rounded"
             onClick={handleCorrect}
@@ -114,12 +119,10 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
             className="bg-red-700 hover:bg-red-800 text-white font-bold shadow-md py-2 px-4 rounded"
             onClick={handleWrong}
           >
-            Wrong
+            Incorrect
           </button>
         </div>
       )}
-
-      <div className="mt-4 text-lg font-semibold">Correct Count: {correctCount}</div>
     </div>
   );
 };
