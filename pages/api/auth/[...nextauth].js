@@ -24,7 +24,7 @@ const SIGN_IN_PROVIDERS = Object.keys(SIGN_IN_HANDLERS);
 
 export const authOptions = {
   pages: {
-    signIn: '/#',
+    signIn: '/',
   },
   secret: process.env.AUTH_SECRET,
   session: {
@@ -50,7 +50,7 @@ export const authOptions = {
           const data = response.data;
           if (data) return data;
         } catch (error) {
-          console.error(error);
+          console.log('An error during login, can be wrong credential');
         }
         return null;
       },

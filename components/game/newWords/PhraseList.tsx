@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { SelectedMaterial } from '@/pages/game/learning';
+import { SelectedMaterial } from '@/components/game/newWords/learning';
 
 //get all phrase based on topic
 const getAllPhrase = async (id: number) => {

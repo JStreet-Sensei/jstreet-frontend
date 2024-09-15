@@ -1,28 +1,28 @@
 //User can play learning page.
 
-import React, { useState, useEffect, createContext } from "react";
-import MainCard from "../../components/game/newWords/MainCard";
-import { phraseType, learningContextType } from "../../types/types";
-import PhraseList from "../../components/game/newWords/PhraseList";
+import React, { useState, useEffect, createContext } from 'react';
+import MainCard from './MainCard';
+import { phraseType, learningContextType } from '@/types/types';
+import PhraseList from './PhraseList';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-const TOPICS = ["First Contact", "Playing together", "Drinking"];
+const TOPICS = ['First Contact', 'Playing together', 'Drinking'];
 export const SelectedMaterial = createContext<learningContextType | null>(null);
 
 const Learning = () => {
   const [selectedTopic, setSelectedTopic] = useState(TOPICS[0]);
   const [selectedPhrase, setSelectedPhrase] = useState<phraseType>({
     id: 0,
-    japanese: "loading...",
+    japanese: 'loading...',
   });
 
   //Just test for appearence, put useEffect here.
   useEffect(() => {
     setSelectedPhrase({
       id: 1,
-      japanese: "よっす",
-      english: "Hi",
-      description: "よっす is shorter version of おはようございます",
+      japanese: 'よっす',
+      english: 'Hi',
+      description: 'よっす is shorter version of おはようございます',
     });
   }, []);
 

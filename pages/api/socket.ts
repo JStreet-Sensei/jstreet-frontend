@@ -4,7 +4,7 @@ import { NextApiResponseServerIO } from '@/types/next';
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { Server as IOServer } from 'socket.io';
 import { CardData, GameResultType, Player, ServerGameState, ServerLobby } from '@/types/game';
-import { extractDataFromQuery, serializeServerObject } from '@/utils/utils-socket';
+import { createScoreData, extractDataFromQuery, serializeServerObject } from '@/utils/utils-socket';
 import {
   checkCardMatch,
   checkDataSelectable,
@@ -12,6 +12,7 @@ import {
   getSelectedCards,
   isUngussedCardsAvaible,
 } from '@/utils/utils-data';
+import axios from 'axios';
 
 export const config = {
   api: {
@@ -68,11 +69,17 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
         io.to(lobbyRoom).emit('join', serializeServerObject(lobby));
       } else {
         lobby = lobbies[lobby_id];
-        lobby.players.add(player);
-        console.log('New client connected ', player.username);
-        console.log('Change lobby ', lobby);
-        // Send the new lobby to everyone
-        io.to(lobbyRoom).emit('join', serializeServerObject(lobby));
+        if (lobby.players.size >= 2) {
+          socket.emit('lobby-full', 'Already 2 players');
+          socket.disconnect();
+          return;
+        } else {
+          lobby.players.add(player);
+          console.log('New client connected ', player.username);
+          console.log('Change lobby ', lobby);
+          // Send the new lobby to everyone
+          io.to(lobbyRoom).emit('join', serializeServerObject(lobby));
+        }
       }
 
       // // When a user press Start to start the game the status will propagate to everyone
@@ -81,6 +88,10 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
         // Set the start timer
         if (lobby) lobby.startTime = new Date();
         io.to(lobbyRoom).emit('start');
+        // Delete the lobby from the DB
+        axios({ url: `${getBackendURL()}/api/lobbies/${lobby_id}/`, method: 'DELETE' })
+          .then(() => console.log('Lobby deleted succefully'))
+          .catch(() => console.log('Cannot delete the lobby'));
       });
 
       socket.on('send-game-update', (cardDeck: CardData[]) => {
@@ -149,6 +160,15 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
                 players: Array.from(lobby.players),
                 time: duration,
               };
+
+              // Save the score
+              const scoreData = createScoreData(lobby.players);
+              const response = axios({
+                url: `${getBackendURL()}/api/scores/create`,
+                method: 'POST',
+                data: scoreData,
+              });
+              console.log(response);
               // Send to everyone the game ends
               io.to(lobbyRoom).emit('end-game', result);
             }

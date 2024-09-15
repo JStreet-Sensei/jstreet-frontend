@@ -157,17 +157,21 @@ const Lobby: React.FC = () => {
           </div>
         </div>
         <div className="my-4">
-          <ul className="list-disc pl-5 mt-10">
-            {Lobbies.map((lobby, index) => (
-              <li
-                key={index}
-                className={`py-2 cursor-pointer hover:bg-blue-100 ${selectedLobbyId === lobby.game_id ? 'bg-blue-200' : ''}`}
-                onClick={() => handleLobbieClick(lobby.game_id, lobby.name)}
-              >
-                {lobby.name}
-              </li>
-            ))}
-          </ul>
+          {Lobbies.length > 0 ? (
+            <ul className="list-disc pl-5 mt-10">
+              {Lobbies.map((lobby, index) => (
+                <li
+                  key={index}
+                  className={`py-2 cursor-pointer hover:bg-blue-100 ${selectedLobbyId === lobby.game_id ? 'bg-blue-200' : ''}`}
+                  onClick={() => handleLobbieClick(lobby.game_id, lobby.name)}
+                >
+                  {lobby.name}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No lobby available</p>
+          )}
         </div>
         {selectedLobbyId === null ? (
           <button

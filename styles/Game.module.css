@@ -7,3 +7,41 @@
   background-color: #282828;
   background-size: 16px 16px;
 }
+
+.table_background {
+  background: rgb(255, 255, 255);
+  padding: 20px;
+  border-radius: 1rem;
+}
+
+@keyframes glow_player0 {
+  0% {
+    box-shadow: 0 0 10px rgba(216, 27, 96, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(216, 27, 96, 0.75);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(216, 27, 96, 0.5);
+  }
+}
+
+@keyframes glow_player1 {
+  0% {
+    box-shadow: 0 0 10px rgba(17, 223, 217, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(17, 223, 217, 0.75);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(17, 223, 217, 0.5);
+  }
+}
+
+.animate_shadowRotate_player0 {
+  animation: glow_player0 1s infinite;
+}
+
+.animate_shadowRotate_player1 {
+  animation: glow_player1 1s infinite;
+}

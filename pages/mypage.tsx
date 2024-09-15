@@ -116,7 +116,7 @@ const MyPage = () => {
                     <strong>Score:</strong> {score.score || 'Not provided'}
                   </p>
                   <p>
-                    <strong>Players:</strong> {score.player1} vs {score.player2}
+                    <strong>Players:</strong> {score.winner_username}(Won) vs {score.loser_username}
                   </p>
                   <p>
                     <strong>Date:</strong> {new Date(score.date).toLocaleDateString()}

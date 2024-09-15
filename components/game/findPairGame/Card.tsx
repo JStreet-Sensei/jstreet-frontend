@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import styles from '@/styles/Card.module.css';
 import NinjaLogo from '@/public/ninjaLogo.svg';
 import Image from 'next/image';
+import { Player } from '@/types/game';
 
 type CardProps = {
-  frontText: string;
+  players: Set<Player>;
   backText: string;
   selectCard: (index: number, lastState: boolean) => boolean;
   index: number;
@@ -14,7 +15,7 @@ type CardProps = {
 };
 
 export const Card: React.FC<CardProps> = ({
-  frontText,
+  players,
   backText,
   selectCard,
   index,
@@ -25,6 +26,7 @@ export const Card: React.FC<CardProps> = ({
   // Flip true means that show the back of the cards
   const [useFlip, setFlip] = useState(false);
   const [useIsClickable, setIsClickable] = useState(isCardClickable);
+  const playerArray = Array.from(players);
 
   useEffect(() => {
     setIsClickable(isCardClickable);
@@ -38,29 +40,32 @@ export const Card: React.FC<CardProps> = ({
   }, [selected, guessed]);
 
   const handleFlip = () => {
-    console.log(useIsClickable);
     if (useIsClickable) {
       if (selectCard(index, selected) && guessed === 0) setFlip(!useFlip);
     }
   };
 
+  const getBackClass = () => {
+    if (guessed === 0) {
+      return styles.flip_card_back;
+    }
+
+    if (playerArray.length > 0 && guessed === playerArray[1].user_id) {
+      return styles.flip_card_back0;
+    } else {
+      return styles.flip_card_back1;
+    }
+  };
+
   return (
-    <div className={styles.flip_card} onClick={handleFlip}>
-      <div className={`${styles.flip_card_inner} ${useFlip ? styles.flip : ''} `}>
+    <div className={styles.flip_card + ` cursor-grab`} onClick={handleFlip}>
+      <div className={`${styles.flip_card_inner} ${useFlip ? styles.flip : ''}`}>
         <div className={styles.flip_card_front}>
-          <div className="mx-auto">
-            <Image
-              src={NinjaLogo}
-              alt="NinjaLogo"
-              width={100}
-              height={100}
-              className="bg-white rounded-full p-0.5"
-            ></Image>
-          </div>
-          <p className={styles.title + ' drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]'}>J-Sensei</p>
+          <Image src={NinjaLogo} alt="NinjaLogo" width={100} height={100} className="bg-white rounded-full p-0.5" />
+          <p className={styles.title}>J-Sensei</p>
         </div>
-        <div className={styles.flip_card_back}>
-          <p className={styles.title + ' drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]'}>{backText}</p>
+        <div className={getBackClass()}>
+          <p className={styles.title}>{backText}</p>
         </div>
       </div>
     </div>
