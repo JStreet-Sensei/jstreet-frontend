@@ -24,7 +24,7 @@ const SIGN_IN_PROVIDERS = Object.keys(SIGN_IN_HANDLERS);
 
 export const authOptions = {
   pages: {
-    signIn: '/#',
+    signIn: '/',
   },
   secret: process.env.AUTH_SECRET,
   session: {
