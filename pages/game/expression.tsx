@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 interface ContentItem {
   content_id: number;
   japanese_slang: string;
@@ -118,16 +117,18 @@ const ExpressionPage: React.FC = () => {
     <>
       <div className="flex flex-1 flex-col justify-center min-h-80 mt-12">
         {!isLearning ? (
-          <div className="flex items-center justify-center mb-10 space-x-4">
-            <img src="/new-expression-fox.png" alt="Expression Fox" className="w-16 h-16" />
+          <>
+            <div className="flex items-center justify-center mb-10 space-x-4">
+              <img src="/new-expression-fox.png" alt="Expression Fox" className="w-16 h-16" />
 
-            <button
-              className="w-2/3 px-9 py-4 text-center text-white bg-cyan-700 rounded-lg shadow-lg hover:bg-cyan-900 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105"
-              onClick={handleStartLearning}
-            >
-              Start Learning
-            </button>
-          </div>
+              <button
+                className="w-2/3 px-9 py-4 text-center text-white bg-cyan-700 rounded-lg shadow-lg hover:bg-cyan-900 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out transform hover:scale-105"
+                onClick={handleStartLearning}
+              >
+                Start Learning
+              </button>
+            </div>
+          </>
         ) : (
           <div className="md:max-w-md p-8 bg-white rounded-lg shadow-xl h-96">
             {content.length > 0 ? (
