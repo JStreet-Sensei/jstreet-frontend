@@ -14,7 +14,7 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) =
   const GRID_SIZE = 4;
 
   // Card elements state
-  const [useCardElement, setCardElement] = useState<ReactNode>([]);
+  const [useCardElement, setCardElement] = useState<ReactNode[]>([]);
   const [useRefresh, setRefresh] = useState(false);
   const [useCardDeck, setCardDeck] = useState(gameState.cardDeck);
   const [isCardClickable, setCardClickable] = useState(false);
@@ -98,9 +98,20 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState }) =
   return (
     <>
       <div
-        className={`grid grid-cols 4 gap-4 grid-cols-4 place-items-center md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 align-middle justify-self-auto`}
+        className={`${styles.table_background} border-4 border-solid border-black grid grid-cols-4 gap-4 place-items-center md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 align-middle justify-self-auto py-2`}
       >
-        {useCardElement}
+        {useCardElement ? (
+          useCardElement.map((card, index) => (
+            <div
+              key={index}
+              className="shadow-lg transition-shadow duration-300 hover:shadow-[0_10px_25px_-15px_var(--turquoise)]"
+            >
+              {card}
+            </div>
+          ))
+        ) : (
+          <p>No cards available</p>
+        )}
       </div>
     </>
   );

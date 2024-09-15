@@ -38,7 +38,6 @@ export const Card: React.FC<CardProps> = ({
   }, [selected, guessed]);
 
   const handleFlip = () => {
-    console.log(useIsClickable);
     if (useIsClickable) {
       if (selectCard(index, selected) && guessed === 0) setFlip(!useFlip);
     }
@@ -46,21 +45,13 @@ export const Card: React.FC<CardProps> = ({
 
   return (
     <div className={styles.flip_card} onClick={handleFlip}>
-      <div className={`${styles.flip_card_inner} ${useFlip ? styles.flip : ''} `}>
+      <div className={`${styles.flip_card_inner} ${useFlip ? styles.flip : ''}`}>
         <div className={styles.flip_card_front}>
-          <div className="mx-auto">
-            <Image
-              src={NinjaLogo}
-              alt="NinjaLogo"
-              width={100}
-              height={100}
-              className="bg-white rounded-full p-0.5"
-            ></Image>
-          </div>
-          <p className={styles.title + ' drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]'}>J-Sensei</p>
+          <Image src={NinjaLogo} alt="NinjaLogo" width={100} height={100} className="bg-white rounded-full p-0.5" />
+          <p className={styles.title}>J-Sensei</p>
         </div>
         <div className={styles.flip_card_back}>
-          <p className={styles.title + ' drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]'}>{backText}</p>
+          <p className={styles.title}>{backText}</p>
         </div>
       </div>
     </div>

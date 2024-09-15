@@ -10,7 +10,6 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const isHomePage = router.pathname === '/';
   const isSelectGamePage = router.pathname === '/select-game';
   const isGamePage = router.pathname === '/game/find-pair';
-  console.log(router.pathname);
 
   return (
     <>
@@ -28,7 +27,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <div className="content_container min-h-screen pb-20">{children}</div>
         </main>
       )}
-      <Footer />
+      {!isGamePage && <Footer />}
     </>
   );
 };

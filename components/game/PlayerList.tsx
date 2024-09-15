@@ -21,10 +21,7 @@ export const PlayerList = ({ currentPlayerUsername, players, actualTurn, ...prop
       let counterKey = 0;
       playersArray.forEach((player: Player) => {
         const playerTurn = player.user_id === actualTurn;
-        console.log(playerTurn);
-        newPlayersComponets.push(
-          <PlayerShow player={player} key={counterKey} isPlayerTurn={playerTurn} />
-        );
+        newPlayersComponets.push(<PlayerShow player={player} key={counterKey} isPlayerTurn={playerTurn} />);
         counterKey += 1;
       });
       setPlayers(newPlayersComponets);
