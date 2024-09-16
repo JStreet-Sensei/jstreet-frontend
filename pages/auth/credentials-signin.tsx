@@ -62,7 +62,7 @@ export default function SignIn() {
   return (
     <>
       <h2 className="text-center text-2xl font-bold">Login</h2>
-      <form method="post" onSubmit={handlePost} className="m-10 flex flex-col items-center">
+      <form method="post" onSubmit={handlePost} className="items-center">
         <div className="m-10">
           <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           <label className="text-sm font-medium mb-1">
@@ -89,7 +89,7 @@ export default function SignIn() {
             />
           </label>
         </div>
-        <div>
+        <div className="w-full flex justify-center">
           <button
             type="submit"
             className="bg-[var(--turquoise)] text-[var(--blue-dark)] font-semibold 
