@@ -71,7 +71,7 @@ export const SignupPage = () => {
             type="text"
             minLength={3}
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value.toLowerCase())}
             placeholder="Username"
             className="mt-1 block w-full border-black border-2 p-2 rounded-lg"
           />
