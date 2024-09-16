@@ -11,20 +11,25 @@ import 'react-toastify/ReactToastify.css';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+interface SignInProps {
+  csrfToken?: string;
+}
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const csrfToken = await getCsrfToken(context);
   return {
     props: {
-      csrfToken,
+      csrfToken: csrfToken || null,
     },
   };
 }
 
 const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  //states for modals buttons
+  // States for modals buttons
   const [signInModalOpen, setSignInModalOpen] = useState<boolean>(false);
   const [signUpModalOpen, setSignUpModalOpen] = useState<boolean>(false);
 
@@ -60,16 +65,14 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
   return (
     <>
       <div
-        className="relative flex flex-col items-start justify-center min-h-screen
-        bg-no-repeat bg-center md:hidden bg-[#25dad1] "
+        className="relative flex flex-col items-center justify-center min-h-screen bg-no-repeat bg-center md:hidden bg-[#25dad1]"
         style={{ backgroundImage: "url('/LandingPage/landpage_md.jpeg')", backgroundSize: '80%' }}
       >
-        <div className="flex-1 min-w-full flex items-start justify-center flex-col z-10">
-          <div className="fixed z-20 flex flex-row gap-4 bottom-72 left-4 items-center justify-center ">
+        <div className="absolute top-1/2 transform -translate-y-1/2 w-full flex flex-col items-center gap-4 z-10 mt-16">
+          <div className="flex flex-row gap-4 items-center justify-center">
             <button
               onClick={openSignInModal}
-              className="bg-red-700 h-10 text-white font-bold py-4 px-8 rounded-full left-2
-              bottom-1 shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
+              className="bg-red-700 h-8 text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
             >
               Login
             </button>
@@ -78,11 +81,10 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
                 <SignIn />
               </FlexModal>
             )}
-            <span className=" h-10  text-white font-bold py-4 px-8 text-2xl">OR</span>
+            <span className="text-white font-bold py-4 px-8 text-2xl">OR</span>
             <button
               onClick={openSignUpModal}
-              className="bg-red-700 h-10 rounded-full  left-80
-              bottom-1  text-white font-bold py-4 px-8  shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
+              className="bg-red-700 h-8 text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
             >
               Sign Up
             </button>
@@ -96,15 +98,13 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
       </div>
 
       <div
-        className="relative md:flex flex-col items-start justify-center min-h-screen
-        bg-no-repeat bg-[#25dbd1] bg-center hidden md:visible bg-contain"
-        style={{ backgroundImage: "url('/LandingPage/landpage.svg')", backgroundSize: '100%' }}
+        className="relative flex flex-col items-start justify-center min-h-screen bg-no-repeat bg-[#25dbd1] bg-center hidden md:flex md:bg-contain"
+        style={{ backgroundImage: "url('/LandingPage/landpage.svg')", backgroundSize: 'cover' }}
       >
-        <div className="fixed z-20 flex flex-row gap-4 bottom-72 left-40 items-center justify-center ">
+        <div className="absolute bottom-32 left-16 flex flex-row gap-4 items-center">
           <button
             onClick={openSignInModal}
-            className="bg-red-700 h-10 text-white font-bold py-4 px-8 rounded-full left-2
-              bottom-1 shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
+            className="bg-red-700 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
           >
             Login
           </button>
@@ -113,16 +113,10 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
               <SignIn />
             </FlexModal>
           )}
-          <span
-            className=" h-10  text-white font-bold py-4 px-8 text-2xl
-              "
-          >
-            OR
-          </span>
+          <span className="text-white font-bold text-2xl">OR</span>
           <button
-            className="bg-red-700 h-10 rounded-full  left-80
-              bottom-1  text-white font-bold py-4 px-8  shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
             onClick={openSignUpModal}
+            className="bg-red-700 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:bg-red-600 focus:ring-2 focus:ring-opacity-75 transition duration-300 ease-in-out"
           >
             Sign Up
           </button>
