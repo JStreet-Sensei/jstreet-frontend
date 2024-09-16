@@ -92,6 +92,38 @@ const ExpressionPage: React.FC = () => {
     }
   };
 
+  //record last content
+  useEffect(() => {
+    const LastLearnedWord = async () => {
+      if (content.length > 0 && currentIndex === content.length - 1) {
+        const currentContentId = content[currentIndex].content_id;
+
+        try {
+          const response = await fetch(getFetchBackendURL('/api/words-learned/create'), {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              user: userInfo,
+              content: currentContentId,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to record learned word');
+          }
+
+          console.log('Last content recorded');
+        } catch (error) {
+          console.error('Error posting learned word:', error);
+        }
+      }
+    };
+
+    LastLearnedWord();
+  }, [currentIndex, content, userInfo]);
+
   return (
     <>
       <div className="flex flex-1 flex-col justify-center min-h-80 mt-12">
