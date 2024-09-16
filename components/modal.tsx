@@ -8,8 +8,10 @@ interface ModalProps {
 
 const FlexModal: React.FC<ModalProps> = ({ children, closeModal, title }) => {
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center'>
-      <div className='bg-white p-8 rounded relative'>
+    <div className='fixed inset-0 bg-opacity-25 backdrop-blur-sm flex items-center justify-center m-auto'>
+      {/* <div className='fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center'> */}
+      <div className='bg-white p-8 rounded relative w-60 md:w-96'>
+        {/* <div className='bg-white p-8 rounded relative'> */}
         {title && (
           <h2 className='text-xl font-bold mb-4'>{title}</h2>
         )}
