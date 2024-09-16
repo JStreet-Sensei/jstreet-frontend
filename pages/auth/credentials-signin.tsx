@@ -1,13 +1,9 @@
-import { getCsrfToken, signIn, useSession } from 'next-auth/react';
-import { FormEvent, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/ReactToastify.css';
+import { getCsrfToken, useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 
 export default function SignIn() {
   const session = useSession();
   const [csrfToken, setCsrfToken] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
 
   useEffect(() => {
     async function fetchCsrfToken() {
@@ -21,48 +17,10 @@ export default function SignIn() {
       fetchCsrfToken();
     }
   }, [session.status]);
-
-  const handlePost = (event: FormEvent) => {
-    event.preventDefault();
-    signIn('credentials', {
-      username,
-      password,
-      redirect: false,
-      callbackUrl: '/select-game',
-    })
-      .then((response) => {
-        if (response?.status === 401) {
-          toast.error('Wrong username or password. Try again.', {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(1, error);
-        toast.error('Something went wrong.', {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-      });
-  };
-
   return (
     <>
       <h2 className="text-center text-2xl font-bold">Login</h2>
-      <form method="post" onSubmit={handlePost} className="m-10 flex flex-col items-center">
+      <form method="post" action="/api/auth/callback/credentials" className=" items-center">
         <div className="m-10">
           <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           <label className="text-sm font-medium mb-1">
@@ -70,7 +28,6 @@ export default function SignIn() {
             <input
               name="username"
               type="text"
-              onChange={(e) => setUsername(e.target.value)}
               className="ml-5 border-black border-2 p-2 rounded-lg"
               placeholder="Username"
             />
@@ -82,14 +39,13 @@ export default function SignIn() {
             <input
               name="password"
               type="password"
-              onChange={(e) => setPassword(e.target.value)}
               className="ml-5 border-black border-2 p-2 rounded-lg"
               placeholder="Password"
               autoComplete="on"
             />
           </label>
         </div>
-        <div>
+        <div className="w-full flex justify-center">
           <button
             type="submit"
             className="bg-[var(--turquoise)] text-[var(--blue-dark)] font-semibold 
@@ -99,6 +55,7 @@ export default function SignIn() {
             Login
           </button>
         </div>
+
       </form>
     </>
   );
