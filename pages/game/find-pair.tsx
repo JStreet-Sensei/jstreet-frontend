@@ -151,7 +151,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
           setDisconnectModalOpen(true);
           setTimeout(() => {
             router.push('/lobby');
-          }, 2000);
+          }, 5000);
         }
       });
 
