@@ -99,7 +99,7 @@ export const Matrix: React.FC<MatrixProps> = ({ handleUpdateDeck, gameState, pla
   return (
     <>
       <div
-        className={`${styles.table_background} border-4 border-solid border-black grid grid-cols-2 gap-4 place-items-center md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 align-middle justify-self-auto py-2`}
+        className={`${styles.table_background} border-4 border-solid border-black grid grid-cols-3 gap-4 place-items-center md:grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 align-middle justify-self-auto py-2`}
       >
         {useCardElement ? (
           useCardElement.map((card, index) => (
