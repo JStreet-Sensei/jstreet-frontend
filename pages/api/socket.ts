@@ -56,6 +56,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
           players: new Set<Player>(),
           gameState: gameState,
           startTime: new Date(),
+          started: false,
         };
 
         // Save the actual lobby
@@ -86,7 +87,10 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
       socket.on('start', () => {
         console.log('Game start!');
         // Set the start timer
-        if (lobby) lobby.startTime = new Date();
+        if (lobby) {
+          lobby.startTime = new Date();
+          lobby.started = true;
+        }
         io.to(lobbyRoom).emit('start');
         // Delete the lobby from the DB
         axios({ url: `${getBackendURL()}/api/lobbies/${lobby_id}/`, method: 'DELETE' })
@@ -181,15 +185,13 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
       });
 
       socket.on('disconnect', () => {
-        // Send the new lobby to everyone
-        io.to(lobbyRoom).emit('left', lobbies[lobby_id]);
         // Remove player from lobby
         if (player && lobby) {
           // Remove from the array
           lobby.players.delete(player);
 
           // Update all the user is disconnected
-          io.to(lobbyRoom).emit('left', lobby);
+          io.to(lobbyRoom).emit('left', serializeServerObject(lobby));
           console.log('Client left and emit and update to everyone. ');
           // Delete the lobby if empty
           if (lobby.players.size === 0) {

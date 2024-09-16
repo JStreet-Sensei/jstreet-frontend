@@ -77,7 +77,7 @@ const HomePage = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSid
               Login
             </button>
             {signInModalOpen && (
-              <FlexModal closeModal={closeSignInModal} title="">
+              <FlexModal closeModal={closeSignInModal} title="" >
                 <SignIn />
               </FlexModal>
             )}
