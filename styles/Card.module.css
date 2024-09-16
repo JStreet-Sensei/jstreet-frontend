@@ -8,7 +8,21 @@
   border-radius: 1rem;
 }
 
+@media (max-width: 320px) {
+  .flip_card {
+    width: 100px;
+    height: 150px;
+  }
+}
+
 @media (max-width: 360px) {
+  .flip_card {
+    width: 150px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
   .flip_card {
     width: 150px;
     height: 200px;

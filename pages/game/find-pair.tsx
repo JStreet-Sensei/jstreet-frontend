@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import FlexModal from '@/components/modal';
 import { GetServerSideProps } from 'next';
 import { getPlayerFromSet } from '@/utils/utils-socket';
+import { usePathname } from 'next/navigation';
 
 interface Props {
   gameId: string | string[] | undefined;
@@ -98,6 +99,8 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
     };
   }, []);
 
+  useEffect(() => console.log(start), [start]);
+
   useEffect(() => {
     console.log('Client game state ready');
     setGameStateReady(true);
@@ -139,12 +142,17 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
 
       newSocket.on('left', (receivedLobby: ServerLobby) => {
         console.log('A player left the lobby');
+        receivedLobby.players = new Set(receivedLobby.players);
         setServerLobby(receivedLobby);
-        setDisconnectModalMessage('A player has disconnected. You will be redirected to the lobby.');
-        setDisconnectModalOpen(true);
-        setTimeout(() => {
-          router.push('/lobby');
-        }, 2000);
+        //show players on join page
+        setPlayers(Array.from(receivedLobby.players));
+        if (receivedLobby.started) {
+          setDisconnectModalMessage('A player has disconnected. You will be redirected to the lobby.');
+          setDisconnectModalOpen(true);
+          setTimeout(() => {
+            router.push('/lobby');
+          }, 2000);
+        }
       });
 
       // Get the update of the deck
@@ -191,19 +199,6 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
 
       newSocket.on('disconnect', () => {
         console.log('Disconnected from server');
-        if (errorMessage.current) {
-          setDisconnectModalMessage(errorMessage.current);
-          setDisconnectModalOpen(true);
-        } else if (errorMessage.current === 'SKIP') {
-          // If SKIP means that redirect is not required
-          return;
-        } else {
-          setDisconnectModalMessage('A player has disconnected. You will be redirected to the lobby.');
-          setDisconnectModalOpen(true);
-          setTimeout(() => {
-            router.push({ pathname: '/lobby' });
-          }, 2000);
-        }
       });
       setSocket(newSocket);
       setSocketReady(true);

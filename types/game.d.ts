@@ -33,6 +33,7 @@ export type ServerLobby = {
   players: Set<Player>;
   gameState: ServerGameState;
   startTime: Date;
+  started: boolean;
 };
 
 export interface ClientGameState extends ServerGameState {
