@@ -8,6 +8,13 @@
   border-radius: 1rem;
 }
 
+@media (max-width: 360px) {
+  .flip_card {
+    width: 150px;
+    height: 200px;
+  }
+}
+
 .flip_card_inner {
   position: relative;
   width: 100%;
