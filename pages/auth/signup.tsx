@@ -30,6 +30,7 @@ export const SignupPage = () => {
             username,
             password,
             redirect: true,
+            callbackUrl: '/select-game',
           });
         } else {
           toast.error('Registration failed. Username already exist.', {
