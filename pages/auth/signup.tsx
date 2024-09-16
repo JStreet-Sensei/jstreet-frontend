@@ -64,17 +64,19 @@ export const SignupPage = () => {
         <div className="mb-5 w-full max-w-xs">
           <label htmlFor="username" className="block text-sm font-medium mb-1">
             Username
-            <input
-              id="username"
-              type="text"
-              minLength={3}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Username"
-              className="mt-1 block w-full border-black border-2 p-2 rounded-lg"
-            />
           </label>
+          <span className="text-red-500 text-xs">*Special characters are not allowed.</span>
+          <input
+            id="username"
+            type="text"
+            minLength={3}
+            value={username}
+            onChange={(e) => setUsername(e.target.value.toLowerCase())}
+            placeholder="Username"
+            className="mt-1 block w-full border-black border-2 p-2 rounded-lg"
+          />
         </div>
+
         <div className="mb-5 w-full max-w-xs">
           <label htmlFor="password" className="block text-sm font-medium mb-1">
             Password
