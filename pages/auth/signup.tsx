@@ -1,6 +1,4 @@
-import axios from 'axios';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
@@ -8,7 +6,6 @@ import 'react-toastify/ReactToastify.css';
 const SIGNUP_URL = '/api/signup';
 
 export const SignupPage = () => {
-  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
