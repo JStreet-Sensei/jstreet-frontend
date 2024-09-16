@@ -71,10 +71,10 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
   if (selectedMaterial && selectedMaterial.correctPhrases.length === selectedMaterial.phrases.length) {
     return (
       <div className="text-center">
-        <h1 className="text-2xl px-2 font-semibold text-red-700">Congratulations!</h1>
-        <p className="mt-2 text-lg text-cyan-700">You&apos;ve completed all flashcards</p>
+        <h1 className="text-2xl lg:text-4xl px-2 lg:px-4 font-semibold text-red-700">Congratulations!</h1>
+        <p className="mt-2 text-lg lg:text-2xl text-cyan-700">You&apos;ve completed all flashcards</p>
         <button
-          className="mt-4 bg-[var(--savoy-blue)] hover:bg-blue-600 text-white font-bold shadow-md py-2 px-4 rounded"
+          className="mt-4 bg-[var(--savoy-blue)] hover:bg-blue-600 text-white font-bold shadow-md py-2 lg:py-4 px-4 lg:px-8 rounded"
           onClick={handleRestart}
         >
           Restart
@@ -85,24 +85,28 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
 
   return (
     <div
-      className="relative flex flex-col items-center bg-white border-2 border-gray-300 rounded-lg shadow-lg p-6 w-lg h-auto overflow-hidden"
-      style={{ minHeight: '420px', minWidth: '420px' }}
+      className="relative flex flex-col items-center bg-white border-2 border-gray-300 rounded-lg shadow-lg p-6 lg:p-12 w-lg h-auto overflow-hidden"
+      style={{ minHeight: '330px', minWidth: '300px' }}
     >
-      <div className="text-lg font-semibold mb-4">💡Correct Count: {correctCount}</div>
+      <div className="text-lg lg:text-2xl font-semibold mb-4">💡Correct Count: {correctCount}</div>
 
       <div
         className={`${styles.flip_card} ${styles.flip_card_inner} ${isBack ? styles.flip : ''}`}
         onClick={() => setIsBack(!isBack)}
-        style={{ width: '400px', minHeight: '300px', cursor: 'pointer' }}
+        style={{ width: '280px', minHeight: '200px', cursor: 'pointer' }}
       >
         <div className={`${styles.flip_card_front} flex items-center justify-center`}>
-          <p className="text-2xl font-bold text-gray-800">{currentPhrase?.english || 'Loading...'}</p>
+          <p className="text-md text-2xl lg:text-4xl font-bold text-gray-800">
+            {currentPhrase?.english || 'Loading...'}
+          </p>
         </div>
         <div className={`${styles.flip_card_back} flex items-center justify-center font-semibold`}>
-          <p className="text-lg px-5 font-semibold">
+          <p className="text-md px-5 font-semibold">
             {currentPhrase?.japanese || 'Loading...'}
             <br />
-            <span className="text-md font-semibold">{currentPhrase?.description || ''}</span>
+            <span className="text-md font-semibold block max-h-24 overflow-y-auto">
+              {currentPhrase?.description || ''}
+            </span>
           </p>
         </div>
       </div>
@@ -110,13 +114,13 @@ const FlashCard = ({ loading, noLearnedWords }: FlashCardProps) => {
       {isBack && (
         <div className="mt-6 flex space-x-12">
           <button
-            className="bg-cyan-700 hover:bg-cyan-900 text-white font-bold shadow-md py-2 px-4 rounded"
+            className="bg-cyan-700 hover:bg-cyan-900 text-white font-bold shadow-md py-2 lg:py-4 px-4 lg:px-8 rounded"
             onClick={handleCorrect}
           >
             Correct
           </button>
           <button
-            className="bg-red-700 hover:bg-red-800 text-white font-bold shadow-md py-2 px-4 rounded"
+            className="bg-red-700 hover:bg-red-800 text-white font-bold shadow-md py-2 lg:py-4 px-4 lg:px-8 rounded"
             onClick={handleWrong}
           >
             Incorrect
