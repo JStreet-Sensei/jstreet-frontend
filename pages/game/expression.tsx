@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getFetchBackendURL } from '@/utils/utils-data';
 import { getSession, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 interface ContentItem {
   content_id: number;
