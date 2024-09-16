@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Poppins } from 'next/font/google';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -14,6 +14,7 @@ export const Header: React.FC = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null); 
 
   const isInGamePage = router.pathname.includes('/find-pair');
   const isMyPage = router.pathname === '/mypage';
@@ -25,6 +26,20 @@ export const Header: React.FC = () => {
     router.push(path);
     if (menuOpen) setMenuOpen(false); // Close menu on selection
   };
+
+  // Handle click outside of the menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuOpen && menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
 
   return (
     <>
@@ -105,7 +120,9 @@ export const Header: React.FC = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden fixed right-0 bg-[#12dcd8] shadow-lg flex flex-col space-y-4 p-4 items-center justify-center w-1/2 transition-transform transform translate-x-0 z-50">
+        <div
+        ref={menuRef}
+        className="md:hidden fixed right-0 bg-[#12dcd8] shadow-lg flex flex-col space-y-4 p-4 items-center justify-center w-1/2 transition-transform transform translate-x-0 z-50">
           {!isInGamePage && (
             <>
               <button
