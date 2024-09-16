@@ -45,7 +45,10 @@ export const authOptions = {
           const response = await axios({
             url: BACKEND_URL + 'api/auth/login/',
             method: 'post',
-            data: credentials,
+            data: {
+              ...credentials,
+              username: credentials.username.toLowerCase(),
+            },
           });
           const data = response.data;
           if (data) return data;
