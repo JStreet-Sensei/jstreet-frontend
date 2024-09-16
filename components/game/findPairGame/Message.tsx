@@ -33,7 +33,7 @@ export const Message: React.FC<MessageProps> = ({ message }) => {
 
   return (
     <div className="w-full flex justify-center items-center">
-      <p className="text-white text-4xl font-bold h-5">{currentMessage}</p>
+      <p className="text-white text-xl sm:text-4xl font-bold h-5">{currentMessage}</p>
     </div>
   );
 };

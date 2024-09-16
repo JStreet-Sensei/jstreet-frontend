@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getFetchBackendURL } from '@/utils/utils-data';
 import { getSession, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 interface ContentItem {
   content_id: number;
@@ -47,12 +45,6 @@ const ExpressionPage: React.FC = () => {
       fetchData();
     }
   }, [status, session]);
-
-  useEffect(() => {
-    if (currentIndex === content.length - 1 || content.length === 0) {
-      notifyLastContent()
-    }
-  }, [currentIndex])
 
   const handleStartLearning = () => {
     setIsLearning(true);
@@ -99,19 +91,6 @@ const ExpressionPage: React.FC = () => {
       });
     }
   };
-
-  const notifyLastContent = () => {
-    toast.info('You have reached the end of the content! All the material is available in the flashcards to practice.', {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-  }
 
   return (
     <>
@@ -179,19 +158,6 @@ const ExpressionPage: React.FC = () => {
           </Link>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-        limit={1}
-      />
     </>
   );
 };

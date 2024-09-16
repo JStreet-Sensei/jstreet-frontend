@@ -202,7 +202,7 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
           setDisconnectModalOpen(true);
           setTimeout(() => {
             router.push({ pathname: '/lobby' });
-          }, 5000);
+          }, 2000);
         }
       });
       setSocket(newSocket);
@@ -238,8 +238,10 @@ const FindPair = ({ gameId, lobbyName }: Props) => {
             </div>
           </FlexModal>
         )}
-        <h1>Please wait...</h1>
-        <p>The game is still loading...</p>
+        <div className="flex flex-col items-center justify-center h-screen text-center text-4xl text-white">
+          <h1>Please wait...</h1>
+          <p>The game is still loading...</p>
+        </div>
       </div>
     );
   }
