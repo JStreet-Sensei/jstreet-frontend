@@ -14,11 +14,11 @@ const GameResult = () => {
   // Get query arguments
   const router = useRouter();
   const { result } = router.query;
-  let isDraw: boolean[] = [];
 
   const [useResult, setResult] = useState<GameResultType>();
   const [useResultComponets, setResultsComponents] = useState<ReactNode[]>();
   const [useWinner, setWinner] = useState<Player>();
+  const [isDraw, setIsDraw] = useState<Boolean[]>([]);
 
   useEffect(() => {
     const resultString = result as string;
@@ -32,7 +32,11 @@ const GameResult = () => {
       for (let i = 0; i < useResult.players.length; i++) {
         const actualPlayer = useResult.players[i];
         if (i > 0) {
-          isDraw.push((actualPlayer.score - useResult.players[i - 1].score) === 0 ? true : false)
+          if ((actualPlayer.score - useResult.players[i - 1].score) === 0) {
+            setIsDraw([...isDraw, true])
+          } else {
+            setIsDraw([...isDraw, false])
+          }
         }
         newComponets.push(<ScorCircle player={actualPlayer} key={i}></ScorCircle>);
         if (lastScore < actualPlayer.score) {
@@ -41,6 +45,8 @@ const GameResult = () => {
         }
       }
       setResultsComponents(newComponets);
+      console.log("isDraw", isDraw)
+      console.log("isDraw every", isDraw.every(Boolean))
     }
   }, [useResult]);
   console.log(result);
