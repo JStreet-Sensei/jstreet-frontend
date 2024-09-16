@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import SignIn from '@/pages/auth/credentials-signin';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
-import SignupPage from '@/pages/signup';
+import SignupPage from '@/pages/auth/signup';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 
