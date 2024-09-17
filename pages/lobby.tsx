@@ -138,6 +138,7 @@ const Lobby: React.FC = () => {
               value={lobbyName}
               onChange={(e) => setLobbyName(e.target.value)}
               className="w-full py-2 border rounded text-center"
+              maxLength={20}
             />
           </div>
           {error && <p className="text-red-600">{error}</p>}
