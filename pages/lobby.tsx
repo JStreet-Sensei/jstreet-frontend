@@ -162,10 +162,12 @@ const Lobby: React.FC = () => {
               {Lobbies.map((lobby, index) => (
                 <li
                   key={index}
-                  className={`py-2 cursor-pointer hover:bg-blue-100 ${selectedLobbyId === lobby.game_id ? 'bg-blue-200' : ''}`}
+                  className={`py-2 px-2 cursor-pointer hover:bg-blue-100 ${selectedLobbyId === lobby.game_id ? 'bg-blue-200' : ''}
+                  list-none border-solid border-2 rounded m-1 shadow-sm border-[#fbfbfb00]
+                  `}
                   onClick={() => handleLobbieClick(lobby.game_id, lobby.name)}
                 >
-                  {lobby.name}
+                  <p className='truncate md:max-w-2xl max-w-72'><span className='font-extralight italic'>Lobby: </span><span className='text-2xl font-thin'>{lobby.name}</span></p>
                 </li>
               ))}
             </ul>
