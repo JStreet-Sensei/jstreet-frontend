@@ -21,8 +21,17 @@ export const PlayerShow = ({ player, isPlayerTurn, playerIndex }: PlayerListProp
         : '';
 
   return (
-    <div className={`px-2 font-bold ${isPlayerTurn ? animationClass : ''}`}>
-      {player?.username} - {player?.score} match {isPlayerTurn ? '' : ''}
+    <div className={`px-2 py-2 ${isPlayerTurn ? animationClass : ''}`}>
+      <span className='italic md:text-3xl text-2xl'>
+        {player?.username}
+        -
+      </span>
+      <span className='md:text-5xl text-3xl'>
+        {player?.score}
+      </span>
+      <span className='md:text-3xl text-2xl'>
+        match {isPlayerTurn ? '★' : ''}
+      </span>
     </div>
   );
 };
