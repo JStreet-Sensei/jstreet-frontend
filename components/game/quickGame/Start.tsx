@@ -7,7 +7,7 @@ const StartQuickAnswerGame: React.FC = () => {
       <div className="flex flex-col md:flex-row h-full items-center">
         <div className="flex flex-col">
           <h3 className="text-3xl text-start">Quick Answer Game</h3>
-          <h4>Comming soon...</h4>
+          <h4>Coming soon...</h4>
         </div>
         <Image width={150} height={150} src="/quick-answer-fox.png" alt="Quick Answer Game Fox Picture" />
       </div>
