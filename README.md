@@ -30,6 +30,16 @@ Clone frontend
   git clone https://github.com/Nihongo-Jouzu/nihongo-jouzu-frontend
 ```
 
+Example of folder structure:
+
+         projects
+         ├───nihongo-jouzu-backend
+         │   └───backend
+         └───nihongo-jouzu-frontend
+             └───package.json
+
+Copy .env.example to .env in each repository
+
 Go to the backend directory
 
 ```bash
@@ -58,6 +68,7 @@ Install my-project with npm
 ```
 
 ## Screenshots
+
 <img width="1426" alt="Main page" src="https://github.com/user-attachments/assets/fb159d3f-863e-4ce3-998d-64391dbe82d7">
 <img width="1424" alt="Game page" src="https://github.com/user-attachments/assets/b73b1d1b-9405-4b2c-afc9-fba85a5b26a5">
 
