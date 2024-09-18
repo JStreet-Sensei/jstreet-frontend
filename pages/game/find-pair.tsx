@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import GameStateProvider from '@/components/context/GameStateProvider';
 import SocketProvider from '@/components/context/SocketProvider';
-import GamePair from '@/components/GamePair';
+import GamePair from '@/components/game/findPairGame/GamePair';
 
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
@@ -12,7 +12,6 @@ import { useRouter } from 'next/router';
 import FlexModal from '@/components/modal';
 import { GetServerSideProps } from 'next';
 import { getPlayerFromSet } from '@/utils/utils-socket';
-import { usePathname } from 'next/navigation';
 
 interface Props {
   gameId: string | string[] | undefined;
