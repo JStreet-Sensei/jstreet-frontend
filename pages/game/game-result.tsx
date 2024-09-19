@@ -1,12 +1,12 @@
 //User can see game result after one game.
 
-import Winner from '@/components/game/Winner';
+import Winner from '@/components/game/findPairGame/Winner';
 import ScorCircle from '@/components/game/ScoreCircle';
 import { GameResultType, Player } from '@/types/game';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, ReactNode } from 'react';
 import styles from '@/styles/GameResult.module.css';
-import Draw from '@/components/game/Draw';
+import Draw from '@/components/game/findPairGame/Draw';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -32,30 +32,28 @@ const GameResult = () => {
       for (let i = 0; i < useResult.players.length; i++) {
         const actualPlayer = useResult.players[i];
         if (i > 0) {
-          if ((actualPlayer.score - useResult.players[i - 1].score) === 0) {
-            setIsDraw([...isDraw, true])
+          if (actualPlayer.score - useResult.players[i - 1].score === 0) {
+            setIsDraw([...isDraw, true]);
           } else {
-            setIsDraw([...isDraw, false])
+            setIsDraw([...isDraw, false]);
           }
         }
-        newComponets.push(<ScorCircle player={actualPlayer} key={i}></ScorCircle>);
+        newComponets.push(<ScorCircle player={actualPlayer} key={i} playerNumber={i}></ScorCircle>);
         if (lastScore < actualPlayer.score) {
           setWinner(actualPlayer);
           lastScore = actualPlayer.score;
         }
       }
       setResultsComponents(newComponets);
-      console.log("isDraw", isDraw)
-      console.log("isDraw every", isDraw.every(Boolean))
+      console.log('isDraw', isDraw);
+      console.log('isDraw every', isDraw.every(Boolean));
     }
   }, [useResult]);
   console.log(result);
   return (
-    <div className={`${styles.expand_until_footer} align-middle background-main`}>
-      {isDraw.every(Boolean) ? <Draw></Draw> :
-        <Winner player={useWinner}></Winner>
-      }
-      <div className="mx-auto flex items-center justify-center h-full">{useResultComponets}</div>
+    <div className={` align-middle background-main rounded-3xl border-4 border-[#43346dff] my-5 shadow-2xl`}>
+      {isDraw.every(Boolean) ? <Draw></Draw> : <Winner player={useWinner}></Winner>}
+      <div className="my-5 flex items-center justify-center h-full">{useResultComponets}</div>
     </div>
   );
 };

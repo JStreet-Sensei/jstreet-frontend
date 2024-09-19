@@ -8,7 +8,8 @@ const StartPairGame: React.FC = () => {
         <div className="flex flex-col">
           <h3 className="text-3xl text-start ">Find Pair Game</h3>
           <h5>
-            You play with the other player.<br></br>Choose right pair of formal Japanese<br></br> and street Japanese.
+            Play with another player.<br></br>Choose the correct pair of formal Japanese
+            <br></br> and street Japanese.
           </h5>
         </div>
         <Image width={150} height={150} src="/pair-game-fox.png" alt="Find Pair Fox Picture" />

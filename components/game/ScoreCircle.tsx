@@ -2,9 +2,10 @@ import { Player } from '@/types/game';
 
 type ScorCircleProps = {
   player: Player | undefined;
+  playerNumber: number;
 };
 
-const ScorCircle = ({ player }: ScorCircleProps) => {
+const ScorCircle = ({ player, playerNumber }: ScorCircleProps) => {
   return (
     <>
       <div className="relative size-40">
@@ -22,7 +23,7 @@ const ScorCircle = ({ player }: ScorCircleProps) => {
             cy="18"
             r="16"
             fill="none"
-            className="stroke-current secondary-color "
+            className={`stroke-current secondary-color`}
             stroke-width="2"
             stroke-dasharray="100"
             stroke-dashoffset={((8 - (player ? player?.score : 0)) / 8) * 100}

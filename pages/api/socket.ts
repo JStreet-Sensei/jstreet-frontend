@@ -125,9 +125,9 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
             cardDeck[cardIndex1].selected = false;
             cardDeck[cardIndex2].selected = false;
 
-            console.log('Card gueesed!');
+            console.log('Card guessed!');
             if (player) {
-              responseMessage = `${player.username} gueesed 2 cards!`;
+              responseMessage = `${player.username} guessed 2 cards!`;
               player.score = player.score + 1;
             }
           } else if (selectedCards.length === 2) {
