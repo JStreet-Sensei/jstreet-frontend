@@ -1,172 +1,127 @@
-# Design
+# J-Town Sensei
 
-## Figma mockup
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens) ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
 
-https://www.figma.com/design/8NGJOCtcVqLFtTrS3P0ht7/Nihongo-Alley---copied-with-new-games?node-id=0-88&node-type=CANVAS&t=FZORUYPPwlmsROs0-0
+[![Node.js CI](https://github.com/Nihongo-Jouzu/nihongo-jouzu-frontend/actions/workflows/node.js.yml/badge.svg)](https://github.com/Nihongo-Jouzu/nihongo-jouzu-frontend/actions/workflows/node.js.yml)
 
-# Implementation
+J-TOWN is a casual Japanese learning app that enables intermediate language learners to enjoy their studies more. Users can engage in self-learning practices and compete with others through simple games.
 
-## Websocket
+The uniqueness of this app lies in its content. Learning casual Japanese is key to speaking more fluent Japanese, but it's challenging due to the lack of daily opportunities. J-TOWN provides quality materials and engaging simple games, allowing you to focus on becoming a natural Japanese speaker. You can also use this app as a refreshing break during your main studies.
 
-https://medium.com/@RajeshSharma-dev/websockets-with-nextjs-for-building-real-time-responsive-application-bc4bedd19eec
-https://github.com/ryanc268/Typescript-Websocket-Game/tree/main
+For our tech stack, we use Next.js for the frontend. On the backend, we employ Django Rest Framework and PostgreSQL. We deploy using Railways with a Docker file. For testing, we utilize Jest and Playwright.
 
-## Route
+## Initial setup
 
-### Protected route
-
-Use middleware.ts for protected route.
-https://www.freecodecamp.org/news/secure-routes-in-next-js/<br>
-
-## Authentication
-
-We use Nextauth.js.
-Detail logic.
-https://refine.dev/blog/nextauth-google-github-authentication-nextjs/#for-githubprovider-you-will-need-a-github-account
-
-example:
+Create a folder
 
 ```bash
-const { data: session } = useSession()
+  mkdir jsensei
 ```
 
-the session is:
+Clone backend
 
 ```bash
-{user: {…}, expires: '2024-10-02T05:32:22.302Z'}
-expires: "2024-10-02T05:32:22.302Z"
-user: {email:"testuser@gmail.com"
-image:"https://lh3.googleusercontent.com/....."
-name:"Test User"}
+  git clone https://github.com/Nihongo-Jouzu/nihongo-jouzu-backend
 ```
 
-## Backend call
+Clone frontend
 
-When you need to fetch from the backend instead of the url replace with getFetchBackendURL(path).
-Where path is the path of the backend
-Like the example:
-
-```
-  const response = await axios({
-    method: 'get',
-    url: getFetchBackendURL('/api/auth/user/'),
-    headers: { Authorization: 'Bearer ' + session?.access_token },
-  });
+```bash
+  git clone https://github.com/Nihongo-Jouzu/nihongo-jouzu-frontend
 ```
 
-## Styling
+Example of folder structure:
 
-Use noraml css and tailwind css.
-You should write normal css within global.css file.
-https://nextjs.org/docs/pages/building-your-application/styling/css-modules#css-modules
-https://medium.com/@joel.woodyard/how-to-combine-tailwind-and-css-stylesheets-in-next-js-tutorial-39c522ca639
+         projects
+         ├───nihongo-jouzu-backend
+         │   └───backend
+         └───nihongo-jouzu-frontend
+             └───package.json
 
-## Socket
+Copy .env.example to .env in each repository
 
-The api request are done to `api/Socket.ts (Server)`
-The socket client is `SocketProvider.tsx (Client)`
+Go to the backend directory
 
-`socket.on` is the event for receive status or data
+```bash
+  cd nihongo-jouzu-backend
+```
 
-`socket.emit` is the event for send data to everyone
+Run docker
 
-## Game state
+```bash
+  docker compose build
+```
 
-Every game contains 2 context provider
+Start the server
 
-- GameState - Contain all information about the game and the status
-- Socket - Contain all information and event about the scoket
+```bash
+  docker compose up
+```
 
-# Folder structure
+## Installation
 
-There is two ways in Nextjs for routing. We adopt pages routing, not app routing. <br>
-https://medium.com/@CraftedX/should-you-use-next-js-pages-or-app-directory-38e803fe5cb4
+Install my-project with npm
 
-Folder structure is related to routing.<br>
-https://nextjs.org/docs/pages/building-your-application/routing
+```bash
+  cd nihongo-jouzu-frontend
+  npm install
+```
 
-Folder structure convention. See page router section.<br>
-https://nextjs.org/docs/getting-started/project-structure
+## Screenshots
 
-The basic behavior of Next.js by naming for file/folders.<br>
-There are some part which is defferent in between page router and app router.<br>
-https://nextjs.org/docs/app/building-your-application/routing/colocation<br>
+<img width="1426" alt="Main page" src="https://github.com/user-attachments/assets/fb159d3f-863e-4ce3-998d-64391dbe82d7">
+<img width="1424" alt="Game page" src="https://github.com/user-attachments/assets/b73b1d1b-9405-4b2c-afc9-fba85a5b26a5">
 
-The \_app.tsx file is used for rendering every page.<br>
-https://nextjs.org/docs/pages/building-your-application/routing/custom-app
+## Demo
 
-Page name is case-sensitive. URL is case-sensitive as well.
+https://j-street.up.railway.app/
 
-- Commponents<br>
-  React components used in each page. For example, flash card, card to show score, ...<br>
-  The name should be camel case.
+## API Reference
 
-- Pages<br>
-  These represents pages.<br>
+#### Socket connection
 
-- apis<br>
-  https://next-auth.js.org/getting-started/example<br>
+```TCP
+   /api/socket
+```
 
-* utils<br>
-  mocks-tsx.tsx<br>
-  mocks.ts<br>
-  Mock funcitons for test.
+| Parameter  | Type     | Description                             |
+| :--------- | :------- | :-------------------------------------- |
+| `player`   | `Player` | **Required**. Player type with his data |
+| `lobby_id` | `number` | **Required**. Id of the lobby           |
 
-# Commands
+Create and manage connection with socket for play memo game
 
-- install<br>
-  npm install<br>
-  ※For development of only frontend, we don't need docker run.<br>
-  ※EbisuG haven't checked running app with docker yet.
+#### Connect with backend server
 
-* run local<br>
-  npm run dev<br>
+```http
+  GET/POST/PUT/DELETE /api/backend
+```
 
-* run test<br>
+| Parameter | Type     | Description                        |
+| :-------- | :------- | :--------------------------------- |
+| `path`    | `string` | **Required**. Path with query args |
+
+Forward the fetch to backend server
+
+#### User signup
+
+```http
+  POST /api/signup
+```
+
+| Parameter  | Type     | Description                        |
+| :--------- | :------- | :--------------------------------- |
+| `username` | `string` | **Required**. Username of the user |
+| `password` | `string` | **Required**. Password of the user |
+
+#### add(num1, num2)
+
+Takes two numbers and returns the sum.
+
+## Running Tests
+
+To run tests, run the following command
+
+```bash
   npm run test
-
-# Testing
-
-## Plan
-
-The purpose is to prevent degradation and reduce time run test mannually.
-
-Component/Page test<br>
-・Check successfully rendering.<br>
-・Check fetching data.<br>
-・Check state changes correctly.<br>
-
-End-to-end test<br>
-・Check scenario of user events.<br>
-
-## Tools
-
-Use Jest + React Testing Libraries
-Basic usage for Jest + React:<br>
-https://www.robinwieruch.de/react-testing-library/<br>
-With Nextjs official tutorial<br>
-https://nextjs.org/docs/pages/building-your-application/testing/jest<br>
-Tips for mock Next router.<br>
-https://github.com/vercel/next.js/issues/7479#issuecomment-587145429<br>
-Custom renders for mock context.<br>
-https://testing-library.com/docs/react-testing-library/setup/#custom-render
-
-# Errors
-
-- App doesn't run after successful build.
-  Make sure you use the latest things. Delete your image, container, and volume. Run docker compose commands again.
-
-# Reference
-
-Using google auth.<br>
-https://blog.stackademic.com/building-a-custom-google-authentication-system-with-django-rest-framework-and-reactjs-ii-794fa8592782
-
-Use @react-oauth/google version.<br>
-https://muhammedsahad.medium.com/react-js-a-step-by-step-guide-to-google-authentication-926d0d85edbd<br>
-https://blog.logrocket.com/guide-adding-google-login-react-app/<br>
-
-React test components whole overview from unit test to integration test with tools<br>
-https://medium.com/@dev.emondas/testing-react-components-a-complete-guideline-b84f1e23d176
-
-Signup logic<br>
-https://github.com/VulcanWM/login-signup-nextjs
+```

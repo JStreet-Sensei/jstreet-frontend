@@ -26,7 +26,7 @@ export const Message: React.FC<MessageProps> = ({ message }) => {
     const timer = setTimeout(() => {
       setCurrentMessage('');
       setMessagesQueue((prevQueue) => prevQueue.slice(1));
-    }, 1500);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [messagesQueue]);
