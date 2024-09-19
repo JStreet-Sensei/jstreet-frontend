@@ -38,7 +38,7 @@ const GameResult = () => {
             setIsDraw([...isDraw, false]);
           }
         }
-        newComponets.push(<ScorCircle player={actualPlayer} key={i}></ScorCircle>);
+        newComponets.push(<ScorCircle player={actualPlayer} key={i} playerNumber={i}></ScorCircle>);
         if (lastScore < actualPlayer.score) {
           setWinner(actualPlayer);
           lastScore = actualPlayer.score;
