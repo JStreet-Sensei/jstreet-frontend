@@ -21,21 +21,21 @@ Create a folder
 Clone backend
 
 ```bash
-  git clone https://github.com/Nihongo-Jouzu/nihongo-jouzu-backend
+  git clone https://github.com/JStreet-Sensei/jstreet-backend
 ```
 
 Clone frontend
 
 ```bash
-  git clone https://github.com/Nihongo-Jouzu/nihongo-jouzu-frontend
+  git clone https://github.com/JStreet-Sensei/jstreet-frontend
 ```
 
 Example of folder structure:
 
          projects
-         ├───nihongo-jouzu-backend
+         ├───jstreet-backend
          │   └───backend
-         └───nihongo-jouzu-frontend
+         └───jstreet-frontend
              └───package.json
 
 Copy .env.example to .env in each repository
