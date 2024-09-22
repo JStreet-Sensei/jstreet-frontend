@@ -63,7 +63,7 @@ Start the server
 Install my-project with npm
 
 ```bash
-  cd nihongo-jouzu-frontend
+  cd jstreet-frontend
   npm install
 ```
 
